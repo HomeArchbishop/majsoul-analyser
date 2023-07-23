@@ -1,0 +1,21 @@
+{
+  "include": [
+    "server/",
+    "user/",
+    "utils/"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "target": "ES2015",
+    "outDir": "dist-server",
+    "isolatedModules": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
+    "strictNullChecks": true
+  }
+}

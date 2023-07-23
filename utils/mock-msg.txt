@@ -1,0 +1,462 @@
+req{"resName":"ResAuthGame","index":1}
+res{"data":{"players":[{"account_id":10154601,"avatar_id":400101,"title":0,"nickname":"拆家大主教","level":{"id":10102,"score":0},"character":{"charid":200001,"level":0,"exp":480,"skin":400101,"is_upgraded":false},"level3":{"id":20201,"score":205},"avatar_frame":0}],"seat_list":[10154601,0,0,0],"is_game_start":false,"game_config":{"category":1,"mode":{"mode":3,"ai":true,"detail_rule":{"time_fixed":300,"time_add":0,"dora_count":3,"shiduan":1,"init_point":25000,"fandian":30000,"bianjietishi":true,"ai_level":1,"fanfu":1,"guyi_mode":0}},"meta":{"room_id":38696}},"ready_id_list":[0,0,0]},"name":"ResAuthGame"}
+resnull
+res{"data":{"ready_id_list":[10154601,0,0,0]},"name":"NotifyPlayerLoadGameReady"}
+resnull
+res{"data":{"step":0,"name":"ActionMJStart","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+res{"data":{"step":1,"name":"ActionNewRound","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+res{"data":{"step":2,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":3,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":4,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":5,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":6,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":7,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":8,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":9,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":10,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":11,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":12,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":13,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":14,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":15,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":16,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":17,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+res{"data":{"step":18,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":19,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":20,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":21,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":22,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":23,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":24,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":25,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":26,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":27,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":28,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":29,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":30,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":31,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":32,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":33,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":34,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":35,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":36,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":37,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":38,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":39,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+res{"data":{"step":40,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":41,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":42,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":43,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":44,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":45,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":46,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":47,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":48,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":49,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":50,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":51,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":52,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":53,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":54,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":56,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":57,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":58,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":59,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":60,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":61,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":62,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":63,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":64,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":65,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":66,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":67,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":68,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":69,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":70,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":71,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":72,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":73,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":74,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":75,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":76,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":77,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":78,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":79,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":80,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":81,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":82,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":83,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":84,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":85,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":86,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":87,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":88,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":89,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":90,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":91,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":92,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":93,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":94,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":95,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":96,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":97,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":98,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":99,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":100,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":101,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":102,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":103,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":104,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":105,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":106,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":107,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":108,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":109,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":110,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":111,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":112,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":113,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":114,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":115,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":116,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":117,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":118,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":119,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":120,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":121,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":122,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":123,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":124,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":125,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":126,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":127,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":128,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":129,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+res{"data":{"step":130,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":131,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":132,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":133,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":134,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":135,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":136,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":137,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":138,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":139,"name":"ActionHule","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+resnull
+res{"data":{"step":0,"name":"ActionNewRound","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":1,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":2,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":3,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":4,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+res{"data":{"step":6,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":7,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":8,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":9,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":10,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":11,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":12,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":13,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+res{"data":{"step":14,"name":"ActionChiPengGang","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":15,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":16,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":17,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":18,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":19,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":20,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":21,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":22,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":23,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":24,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":25,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":26,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":27,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":28,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":29,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":30,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":31,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":32,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":33,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":34,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":35,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":36,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":37,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":38,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":39,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":40,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":41,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":42,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":43,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":44,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":45,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":46,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":47,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":48,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":49,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":50,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":51,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":52,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":53,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":54,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":55,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":56,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":57,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":58,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":59,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":60,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":61,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":62,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+resnull
+res{"data":{"step":63,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":64,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":66,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":65,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":67,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":68,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":69,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":70,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":71,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":72,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":73,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":74,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":75,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":76,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":77,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+resnull
+res{"data":{"step":79,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":80,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":81,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":82,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":83,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"step":84,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":85,"name":"ActionDiscardTile","data":""},"name":"ActionPrototype"}
+res{"data":{"step":86,"name":"ActionDealTile","data":""},"name":"ActionPrototype"}
+resnull
+res{"data":{"reason":"user-manual-terminate"},"name":"NotifyGameTerminate"}
+resnull
+
+
+ActionNewRound {
+  tiles: [
+    '1z', '6m', '9s',
+    '7z', '8p', '7m',
+    '2s', '6m', '9s',
+    '7z', '9s', '0p',
+    '5s', '4m'
+  ],
+  scores: [ 25000, 25000, 25000, 25000 ],
+  tingpais0: [],
+  tingpais1: [],
+  doras: [ '3m' ],
+  chang: 0,
+  ju: 0,
+  ben: 0,
+  operation: OptionalOperationList {
+    operation_list: [ [OptionalOperation] ],
+    seat: 0,
+    time_add: 0,
+    time_fixed: 303000
+  },
+  liqibang: 0,
+  al: false,
+  left_tile_count: 69
+}
+ActionNewRound {
+  tiles: [
+    '7s', '2p', '5z',
+    '7s', '1s', '9m',
+    '1p', '3s', '4m',
+    '0s', '3m', '6m',
+    '8m'
+  ],
+  scores: [ 24000, 26000, 25000, 25000 ],
+  tingpais0: [],
+  tingpais1: [],
+  doras: [ '2z' ],
+  chang: 0,
+  ju: 1,
+  ben: 0,
+  liqibang: 0,
+  al: false,
+  left_tile_count: 69
+}
+
+data: ActionDiscardTile {
+  tingpais: [],
+  doras: [],
+  seat: 3,
+  tile: '0m',
+  is_liqi: false,
+  operation: OptionalOperationList {
+    operation_list: [
+      OptionalOperation { combination: [ '5m|5m' ], type: 3 },
+      OptionalOperation { combination: [ '5m|5m|5m' ], type: 5 }
+    ],
+    seat: 1,
+    time_add: 0,
+    time_fixed: 300000
+  },
+  moqie: false,
+  zhenting: false,
+  is_wliqi: false
+}
