@@ -54,7 +54,8 @@ bot.init()
   .then(inited => {
     if (!inited) { UI.print('OpenCV load failed...'); return }
     app.listen(56556, () => {
-      console.log('listening at 56556')
+      UI.clear()
+      UI.print('OpenCV loaded. Service started at port: 56556')
       logger.info('<server-base> Server started at port 56556')
     })
   })
