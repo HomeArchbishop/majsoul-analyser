@@ -179,7 +179,7 @@ class MsgHandler {
     /* => USELESS, won't handle it */
     // UI.clear()
     // UI.print(UI.text.roundState(round))
-    UI.print('new msg...')
+    UI.print('new msg...', msg.data.step)
   }
 
   /**
