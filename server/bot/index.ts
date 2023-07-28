@@ -119,7 +119,7 @@ class Bot {
     const clickX = maxPoint.x + targetTemplateSize.width / 2 + shotX
     const clickY = maxPoint.y + targetTemplateSize.height / 2 + shotY
 
-    ;[mtDst, mtMask, searchMat, templateMat].forEach(m => m.delete())
+    ;[mtDst, mtMask, searchMat, templateMat, targetTemplateMat].forEach(m => m.delete())
 
     return [clickX, clickY]
   }
