@@ -2,6 +2,9 @@ import { loadImage } from 'canvas'
 import { getOpenCV, loadOpenCV, type opencv } from './opencv'
 import path from 'path'
 import { screenshot, tripleClick } from './robotjs'
+import { Round } from '../gameRecords/Round'
+import { Tile } from '../types/General'
+import { sortTiles } from '../utils/sortTiles'
 
 class Bot {
   async init (): Promise<boolean> {
@@ -25,6 +28,10 @@ class Bot {
     this.canvasScreenY = canvasScreenY
   }
 
+  updateRound (round: Round): void {
+    this.round = round
+  }
+
   async #loadTemplate (name: string): Promise<HTMLImageElement> {
     if (this.templateCaches[name] !== undefined) { return this.templateCaches[name] }
     const templateFile = path.resolve(__dirname, './templates', name)
@@ -44,11 +51,39 @@ class Bot {
 
     if (wait) { await new Promise<void>(resolve => setTimeout(() => { resolve() }, 1300)) }
 
+    const [clickX, clickY] = await this.#getClickPointByCalculation(tile)
+    console.log('click:', clickX, clickY)
+    tripleClick(clickX, clickY)
+  }
+
+  async #getClickPointByCalculation (tile: string): Promise<[number, number]> {
+    if (!/^\d(s|m|p|z)$/.test(tile)) {
+      return await this.#getClickPointByCV(tile)
+    }
+    const player = this.round.players[this.round.meSeat]
+    if (player.hand === undefined) { return [NaN, NaN] }
+
+    const formatedTiles: Tile[] = []
+    const is14Tiles = player.hand.length + player.anGang.length * 3 + player.fulu.length * 3 === 14
+    if (is14Tiles) {
+      formatedTiles.push(...sortTiles(player.hand.slice(0, -1)).map(t => t.replace(/0/g, '5')) as Tile[])
+      formatedTiles.push(player.hand.slice(-1)[0])
+    } else {
+      formatedTiles.push(...sortTiles(player.hand).map(t => t.replace(/0/g, '5')) as Tile[])
+    }
+    const index = formatedTiles.findIndex(t => t === tile)
+    if (index === -1) { return await this.#getClickPointByCV(tile) }
+    const clickX = (0.1168 + 0.0496 * (index + 0.5)) * this.canvasW + this.canvasScreenX + ((is14Tiles && index === player.hand.length - 1) ? 0.0168 : 0) * this.canvasW
+    const clickY = 0.928 * this.canvasH + this.canvasScreenY
+    return [clickX, clickY]
+  }
+
+  async #getClickPointByCV (tile: string): Promise<[number, number]> {
+    if (this.cv === undefined) { return [NaN, NaN] }
+
     if (tile === 'tiaoguo') {
-      console.log('取消')
       await new Promise<void>(resolve => setTimeout(() => { resolve() }, 1000))
-      tripleClick(1053 / 1536 * this.canvasW + this.canvasScreenX, 668 / 1536 * this.canvasW + this.canvasScreenY)
-      return
+      return [1053 / 1536 * this.canvasW + this.canvasScreenX, 668 / 1536 * this.canvasW + this.canvasScreenY]
     }
 
     const shotX = this.canvasScreenX + this.canvasW * 0.091
@@ -83,13 +118,14 @@ class Bot {
 
     const clickX = maxPoint.x + targetTemplateSize.width / 2 + shotX
     const clickY = maxPoint.y + targetTemplateSize.height / 2 + shotY
-    console.log('click:', clickX, clickY)
-    tripleClick(clickX, clickY)
 
     ;[mtDst, mtMask, searchMat, templateMat].forEach(m => m.delete())
+
+    return [clickX, clickY]
   }
 
   cv?: opencv.cv
+  round: Round
   canvasW: number
   canvasH: number
   canvasScreenX: number

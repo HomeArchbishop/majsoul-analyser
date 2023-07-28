@@ -189,6 +189,7 @@ class MsgHandler {
     if (this.game === undefined) { return } /* 如果没有创建Game实例, 说明ID等有问题, 不进行下面的分析 */
     const round = this.game.rounds[this.game.roundPointer]
     if (round === undefined) { return }
+    if (this.bot !== undefined) { this.bot.updateRound(round) } /* 记录当前round */
     /* =============================== */
     /* 处理一般流程Action消息的operations */
     /* =============================== */
