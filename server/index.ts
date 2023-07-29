@@ -27,7 +27,7 @@ router.post('/', async (ctx, next) => {
     const canvasScreenX = +(ctx.query.x ?? 0)
     const canvasScreenY = +(ctx.query.y ?? 0)
     if (msgType === 'res') {
-      logger.info('<server-base> Server received res buffer')
+      logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
       msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, { bot, canvasW, canvasH, canvasScreenX, canvasScreenY })
     } else if (msgType === 'req') {
       logger.info('<server-base> Server received req buffer')

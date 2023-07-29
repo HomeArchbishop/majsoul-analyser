@@ -77,6 +77,7 @@ class MsgHandler {
     if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && msg.data.game_restore.actions.length > 0 && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列, 处理最后一步的 operation (if any) */
       this.#handleActionPrototypeOperations({ name: 'ActionPrototype', data: msg.data.game_restore.actions.slice(-1)[0] })
     }
+    logger.info(`<res-handler> handle ResMsg${_rand}`)
   }
 
   /**
@@ -213,7 +214,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'zimo' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'zimo' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'zimo' : 'tiaoguo')
             break
           }
         }
@@ -222,7 +223,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'hule' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'hu' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'hu' : 'tiaoguo')
             break
           }
         }
@@ -231,7 +232,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'chi' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'chi' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'chi' : 'tiaoguo')
             break
           }
         }
@@ -240,7 +241,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'peng' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'peng' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'peng' : 'tiaoguo')
             break
           }
         }
@@ -250,9 +251,9 @@ class MsgHandler {
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'AnGang' : 'tiaoguo'}`)
             if (choice) {
-              this.bot.ensureClick('gang').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+              this.bot.ensureClick('gang')
             } else {
-              this.bot.ensureClick(discard, msg.data.name === 'ActionNewRound').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+              this.bot.ensureClick(discard, msg.data.name === 'ActionNewRound')
             }
             break
           }
@@ -262,7 +263,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'AnGang' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'gang' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'gang' : 'tiaoguo')
             break
           }
         }
@@ -272,10 +273,10 @@ class MsgHandler {
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'lizhi:' + discard : 'moting:' + discard}`)
             if (choice) {
-              this.bot.ensureClick('lizhi').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
-              this.bot.ensureClick(discard).catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+              this.bot.ensureClick('lizhi')
+              this.bot.ensureClick(discard)
             } else {
-              this.bot.ensureClick(discard).catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+              this.bot.ensureClick(discard)
             }
             break
           }
@@ -285,7 +286,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'babei' : 'tiaoguo'}`)
-            this.bot.ensureClick(choice ? 'babei' : 'tiaoguo').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice ? 'babei' : 'tiaoguo')
             break
           }
         }
@@ -294,7 +295,7 @@ class MsgHandler {
           console.log({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click tile(${choice})`)
-            this.bot.ensureClick(choice, msg.data.name === 'ActionNewRound').catch((err) => { logger.info(`<bot> err: ${err as string}`) })
+            this.bot.ensureClick(choice, msg.data.name === 'ActionNewRound')
             break
           }
         }
