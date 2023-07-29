@@ -71,12 +71,13 @@ class Bot {
     const formatedTiles: Tile[] = []
     const is14Tiles = player.hand.length + player.anGang.length * 3 + player.fulu.length * 3 === 14
     if (is14Tiles) {
-      formatedTiles.push(...sortTiles(player.hand.slice(0, -1)).map(t => t.replace(/0/g, '5')) as Tile[])
+      formatedTiles.push(...sortTiles(player.hand.slice(0, -1)))
       formatedTiles.push(player.hand.slice(-1)[0])
     } else {
-      formatedTiles.push(...sortTiles(player.hand).map(t => t.replace(/0/g, '5')) as Tile[])
+      formatedTiles.push(...sortTiles(player.hand))
     }
-    const index = formatedTiles.findIndex(t => t === tile)
+    let index = formatedTiles.findIndex(t => t === tile)
+    if (index === -1 && /5(s|m|p)/.test(tile)) { index = formatedTiles.findIndex(t => t === tile.replace(/0/g, '5')) }
     if (index === -1) { return await this.#getClickPointByCV(tile) }
     const clickX = (0.1168 + 0.0496 * (index + 0.5)) * this.canvasW + this.canvasScreenX + ((is14Tiles && index === player.hand.length - 1) ? 0.0168 : 0) * this.canvasW
     const clickY = 0.928 * this.canvasH + this.canvasScreenY
