@@ -9,6 +9,7 @@ import { parseResBufferMsg } from './majsoul/parseResBufferMsg'
 import * as Action from './types/Action'
 import { ActionPrototype } from './types/ParsedMsg'
 import { type Bot } from './bot'
+import { sortTiles } from './utils/sortTiles'
 
 function printIDerror (): void {
   UI.print('未获取玩家的ID或ID错误, 请重启游戏')
@@ -97,7 +98,7 @@ class MsgHandler {
         al: actionData.al,
         scores: actionData.scores,
         meSeat: this.game.meSeat,
-        meTiles: actionData.tiles,
+        meTiles: sortTiles(actionData.tiles),
         leftTileCnt: actionData.left_tile_count,
         doras: actionData.doras
       }))
