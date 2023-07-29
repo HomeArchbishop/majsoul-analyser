@@ -5,6 +5,7 @@ import { screenshot, tripleClick } from './robotjs'
 import { Round } from '../gameRecords/Round'
 import { Tile } from '../types/General'
 import { sortTiles } from '../utils/sortTiles'
+import logger from '../logger'
 
 class Bot {
   async init (): Promise<boolean> {
@@ -45,7 +46,11 @@ class Bot {
     this.scale = this.canvasW / 1536 /* 1536 是手牌宽度 80 时的 canvas 宽度 */
   }
 
-  async ensureClick (tile: string, wait: boolean = false): Promise<void> {
+  ensureClick (tile: string, wait: boolean = false): void {
+    this.#lastClickTask = this.#lastClickTask.then(async () => await this.clickTask(tile, wait).catch((err) => { logger.info(`<bot> err: ${err as string}`) }))
+  }
+
+  async clickTask (tile: string, wait: boolean = false): Promise<void> {
     if (this.cv === undefined) { return }
     await this.#useScale()
 
@@ -133,6 +138,8 @@ class Bot {
   scale: number = 1 // 将模版放大的倍数
 
   templateCaches: Record<string, HTMLImageElement> = {}
+
+  #lastClickTask: Promise<void> = Promise.resolve()
 }
 
 export const bot = new Bot()
