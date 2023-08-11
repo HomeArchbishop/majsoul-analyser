@@ -6,6 +6,18 @@ import path from 'path'
 import { formatTiles } from '../utils/formatTiles'
 import { tile2nameSimplified } from '../utils/tile2name'
 import { nextTile } from '../utils/nextTile'
+import os from 'node:os'
+
+let binPath: string
+
+const platform = os.platform()
+if (platform === 'darwin') {
+  binPath = path.resolve(__dirname, './mahjong-helper')
+} else if (platform === 'win32') {
+  binPath = path.resolve(__dirname, './mahjong-helper.exe')
+} else {
+  throw new Error('This program only supports Darwin or Windows, but found ' + platform)
+}
 
 class Analyser extends BaseAnalyser {
   analyseDiscard (round: Round): { choice: Tile, info: string } {
@@ -14,7 +26,7 @@ class Analyser extends BaseAnalyser {
     const anGang = round.players[round.meSeat].anGang
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase()
-    const out = shell.exec(`${path.resolve(__dirname, './mahjong-helper')} ${daraArgs} ${args}`, { silent: true }).stdout
+    const out = shell.exec(`${binPath} ${daraArgs} ${args}`, { silent: true }).stdout
     const choiceName = out.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null) {
       const choice = tile2nameSimplified(choiceName[0]) as Tile
@@ -31,7 +43,7 @@ class Analyser extends BaseAnalyser {
     const anGang = round.players[round.meSeat].anGang
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
-    const out = shell.exec(`${path.resolve(__dirname, './mahjong-helper')} ${daraArgs} ${args}`, { silent: true }).stdout
+    const out = shell.exec(`${binPath} ${daraArgs} ${args}`, { silent: true }).stdout
     const choiceLine = out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null)
     if (choiceLine === undefined) {
       return { choice: false, info: '不副露' }

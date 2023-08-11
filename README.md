@@ -1,12 +1,20 @@
 # Majsoul-analyser 雀力展开！
 
-> 这会是我最后的项目啦，未来要学临床了，要和陪了我四年的前端技术说再见了。2023-7
+> 这会是我最后的项目啦，未来要学临床了。2023-7
 
-适用于 Mac x64 使用
+适用于: 
+  - Darwin (MacOS)
+  - Windows (test on Windows 11, works fine)
+
+Linux 正在测试
 
 ## 介绍
 
 - 自动刷麻将，处理牌局
+
+## Windows 系统使用注意
+windows在测试时发现，屏幕的缩放会影响浏览器 `screenX` 和 `screenY` ，**使用本程序前请先调整「设置」-「屏幕」-「缩放」到 100%**
+![「设置」-「屏幕」-「缩放」](./assets/windows_screen_settings.png)
 
 ## Usage
 
