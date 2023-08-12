@@ -26,9 +26,10 @@ router.post('/', async (ctx, next) => {
     const canvasH = +(ctx.query.h ?? 0)
     const canvasScreenX = +(ctx.query.x ?? 0)
     const canvasScreenY = +(ctx.query.y ?? 0)
+    const isWindowFocus = ctx.query.f === 'true'
     if (msgType === 'res') {
       logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-      msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, { bot, canvasW, canvasH, canvasScreenX, canvasScreenY })
+      msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY } : undefined)
     } else if (msgType === 'req') {
       logger.info('<server-base> Server received req buffer')
       msgHandler.handleReq(buffer)
