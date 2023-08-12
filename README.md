@@ -12,10 +12,6 @@ Linux 正在测试
 
 - 自动刷麻将，处理牌局
 
-## Windows 系统使用注意
-windows在测试时发现，屏幕的缩放会影响浏览器 `screenX` 和 `screenY` ，**使用本程序前请先调整「设置」-「屏幕」-「缩放」到 100%**
-![「设置」-「屏幕」-「缩放」](./assets/windows_screen_settings.png)
-
 ## Usage
 
 **Step1** 安装依赖
