@@ -117,15 +117,23 @@ class MsgHandler {
         round.players[actionData.seat].anGang.push([
           actionData.tiles, actionData.tiles, actionData.tiles, actionData.tiles
         ])
+        const hand = round.players[actionData.seat].hand
+        if (hand !== undefined) { /* 如果是自己, 取走手牌 */
+          for (let i = 0; i < hand.length; i++) {
+            if (hand[i] === actionData.tiles) {
+              hand.splice(i, 1)
+            }
+          }
+        }
       } else if (actionData.type === 4) { /* 加杠 */
         round.players[actionData.seat].fulu.push([
           actionData.tiles, actionData.tiles, actionData.tiles, actionData.tiles
         ])
-      }
-      if (round.players[actionData.seat].hand !== undefined) { /* 如果是自己, 取走手牌 */
-        const index = round.players[actionData.seat].hand?.findIndex(t => t === actionData.tiles)
-        if (index !== undefined && index > -1) {
-          round.players[actionData.seat].hand?.splice(index, 1)
+        if (round.players[actionData.seat].hand !== undefined) { /* 如果是自己, 取走手牌 */
+          const index = round.players[actionData.seat].hand?.findIndex(t => t === actionData.tiles)
+          if (index !== undefined && index > -1) {
+            round.players[actionData.seat].hand?.splice(index, 1)
+          }
         }
       }
     }
