@@ -7,7 +7,10 @@ export interface OptionalOperationList {
   operation_list: OptionalOperation[]
 }
 export interface OptionalOperation {
-  type: number // discard: 1, chi: 2, peng: 3, 4 angang gang: 5, liqi: 7, 8: zimo, hule: 9, babei: 11
+  type: number
+  // discard: 1, chi: 2, peng: 3, angang: 4, gang: 5, addgang: 6,
+  // liqi: 7, zimo: 8, hule(ron): 9, jiuzhongjiupai: 10, babei: 11,
+  // huansanzhang: 12, dingque: 13: reveal: 14
   combination: string[] // such as ['5s|5s', '0s'|'5s']
   // 6liqi => [ '7z', '7z' ] 出一张7z立直
   // 2chi => ['5s|5s', '0s'|'5s'] 与这些吃
