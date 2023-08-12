@@ -20,7 +20,7 @@ windows在测试时发现，屏幕的缩放会影响浏览器 `screenX` 和 `scr
 
 **Step1** 安装依赖
   ```bash
-  yarn run install
+  yarn run install:dependence
   ```
 **Step2** 构建前端注入脚本
   ```bash
