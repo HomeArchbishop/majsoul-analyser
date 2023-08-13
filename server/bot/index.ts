@@ -81,7 +81,7 @@ class Bot {
       formatedTiles.push(...sortTiles(player.hand))
     }
     let index = formatedTiles.findIndex(t => t === tile)
-    if (index === -1 && /5(s|m|p)/.test(tile)) { index = formatedTiles.findIndex(t => t === tile.replace(/0/g, '5')) }
+    if (index === -1 && /5(s|m|p)/.test(tile)) { index = formatedTiles.findIndex(t => t === tile.replace(/5/g, '0')) }
     if (index === -1) { return await this.#getClickPointByCV(tile) }
     const clickX = (0.1168 + 0.0496 * (index + 0.5)) * this.canvasW + this.canvasScreenX + ((is14Tiles && index === player.hand.length - 1) ? 0.0168 : 0) * this.canvasW
     const clickY = 0.928 * this.canvasH + this.canvasScreenY
