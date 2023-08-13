@@ -99,7 +99,7 @@ class Bot {
 
     console.log('shot:', shotX, shotY, shotW, shotH)
     await new Promise<void>(resolve => setTimeout(() => { resolve() }, 800))
-    const screenshotBitmap = screenshot(shotX, shotY, shotW, shotH)
+    const screenshotBitmap = screenshot(shotX * 1.5, shotY * 1.5, shotW * 1.5, shotH * 1.5)
     const screenshotImageData = new ImageData(new Uint8ClampedArray(screenshotBitmap.image as Buffer), screenshotBitmap.width, screenshotBitmap.height)
     const searchMat = this.cv.matFromImageData(screenshotImageData)
     // const searchMat = this.cv.imread(await this.#loadTemplate('pengscreen.png'))
