@@ -14,7 +14,7 @@ window.onblur = () => {
 wsHook.before = (data, url) => {
   if (!url.includes('/game-gateway')) { return data }
   try {
-    const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0)
+    const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0) / window.devicePixelRatio
     const screenY = window.screenY + window.outerHeight - window.innerHeight + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.getBoundingClientRect().y ?? 0)
     const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
     const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
