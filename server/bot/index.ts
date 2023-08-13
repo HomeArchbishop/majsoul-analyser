@@ -29,6 +29,10 @@ class Bot {
     this.canvasScreenY = canvasScreenY
   }
 
+  updateDPI (dpi: number): void {
+    this.dpi = dpi
+  }
+
   updateRound (round: Round): void {
     this.round = round
   }
@@ -99,9 +103,12 @@ class Bot {
 
     console.log('shot:', shotX, shotY, shotW, shotH)
     await new Promise<void>(resolve => setTimeout(() => { resolve() }, 800))
-    const screenshotBitmap = screenshot(shotX * 1.5, shotY * 1.5, shotW * 1.5, shotH * 1.5)
+    const screenshotBitmap = screenshot(shotX * this.dpi, shotY * this.dpi, shotW * this.dpi, shotH * this.dpi)
     const screenshotImageData = new ImageData(new Uint8ClampedArray(screenshotBitmap.image as Buffer), screenshotBitmap.width, screenshotBitmap.height)
     const searchMat = this.cv.matFromImageData(screenshotImageData)
+    const targetSearchMat = new this.cv.Mat()
+    const targetSearchSize = new this.cv.Size(screenshotBitmap.width / this.dpi, screenshotBitmap.height / this.dpi)
+    this.cv.resize(searchMat, targetSearchMat, targetSearchSize, 0, 0, this.cv.INTER_AREA)
     // const searchMat = this.cv.imread(await this.#loadTemplate('pengscreen.png'))
 
     const templateImage = await this.#loadTemplate(`${tile}.png`)
@@ -115,7 +122,7 @@ class Bot {
     const mtMask = new this.cv.Mat()
 
     console.time('mt')
-    this.cv.matchTemplate(searchMat, targetTemplateMat, mtDst, this.cv.TM_CCOEFF, mtMask)
+    this.cv.matchTemplate(targetSearchMat, targetTemplateMat, mtDst, this.cv.TM_CCOEFF, mtMask)
     const maxPoint = this.cv.minMaxLoc(mtDst, mtMask).maxLoc
     const maxVal = this.cv.minMaxLoc(mtDst, mtMask).maxVal
     console.timeEnd('mt')
@@ -125,7 +132,7 @@ class Bot {
     const clickX = maxPoint.x + targetTemplateSize.width / 2 + shotX
     const clickY = maxPoint.y + targetTemplateSize.height / 2 + shotY
 
-    ;[mtDst, mtMask, searchMat, templateMat, targetTemplateMat].forEach(m => m.delete())
+    ;[mtDst, mtMask, searchMat, templateMat, targetTemplateMat, targetSearchMat].forEach(m => m.delete())
 
     return [clickX, clickY]
   }
@@ -137,6 +144,8 @@ class Bot {
   canvasScreenX: number
   canvasScreenY: number
   scale: number = 1 // 将模版放大的倍数
+
+  dpi: number
 
   templateCaches: Record<string, HTMLImageElement> = {}
 

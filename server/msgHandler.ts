@@ -34,9 +34,10 @@ class MsgHandler {
     this.reqQueue[index] = { resName }
   }
 
-  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number }): void {
+  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number }): void {
     if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
     if (this.bot !== undefined && botOptions === undefined) { this.bot = undefined } /* 没有自动化机器人传入, 就说明关闭自动化 */
+    if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateDPI(botOptions.dpi) } /* 记录更新模版放大比 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasWH(botOptions.canvasW, botOptions.canvasH) } /* 记录更新模版放大比 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasXY(botOptions.canvasScreenX, botOptions.canvasScreenY) } /* 记录canvas屏幕位置 */
     const _rand = ~~(Math.random() * 10000)
