@@ -1,0 +1,308 @@
+info: <res-handler> Parsed ResMsg761 {"data":{"step":1,"name":"ActionNewRound","data":{"tiles":["3z","5p","1m","9p","2p","1m","5s","1p","8p","3z","4p","4z","8s"],"scores":[35000,35000,35000],"tingpais0":[],"tingpais1":[],"doras":["4z"],"chang":0,"ju":0,"ben":0,"liqibang":0,"al":false,"left_tile_count":54}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:23.643Z"}
+info: <res-handler> handle ResMsg761 {"timestamp":"2023-08-14T08:56:23.643Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:24.358Z"}
+info: <req-handler> Begin to handle ReqMsg(5218): [2,68,1,10,33,46,108,113,46,70,97,115,116,84,101,115,116,46,102,101,116,99,104,71,97,109,101,80,108,97,121,101,114,83,116,97,116,101,18,0] {"timestamp":"2023-08-14T08:56:24.358Z"}
+info: <req-handler> Parsed ReqMsg(5218) null {"timestamp":"2023-08-14T08:56:24.361Z"}
+info: <server-base> Server received res buffer: [3,68,1,10,0,18,5,18,3,3,3,3] {"timestamp":"2023-08-14T08:56:24.412Z"}
+info: <res-handler> Begin to handle ResMsg1392: [3,68,1,10,0,18,5,18,3,3,3,3] {"timestamp":"2023-08-14T08:56:24.413Z"}
+info: <res-handler> Parsed ResMsg1392 null {"timestamp":"2023-08-14T08:56:24.416Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:25.023Z"}
+info: <req-handler> Begin to handle ReqMsg(1998): [2,69,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:25.023Z"}
+info: <req-handler> Parsed ReqMsg(1998) null {"timestamp":"2023-08-14T08:56:25.025Z"}
+info: <server-base> Server received res buffer: [3,69,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:25.079Z"}
+info: <res-handler> Begin to handle ResMsg7182: [3,69,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:25.080Z"}
+info: <res-handler> Parsed ResMsg7182 null {"timestamp":"2023-08-14T08:56:25.082Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:27.025Z"}
+info: <req-handler> Begin to handle ReqMsg(2448): [2,70,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:27.025Z"}
+info: <req-handler> Parsed ReqMsg(2448) null {"timestamp":"2023-08-14T08:56:27.027Z"}
+info: <server-base> Server received res buffer: [3,70,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:27.091Z"}
+info: <res-handler> Begin to handle ResMsg7899: [3,70,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:27.093Z"}
+info: <res-handler> Parsed ResMsg7899 null {"timestamp":"2023-08-14T08:56:27.095Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:29.029Z"}
+info: <req-handler> Begin to handle ReqMsg(8338): [2,71,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:29.029Z"}
+info: <req-handler> Parsed ReqMsg(8338) null {"timestamp":"2023-08-14T08:56:29.031Z"}
+info: <server-base> Server received res buffer: [3,71,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:29.130Z"}
+info: <res-handler> Begin to handle ResMsg3566: [3,71,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:29.131Z"}
+info: <res-handler> Parsed ResMsg3566 null {"timestamp":"2023-08-14T08:56:29.134Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:31.032Z"}
+info: <req-handler> Begin to handle ReqMsg(1111): [2,72,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:31.032Z"}
+info: <req-handler> Parsed ReqMsg(1111) null {"timestamp":"2023-08-14T08:56:31.034Z"}
+info: <server-base> Server received res buffer: [3,72,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:31.093Z"}
+info: <res-handler> Begin to handle ResMsg9956: [3,72,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:31.093Z"}
+info: <res-handler> Parsed ResMsg9956 null {"timestamp":"2023-08-14T08:56:31.095Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:33.032Z"}
+info: <req-handler> Begin to handle ReqMsg(7171): [2,73,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:33.032Z"}
+info: <req-handler> Parsed ReqMsg(7171) null {"timestamp":"2023-08-14T08:56:33.033Z"}
+info: <server-base> Server received res buffer: [3,73,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:33.107Z"}
+info: <res-handler> Begin to handle ResMsg9814: [3,73,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:33.108Z"}
+info: <res-handler> Parsed ResMsg9814 null {"timestamp":"2023-08-14T08:56:33.110Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:35.034Z"}
+info: <req-handler> Begin to handle ReqMsg(3711): [2,74,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:35.034Z"}
+info: <req-handler> Parsed ReqMsg(3711) null {"timestamp":"2023-08-14T08:56:35.036Z"}
+info: <server-base> Server received res buffer: [3,74,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:35.092Z"}
+info: <res-handler> Begin to handle ResMsg1808: [3,74,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:35.093Z"}
+info: <res-handler> Parsed ResMsg1808 null {"timestamp":"2023-08-14T08:56:35.095Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,2,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,85,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:35.561Z"}
+info: <res-handler> Begin to handle ResMsg7272: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,2,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,85,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:35.562Z"}
+info: <res-handler> Parsed ResMsg7272 {"data":{"step":2,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":0,"tile":"3s","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:35.564Z"}
+info: <res-handler> handle ResMsg7272 {"timestamp":"2023-08-14T08:56:35.565Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,3,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,87,102,204] {"timestamp":"2023-08-14T08:56:36.062Z"}
+info: <res-handler> Begin to handle ResMsg1321: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,3,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,87,102,204] {"timestamp":"2023-08-14T08:56:36.063Z"}
+info: <res-handler> Parsed ResMsg1321 {"data":{"step":3,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":1,"left_tile_count":53,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:36.065Z"}
+info: <res-handler> handle ResMsg1321 {"timestamp":"2023-08-14T08:56:36.065Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,4,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,95,185,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:36.660Z"}
+info: <res-handler> Begin to handle ResMsg8918: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,4,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,95,185,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:36.662Z"}
+info: <res-handler> Parsed ResMsg8918 {"data":{"step":4,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":1,"tile":"9m","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:36.664Z"}
+info: <res-handler> handle ResMsg8918 {"timestamp":"2023-08-14T08:56:36.664Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:37.034Z"}
+info: <req-handler> Begin to handle ReqMsg(8316): [2,75,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:37.034Z"}
+info: <req-handler> Parsed ReqMsg(8316) null {"timestamp":"2023-08-14T08:56:37.037Z"}
+info: <server-base> Server received res buffer: [3,75,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:37.095Z"}
+info: <res-handler> Begin to handle ResMsg2606: [3,75,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:37.096Z"}
+info: <res-handler> Parsed ResMsg2606 null {"timestamp":"2023-08-14T08:56:37.098Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,49,8,5,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,29,134,111,112,89,100,181,95,185,108,170,146,141,154,134,250,117,168,121,224,204,156,21,45,30,137,111,143,45,244] {"timestamp":"2023-08-14T08:56:37.153Z"}
+info: <res-handler> Begin to handle ResMsg6074: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,49,8,5,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,29,134,111,112,89,100,181,95,185,108,170,146,141,154,134,250,117,168,121,224,204,156,21,45,30,137,111,143,45,244] {"timestamp":"2023-08-14T08:56:37.154Z"}
+info: <res-handler> Parsed ResMsg6074 {"data":{"step":5,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":2,"tile":"3p","left_tile_count":52,"operation":{"operation_list":[{"combination":[],"type":1},{"combination":[],"type":11}],"seat":2,"time_add":20000,"time_fixed":5000},"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:37.157Z"}
+info: <bot> bot click babei {"timestamp":"2023-08-14T08:56:37.157Z"}
+info: <res-handler> handle ResMsg6074 {"timestamp":"2023-08-14T08:56:37.157Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:38.546Z"}
+info: <req-handler> Begin to handle ReqMsg(4458): [2,76,1,10,27,46,108,113,46,70,97,115,116,84,101,115,116,46,105,110,112,117,116,79,112,101,114,97,116,105,111,110,18,6,8,11,40,0,48,0] {"timestamp":"2023-08-14T08:56:38.546Z"}
+info: <req-handler> Parsed ReqMsg(4458) null {"timestamp":"2023-08-14T08:56:38.548Z"}
+info: <server-base> Server received res buffer: [3,76,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:38.549Z"}
+info: <res-handler> Begin to handle ResMsg539: [3,76,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:38.549Z"}
+info: <res-handler> Parsed ResMsg539 null {"timestamp":"2023-08-14T08:56:38.551Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,23,8,6,18,11,65,99,116,105,111,110,66,97,66,101,105,26,6,157,118,81,98,22,204] {"timestamp":"2023-08-14T08:56:38.551Z"}
+info: <res-handler> Begin to handle ResMsg5490: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,23,8,6,18,11,65,99,116,105,111,110,66,97,66,101,105,26,6,157,118,81,98,22,204] {"timestamp":"2023-08-14T08:56:38.552Z"}
+info: <res-handler> Parsed ResMsg5490 {"data":{"step":6,"name":"ActionBaBei","data":{"doras":[],"tingpais":[],"seat":2,"zhenting":false,"moqie":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:38.555Z"}
+info: <res-handler> handle ResMsg5490 {"timestamp":"2023-08-14T08:56:38.555Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,49,8,7,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,29,134,111,112,89,102,181,95,190,108,182,146,141,154,134,250,117,154,219,116,198,148,61,150,45,163,211,210,45,244] {"timestamp":"2023-08-14T08:56:38.765Z"}
+info: <res-handler> Begin to handle ResMsg3730: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,49,8,7,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,29,134,111,112,89,102,181,95,190,108,182,146,141,154,134,250,117,154,219,116,198,148,61,150,45,163,211,210,45,244] {"timestamp":"2023-08-14T08:56:38.766Z"}
+info: <res-handler> Parsed ResMsg3730 {"data":{"step":7,"name":"ActionDealTile","data":{"doras":["4z"],"tingpais":[],"seat":2,"tile":"1p","left_tile_count":51,"operation":{"operation_list":[{"combination":[],"type":1}],"seat":2,"time_add":20000,"time_fixed":5000},"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:38.768Z"}
+info: <bot> bot click tile(8s) {"timestamp":"2023-08-14T08:56:39.067Z"}
+info: <res-handler> handle ResMsg3730 {"timestamp":"2023-08-14T08:56:39.067Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:39.597Z"}
+info: <req-handler> Begin to handle ReqMsg(9412): [2,77,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:39.597Z"}
+info: <req-handler> Parsed ReqMsg(9412) null {"timestamp":"2023-08-14T08:56:39.600Z"}
+info: <server-base> Server received res buffer: [3,77,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:39.600Z"}
+info: <res-handler> Begin to handle ResMsg431: [3,77,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:39.602Z"}
+info: <res-handler> Parsed ResMsg431 null {"timestamp":"2023-08-14T08:56:39.603Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:39.603Z"}
+info: <req-handler> Begin to handle ReqMsg(9233): [2,78,1,10,27,46,108,113,46,70,97,115,116,84,101,115,116,46,105,110,112,117,116,79,112,101,114,97,116,105,111,110,18,12,8,1,26,2,56,115,40,0,48,0,56,0] {"timestamp":"2023-08-14T08:56:39.603Z"}
+info: <req-handler> Parsed ReqMsg(9233) null {"timestamp":"2023-08-14T08:56:39.606Z"}
+info: <server-base> Server received res buffer: [3,78,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:39.607Z"}
+info: <res-handler> Begin to handle ResMsg5697: [3,78,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:39.607Z"}
+info: <res-handler> Parsed ResMsg5697 null {"timestamp":"2023-08-14T08:56:39.610Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,8,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,94,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:39.610Z"}
+info: <res-handler> Begin to handle ResMsg3949: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,8,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,94,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:39.611Z"}
+info: <res-handler> Parsed ResMsg3949 {"data":{"step":8,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":2,"tile":"8s","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:39.615Z"}
+info: <res-handler> handle ResMsg3949 {"timestamp":"2023-08-14T08:56:39.615Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,9,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,80,102,204] {"timestamp":"2023-08-14T08:56:39.770Z"}
+info: <res-handler> Begin to handle ResMsg6611: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,9,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,80,102,204] {"timestamp":"2023-08-14T08:56:39.772Z"}
+info: <res-handler> Parsed ResMsg6611 {"data":{"step":9,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":0,"left_tile_count":50,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:39.774Z"}
+info: <res-handler> handle ResMsg6611 {"timestamp":"2023-08-14T08:56:39.774Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:41.036Z"}
+info: <req-handler> Begin to handle ReqMsg(3662): [2,79,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:41.036Z"}
+info: <req-handler> Parsed ReqMsg(3662) null {"timestamp":"2023-08-14T08:56:41.037Z"}
+info: <server-base> Server received res buffer: [3,79,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:41.103Z"}
+info: <res-handler> Begin to handle ResMsg8930: [3,79,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:41.103Z"}
+info: <res-handler> Parsed ResMsg8930 null {"timestamp":"2023-08-14T08:56:41.105Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:43.037Z"}
+info: <req-handler> Begin to handle ReqMsg(9590): [2,80,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:43.038Z"}
+info: <req-handler> Parsed ReqMsg(9590) null {"timestamp":"2023-08-14T08:56:43.040Z"}
+info: <server-base> Server received res buffer: [3,80,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:43.098Z"}
+info: <res-handler> Begin to handle ResMsg320: [3,80,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:43.098Z"}
+info: <res-handler> Parsed ResMsg320 null {"timestamp":"2023-08-14T08:56:43.100Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,10,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,80,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:44.460Z"}
+info: <res-handler> Begin to handle ResMsg5280: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,10,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,80,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:44.461Z"}
+info: <res-handler> Parsed ResMsg5280 {"data":{"step":10,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":0,"tile":"6p","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:44.463Z"}
+info: <res-handler> handle ResMsg5280 {"timestamp":"2023-08-14T08:56:44.464Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,11,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,83,102,204] {"timestamp":"2023-08-14T08:56:44.959Z"}
+info: <res-handler> Begin to handle ResMsg8651: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,11,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,83,102,204] {"timestamp":"2023-08-14T08:56:44.960Z"}
+info: <res-handler> Parsed ResMsg8651 {"data":{"step":11,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":1,"left_tile_count":49,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:44.962Z"}
+info: <res-handler> handle ResMsg8651 {"timestamp":"2023-08-14T08:56:44.962Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:45.038Z"}
+info: <req-handler> Begin to handle ReqMsg(789): [2,81,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:45.038Z"}
+info: <req-handler> Parsed ReqMsg(789) null {"timestamp":"2023-08-14T08:56:45.039Z"}
+info: <server-base> Server received res buffer: [3,81,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:45.098Z"}
+info: <res-handler> Begin to handle ResMsg937: [3,81,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:45.099Z"}
+info: <res-handler> Parsed ResMsg937 null {"timestamp":"2023-08-14T08:56:45.101Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,12,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,84,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:45.821Z"}
+info: <res-handler> Begin to handle ResMsg2683: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,12,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,84,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:45.822Z"}
+info: <res-handler> Parsed ResMsg2683 {"data":{"step":12,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":1,"tile":"2p","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:45.824Z"}
+info: <res-handler> handle ResMsg2683 {"timestamp":"2023-08-14T08:56:45.824Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,13,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,25,154,115,116,93,111,186,83,161,112,178,150,145,158,138,254,121,158,223,112,202,232,49,146,27,165] {"timestamp":"2023-08-14T08:56:46.323Z"}
+info: <res-handler> Begin to handle ResMsg3801: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,13,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,25,154,115,116,93,111,186,83,161,112,178,150,145,158,138,254,121,158,223,112,202,232,49,146,27,165] {"timestamp":"2023-08-14T08:56:46.324Z"}
+info: <res-handler> Parsed ResMsg3801 {"data":{"step":13,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":2,"tile":"4s","left_tile_count":48,"operation":{"operation_list":[{"combination":[],"type":1}],"seat":2,"time_add":20000,"time_fixed":5000},"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:46.327Z"}
+info: <bot> bot click tile(3z) {"timestamp":"2023-08-14T08:56:46.513Z"}
+info: <res-handler> handle ResMsg3801 {"timestamp":"2023-08-14T08:56:46.513Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:47.027Z"}
+info: <req-handler> Begin to handle ReqMsg(5386): [2,82,1,10,27,46,108,113,46,70,97,115,116,84,101,115,116,46,105,110,112,117,116,79,112,101,114,97,116,105,111,110,18,12,8,1,26,2,51,122,40,0,48,0,56,0] {"timestamp":"2023-08-14T08:56:47.027Z"}
+info: <req-handler> Parsed ReqMsg(5386) null {"timestamp":"2023-08-14T08:56:47.029Z"}
+info: <server-base> Server received res buffer: [3,82,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:47.030Z"}
+info: <res-handler> Begin to handle ResMsg7025: [3,82,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:47.030Z"}
+info: <res-handler> Parsed ResMsg7025 null {"timestamp":"2023-08-14T08:56:47.032Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,14,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,85,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:47.032Z"}
+info: <res-handler> Begin to handle ResMsg2911: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,14,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,85,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:47.033Z"}
+info: <res-handler> Parsed ResMsg2911 {"data":{"step":14,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":2,"tile":"3z","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:47.035Z"}
+info: <res-handler> handle ResMsg2911 {"timestamp":"2023-08-14T08:56:47.035Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:47.038Z"}
+info: <req-handler> Begin to handle ReqMsg(5975): [2,83,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:47.039Z"}
+info: <req-handler> Parsed ReqMsg(5975) null {"timestamp":"2023-08-14T08:56:47.040Z"}
+info: <server-base> Server received res buffer: [3,83,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:47.098Z"}
+info: <res-handler> Begin to handle ResMsg7823: [3,83,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:47.098Z"}
+info: <res-handler> Parsed ResMsg7823 null {"timestamp":"2023-08-14T08:56:47.100Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,15,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,77,102,204] {"timestamp":"2023-08-14T08:56:47.197Z"}
+info: <res-handler> Begin to handle ResMsg707: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,15,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,77,102,204] {"timestamp":"2023-08-14T08:56:47.197Z"}
+info: <res-handler> Parsed ResMsg707 {"data":{"step":15,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":0,"left_tile_count":47,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:47.200Z"}
+info: <res-handler> handle ResMsg707 {"timestamp":"2023-08-14T08:56:47.200Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,16,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,81,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:48.932Z"}
+info: <res-handler> Begin to handle ResMsg7029: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,16,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,81,164,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:48.933Z"}
+info: <res-handler> Parsed ResMsg7029 {"data":{"step":16,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":0,"tile":"7p","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:48.935Z"}
+info: <res-handler> handle ResMsg7029 {"timestamp":"2023-08-14T08:56:48.936Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:49.040Z"}
+info: <req-handler> Begin to handle ReqMsg(8319): [2,84,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:49.040Z"}
+info: <req-handler> Parsed ReqMsg(8319) null {"timestamp":"2023-08-14T08:56:49.043Z"}
+info: <server-base> Server received res buffer: [3,84,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:49.098Z"}
+info: <res-handler> Begin to handle ResMsg517: [3,84,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:49.099Z"}
+info: <res-handler> Parsed ResMsg517 null {"timestamp":"2023-08-14T08:56:49.100Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,17,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,76,102,204] {"timestamp":"2023-08-14T08:56:49.446Z"}
+info: <res-handler> Begin to handle ResMsg1200: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,17,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,76,102,204] {"timestamp":"2023-08-14T08:56:49.447Z"}
+info: <res-handler> Parsed ResMsg1200 {"data":{"step":17,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":1,"left_tile_count":46,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:49.450Z"}
+info: <res-handler> handle ResMsg1200 {"timestamp":"2023-08-14T08:56:49.450Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:51.042Z"}
+info: <req-handler> Begin to handle ReqMsg(2011): [2,85,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:51.042Z"}
+info: <req-handler> Parsed ReqMsg(2011) null {"timestamp":"2023-08-14T08:56:51.044Z"}
+info: <server-base> Server received res buffer: [3,85,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:51.108Z"}
+info: <res-handler> Begin to handle ResMsg7337: [3,85,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:51.109Z"}
+info: <res-handler> Parsed ResMsg7337 null {"timestamp":"2023-08-14T08:56:51.110Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,18,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,83,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:52.690Z"}
+info: <res-handler> Begin to handle ResMsg4232: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,18,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,83,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:52.692Z"}
+info: <res-handler> Parsed ResMsg4232 {"data":{"step":18,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":1,"tile":"5z","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:52.694Z"}
+info: <res-handler> handle ResMsg4232 {"timestamp":"2023-08-14T08:56:52.694Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:53.042Z"}
+info: <req-handler> Begin to handle ReqMsg(9092): [2,86,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:53.042Z"}
+info: <req-handler> Parsed ReqMsg(9092) null {"timestamp":"2023-08-14T08:56:53.044Z"}
+info: <server-base> Server received res buffer: [3,86,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:53.102Z"}
+info: <res-handler> Begin to handle ResMsg8267: [3,86,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:53.103Z"}
+info: <res-handler> Parsed ResMsg8267 null {"timestamp":"2023-08-14T08:56:53.106Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,19,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,25,154,115,116,93,109,179,83,188,112,178,150,145,158,138,254,121,158,223,112,202,232,49,146,27,165] {"timestamp":"2023-08-14T08:56:53.203Z"}
+info: <res-handler> Begin to handle ResMsg1992: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,19,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,25,154,115,116,93,109,179,83,188,112,178,150,145,158,138,254,121,158,223,112,202,232,49,146,27,165] {"timestamp":"2023-08-14T08:56:53.205Z"}
+info: <res-handler> Parsed ResMsg1992 {"data":{"step":19,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":2,"tile":"6z","left_tile_count":45,"operation":{"operation_list":[{"combination":[],"type":1}],"seat":2,"time_add":20000,"time_fixed":5000},"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:53.208Z"}
+info: <bot> bot click tile(3z) {"timestamp":"2023-08-14T08:56:53.464Z"}
+info: <res-handler> handle ResMsg1992 {"timestamp":"2023-08-14T08:56:53.464Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:53.964Z"}
+info: <req-handler> Begin to handle ReqMsg(6890): [2,87,1,10,27,46,108,113,46,70,97,115,116,84,101,115,116,46,105,110,112,117,116,79,112,101,114,97,116,105,111,110,18,12,8,1,26,2,51,122,40,0,48,0,56,0] {"timestamp":"2023-08-14T08:56:53.964Z"}
+info: <req-handler> Parsed ReqMsg(6890) null {"timestamp":"2023-08-14T08:56:53.966Z"}
+info: <server-base> Server received res buffer: [3,87,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:53.966Z"}
+info: <res-handler> Begin to handle ResMsg709: [3,87,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:53.967Z"}
+info: <res-handler> Parsed ResMsg709 null {"timestamp":"2023-08-14T08:56:53.968Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,20,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,85,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:53.969Z"}
+info: <res-handler> Begin to handle ResMsg1846: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,20,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,126,99,104,85,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:53.970Z"}
+info: <res-handler> Parsed ResMsg1846 {"data":{"step":20,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":2,"tile":"3z","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:53.972Z"}
+info: <res-handler> handle ResMsg1846 {"timestamp":"2023-08-14T08:56:53.972Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,21,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,78,102,204] {"timestamp":"2023-08-14T08:56:54.443Z"}
+info: <res-handler> Begin to handle ResMsg1283: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,21,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,116,113,78,102,204] {"timestamp":"2023-08-14T08:56:54.444Z"}
+info: <res-handler> Parsed ResMsg1283 {"data":{"step":21,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":0,"left_tile_count":44,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:54.447Z"}
+info: <res-handler> handle ResMsg1283 {"timestamp":"2023-08-14T08:56:54.447Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:55.043Z"}
+info: <req-handler> Begin to handle ReqMsg(1272): [2,88,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:55.043Z"}
+info: <req-handler> Parsed ReqMsg(1272) null {"timestamp":"2023-08-14T08:56:55.045Z"}
+info: <server-base> Server received res buffer: [3,88,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:55.101Z"}
+info: <res-handler> Begin to handle ResMsg4394: [3,88,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:55.102Z"}
+info: <res-handler> Parsed ResMsg4394 null {"timestamp":"2023-08-14T08:56:55.105Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:57.050Z"}
+info: <req-handler> Begin to handle ReqMsg(3713): [2,89,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:57.050Z"}
+info: <req-handler> Parsed ReqMsg(3713) null {"timestamp":"2023-08-14T08:56:57.052Z"}
+info: <server-base> Server received res buffer: [3,89,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:57.108Z"}
+info: <res-handler> Begin to handle ResMsg8065: [3,89,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:57.109Z"}
+info: <res-handler> Parsed ResMsg8065 null {"timestamp":"2023-08-14T08:56:57.110Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:56:59.051Z"}
+info: <req-handler> Begin to handle ReqMsg(1877): [2,90,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:56:59.051Z"}
+info: <req-handler> Parsed ReqMsg(1877) null {"timestamp":"2023-08-14T08:56:59.053Z"}
+info: <server-base> Server received res buffer: [3,90,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:59.109Z"}
+info: <res-handler> Begin to handle ResMsg735: [3,90,1,10,0,18,0] {"timestamp":"2023-08-14T08:56:59.110Z"}
+info: <res-handler> Parsed ResMsg735 null {"timestamp":"2023-08-14T08:56:59.111Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,22,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,81,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:59.898Z"}
+info: <res-handler> Begin to handle ResMsg5782: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,22,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,81,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:56:59.898Z"}
+info: <res-handler> Parsed ResMsg5782 {"data":{"step":22,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":0,"tile":"7s","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:56:59.900Z"}
+info: <res-handler> handle ResMsg5782 {"timestamp":"2023-08-14T08:56:59.901Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,23,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,73,102,204] {"timestamp":"2023-08-14T08:57:00.397Z"}
+info: <res-handler> Begin to handle ResMsg8473: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,26,8,23,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,6,157,117,113,73,102,204] {"timestamp":"2023-08-14T08:57:00.398Z"}
+info: <res-handler> Parsed ResMsg8473 {"data":{"step":23,"name":"ActionDealTile","data":{"doras":[],"tingpais":[],"seat":1,"left_tile_count":43,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:00.401Z"}
+info: <res-handler> handle ResMsg8473 {"timestamp":"2023-08-14T08:57:00.401Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:01.052Z"}
+info: <req-handler> Begin to handle ReqMsg(5984): [2,91,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:01.052Z"}
+info: <req-handler> Parsed ReqMsg(5984) null {"timestamp":"2023-08-14T08:57:01.054Z"}
+info: <server-base> Server received res buffer: [3,91,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:01.108Z"}
+info: <res-handler> Begin to handle ResMsg3168: [3,91,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:01.109Z"}
+info: <res-handler> Parsed ResMsg3168 null {"timestamp":"2023-08-14T08:57:01.111Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,24,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,87,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:57:02.360Z"}
+info: <res-handler> Begin to handle ResMsg5550: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,24,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,125,99,104,87,174,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:57:02.361Z"}
+info: <res-handler> Parsed ResMsg5550 {"data":{"step":24,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":1,"tile":"1z","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:02.363Z"}
+info: <res-handler> handle ResMsg5550 {"timestamp":"2023-08-14T08:57:02.363Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:03.054Z"}
+info: <req-handler> Begin to handle ReqMsg(5144): [2,92,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:03.054Z"}
+info: <req-handler> Parsed ReqMsg(5144) null {"timestamp":"2023-08-14T08:57:03.057Z"}
+info: <server-base> Server received res buffer: [3,92,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:03.127Z"}
+info: <res-handler> Begin to handle ResMsg5989: [3,92,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:03.128Z"}
+info: <res-handler> Parsed ResMsg5989 null {"timestamp":"2023-08-14T08:57:03.129Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,50,8,25,18,17,65,99,116,105,111,110,67,104,105,80,101,110,103,71,97,110,103,26,27,152,111,116,92,67,197,120,245,74,191,173,235,144,132,197,12,158,126,234,201,191,143,179,107,161,233,170] {"timestamp":"2023-08-14T08:57:04.886Z"}
+info: <res-handler> Begin to handle ResMsg7784: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,50,8,25,18,17,65,99,116,105,111,110,67,104,105,80,101,110,103,71,97,110,103,26,27,152,111,116,92,67,197,120,245,74,191,173,235,144,132,197,12,158,126,234,201,191,143,179,107,161,233,170] {"timestamp":"2023-08-14T08:57:04.887Z"}
+info: <res-handler> Parsed ResMsg7784 {"data":{"step":25,"name":"ActionChiPengGang","data":{"tiles":["1z","1z","1z"],"froms":[0,0,1],"tingpais":[],"seat":0,"type":1,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:04.890Z"}
+info: <res-handler> handle ResMsg7784 {"timestamp":"2023-08-14T08:57:04.890Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:05.054Z"}
+info: <req-handler> Begin to handle ReqMsg(3151): [2,93,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:05.054Z"}
+info: <req-handler> Parsed ReqMsg(3151) null {"timestamp":"2023-08-14T08:57:05.057Z"}
+info: <server-base> Server received res buffer: [3,93,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:05.114Z"}
+info: <res-handler> Begin to handle ResMsg9109: [3,93,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:05.114Z"}
+info: <res-handler> Parsed ResMsg9109 null {"timestamp":"2023-08-14T08:57:05.116Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:07.058Z"}
+info: <req-handler> Begin to handle ReqMsg(7707): [2,94,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:07.058Z"}
+info: <req-handler> Parsed ReqMsg(7707) null {"timestamp":"2023-08-14T08:57:07.059Z"}
+info: <server-base> Server received res buffer: [3,94,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:07.127Z"}
+info: <res-handler> Begin to handle ResMsg6573: [3,94,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:07.127Z"}
+info: <res-handler> Parsed ResMsg6573 null {"timestamp":"2023-08-14T08:57:07.129Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:09.060Z"}
+info: <req-handler> Begin to handle ReqMsg(5871): [2,95,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:09.060Z"}
+info: <req-handler> Parsed ReqMsg(5871) null {"timestamp":"2023-08-14T08:57:09.062Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,26,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,80,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:57:09.108Z"}
+info: <res-handler> Begin to handle ResMsg3540: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,37,8,26,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,14,149,124,99,104,80,167,78,156,117,202,153,158,223,147] {"timestamp":"2023-08-14T08:57:09.109Z"}
+info: <res-handler> Parsed ResMsg3540 {"data":{"step":26,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":[],"seat":0,"tile":"6s","is_liqi":false,"moqie":false,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:09.111Z"}
+info: <res-handler> handle ResMsg3540 {"timestamp":"2023-08-14T08:57:09.111Z"}
+info: <server-base> Server received res buffer: [3,95,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:09.138Z"}
+info: <res-handler> Begin to handle ResMsg3800: [3,95,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:09.139Z"}
+info: <res-handler> Parsed ResMsg3800 null {"timestamp":"2023-08-14T08:57:09.140Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:11.061Z"}
+info: <req-handler> Begin to handle ReqMsg(6076): [2,96,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:11.061Z"}
+info: <req-handler> Parsed ReqMsg(6076) null {"timestamp":"2023-08-14T08:57:11.063Z"}
+info: <server-base> Server received res buffer: [3,96,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:11.144Z"}
+info: <res-handler> Begin to handle ResMsg8033: [3,96,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:11.145Z"}
+info: <res-handler> Parsed ResMsg8033 null {"timestamp":"2023-08-14T08:57:11.147Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:13.062Z"}
+info: <req-handler> Begin to handle ReqMsg(2928): [2,97,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:13.062Z"}
+info: <req-handler> Parsed ReqMsg(2928) null {"timestamp":"2023-08-14T08:57:13.064Z"}
+info: <server-base> Server received res buffer: [3,97,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:13.125Z"}
+info: <res-handler> Begin to handle ResMsg2738: [3,97,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:13.125Z"}
+info: <res-handler> Parsed ResMsg2738 null {"timestamp":"2023-08-14T08:57:13.128Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,56,8,27,18,17,65,99,116,105,111,110,67,104,105,80,101,110,103,71,97,110,103,26,33,178,152,158,133,153,243,69,202,96,229,240,200,174,178,40,211,252,165,34,128,202,229,220,74,204,19,236,65,106,22,14,10,120] {"timestamp":"2023-08-14T08:57:13.518Z"}
+info: <res-handler> Begin to handle ResMsg6538: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,56,8,27,18,17,65,99,116,105,111,110,67,104,105,80,101,110,103,71,97,110,103,26,33,178,152,158,133,153,243,69,202,96,229,240,200,174,178,40,211,252,165,34,128,202,229,220,74,204,19,236,65,106,22,14,10,120] {"timestamp":"2023-08-14T08:57:13.520Z"}
+info: <res-handler> Parsed ResMsg6538 {"data":{"step":27,"name":"ActionChiPengGang","data":{"tiles":["6s","6s","6s","6s"],"froms":[1,1,1,0],"tingpais":[],"seat":1,"type":2,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:13.522Z"}
+info: <res-handler> handle ResMsg6538 {"timestamp":"2023-08-14T08:57:13.522Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,30,8,28,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,10,169,129,109,68,88,218,110,218,89,206] {"timestamp":"2023-08-14T08:57:14.119Z"}
+info: <res-handler> Begin to handle ResMsg8394: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,30,8,28,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,10,169,129,109,68,88,218,110,218,89,206] {"timestamp":"2023-08-14T08:57:14.120Z"}
+info: <res-handler> Parsed ResMsg8394 {"data":{"step":28,"name":"ActionDealTile","data":{"doras":["4z"],"tingpais":[],"seat":1,"left_tile_count":42,"zhenting":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:14.122Z"}
+info: <res-handler> handle ResMsg8394 {"timestamp":"2023-08-14T08:57:14.123Z"}
+info: <server-base> Server received req buffer {"timestamp":"2023-08-14T08:57:15.063Z"}
+info: <req-handler> Begin to handle ReqMsg(6027): [2,98,1,10,30,46,108,113,46,70,97,115,116,84,101,115,116,46,99,104,101,99,107,78,101,116,119,111,114,107,68,101,108,97,121,18,0] {"timestamp":"2023-08-14T08:57:15.063Z"}
+info: <req-handler> Parsed ReqMsg(6027) null {"timestamp":"2023-08-14T08:57:15.065Z"}
+info: <server-base> Server received res buffer: [3,98,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:15.137Z"}
+info: <res-handler> Begin to handle ResMsg4035: [3,98,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:15.138Z"}
+info: <res-handler> Parsed ResMsg4035 null {"timestamp":"2023-08-14T08:57:15.140Z"}
+info: <server-base> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,29,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,22,141,101,75,80,125,198,38,132,109,179,161,134,61,121,221,17,243,112,236,205,251,172] {"timestamp":"2023-08-14T08:57:16.210Z"}
+info: <res-handler> Begin to handle ResMsg7211: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,29,18,17,65,99,116,105,111,110,68,105,115,99,97,114,100,84,105,108,101,26,22,141,101,75,80,125,198,38,132,109,179,161,134,61,121,221,17,243,112,236,205,251,172] {"timestamp":"2023-08-14T08:57:16.211Z"}
+info: <res-handler> Parsed ResMsg7211 {"data":{"step":29,"name":"ActionDiscardTile","data":{"tingpais":[],"doras":["4z","3s"],"seat":1,"tile":"3z","is_liqi":false,"moqie":true,"zhenting":false,"is_wliqi":false}},"name":"ActionPrototype"} {"timestamp":"2023-08-14T08:57:16.214Z"}
+info: <res-handler> handle ResMsg7211 {"timestamp":"2023-08-14T08:57:16.215Z"}
+info: <server-bae> Server received res buffer: [1,10,19,46,108,113,46,65,99,116,105,111,110,80,114,111,116,111,116,121,112,101,18,45,8,30,18,14,65,99,116,105,111,110,68,101,97,108,84,105,108,101,26,25,154,115,116,93,111,186,83,184,112,178,150,145,158,138,254,121,158,223,112,202,232,49,146,27,165] {"timestamp":"2023-08-14T08:57:16.714Z"}
+info: <server-base> Server received res buffer: [3,99,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:15.137Z"}
+info: <server-base> Server received res buffer: [3,100,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:15.137Z"}
+info: <server-base> Server received res buffer: [3,101,1,10,0,18,0] {"timestamp":"2023-08-14T08:57:15.137Z"}
