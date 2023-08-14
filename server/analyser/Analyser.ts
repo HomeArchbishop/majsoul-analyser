@@ -7,6 +7,7 @@ import { formatTiles } from '../utils/formatTiles'
 import { tile2nameSimplified } from '../utils/tile2name'
 import { nextTile } from '../utils/nextTile'
 import os from 'node:os'
+import logger from '../logger'
 
 let binPath: string
 
@@ -32,6 +33,7 @@ class Analyser extends BaseAnalyser {
       const choice = tile2nameSimplified(choiceName[0]) as Tile
       return { choice, info: `分析打出${choice}` }
     } else {
+      logger.info(`<analyser> Got unexpected output: \`${out}\`, command: \`${binPath} ${daraArgs} ${args}\``)
       const choice = meHand[~~(Math.random() * meHand.length)]
       return { choice, info: `随机打出${choice}` }
     }
