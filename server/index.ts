@@ -44,7 +44,7 @@ router.post('/', async function (ctx, next) {
         logger.info('<server-base> Server received req buffer')
         msgHandler.handleReq(buffer)
       }
-      ctx.body = { code: 200 }
+      ctx.status = 200
       resolve()
     })
   }))
