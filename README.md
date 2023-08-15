@@ -2,6 +2,8 @@
 
 > 这会是我最后的项目啦，未来要学临床了。2023-7
 
+这个项目还在更新，请及时关注。有想法和 Bug 欢迎 issue。
+
 适用于: 
   - Darwin (MacOS)
   - Windows (test on Windows 11, works fine)
