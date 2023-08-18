@@ -80,7 +80,7 @@ class MsgHandler {
     if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && msg.data.game_restore.actions.length > 0 && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列, 处理最后一步的 operation (if any) */
       this.#handleActionPrototypeOperations({ name: 'ActionPrototype', data: msg.data.game_restore.actions.slice(-1)[0] }, true)
     }
-    logger.info(`<res-handler> handle ResMsg${_rand}`)
+    logger.info(`<res-handler> handled ResMsg${_rand}`)
   }
 
   /**
