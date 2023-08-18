@@ -93,7 +93,7 @@ class MsgHandler {
     /* ========================= */
     if (msg.data.name === 'ActionNewRound') { /* 新一轮(round)开始 */
       const actionData = msg.data.data as Action.ActionNewRound
-      this.game.rounds.push(new Round({
+      this.game.rounds[0] = new Round({
         chang: actionData.chang,
         ju: actionData.ju,
         ben: actionData.ben,
@@ -103,8 +103,8 @@ class MsgHandler {
         meTiles: sortTiles(actionData.tiles),
         leftTileCnt: actionData.left_tile_count,
         doras: actionData.doras
-      }))
-      this.game.roundPointer++
+      })
+      this.game.roundPointer = 0
     }
     const round = this.game.rounds[this.game.roundPointer]
     if (round === undefined) { return }
