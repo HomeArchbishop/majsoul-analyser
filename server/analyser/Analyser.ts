@@ -20,6 +20,13 @@ if (platform === 'darwin') {
   throw new Error('This program only supports Darwin or Windows, but found ' + platform)
 }
 
+function callMahjongHelperShell (command: string): string {
+  let cmd: any = {}
+  cmd = shell.exec(command, { silent: true, timeout: 5000 })
+  const stdout = cmd.stdout
+  return stdout
+}
+
 class Analyser extends BaseAnalyser {
   analyseDiscard (round: Round): { choice: Tile, info: string } {
     const meHand = round.players[round.meSeat].hand as Tile[]
@@ -27,7 +34,7 @@ class Analyser extends BaseAnalyser {
     const anGang = round.players[round.meSeat].anGang
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase()
-    const out = shell.exec(`${binPath} ${daraArgs} ${args}`, { silent: true }).stdout
+    const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
     const choiceName = out.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null) {
       const choice = tile2nameSimplified(choiceName[0]) as Tile
