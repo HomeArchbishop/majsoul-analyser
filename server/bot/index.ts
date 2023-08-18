@@ -1,7 +1,7 @@
 import { loadImage } from 'canvas'
 import { getOpenCV, loadOpenCV, type opencv } from './opencv'
 import path from 'path'
-import { screenshot, tripleClick } from './robotjs'
+import { click, doubleClick, screenshot } from './robotjs'
 import { Round } from '../gameRecords/Round'
 import { Tile } from '../types/General'
 import { sortTiles } from '../utils/sortTiles'
@@ -65,7 +65,11 @@ class Bot {
 
     const [clickX, clickY] = await this.#getClickPointByCalculation(tile)
     UI.print('click:', clickX, clickY)
-    tripleClick(clickX, clickY)
+    if (!/^\d(s|m|p|z)$/.test(tile)) {
+      click(clickX, clickY)
+    } else {
+      doubleClick(clickX, clickY)
+    }
   }
 
   async #getClickPointByCalculation (tile: string): Promise<[number, number]> {
