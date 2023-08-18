@@ -6,6 +6,7 @@ import { Round } from '../gameRecords/Round'
 import { Tile } from '../types/General'
 import { sortTiles } from '../utils/sortTiles'
 import logger from '../logger'
+import UI from '../UI'
 
 class Bot {
   async init (): Promise<boolean> {
@@ -63,7 +64,7 @@ class Bot {
     if (wait) { await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000)) }
 
     const [clickX, clickY] = await this.#getClickPointByCalculation(tile)
-    console.log('click:', clickX, clickY)
+    UI.print('click:', clickX, clickY)
     tripleClick(clickX, clickY)
   }
 
@@ -103,7 +104,7 @@ class Bot {
     const shotW = this.canvasW * (1 - 0.091)
     const shotH = this.canvasH * 0.42
 
-    console.log('shot:', shotX, shotY, shotW, shotH)
+    UI.print('shot:', shotX, shotY, shotW, shotH)
     await new Promise<void>(resolve => setTimeout(() => { resolve() }, 800))
     const screenshotBitmap = screenshot(shotX * this.dpi, shotY * this.dpi, shotW * this.dpi, shotH * this.dpi)
     const screenshotImageData = new ImageData(new Uint8ClampedArray(screenshotBitmap.image as Buffer), screenshotBitmap.width, screenshotBitmap.height)
@@ -116,20 +117,17 @@ class Bot {
     const templateImage = await this.#loadTemplate(`${tile}.png`)
     const templateMat = this.cv.imread(templateImage)
     const targetTemplateMat = new this.cv.Mat()
-    console.log(templateImage.width, templateImage.width * this.scale, templateImage.height * this.scale)
     const targetTemplateSize = new this.cv.Size(templateImage.width * this.scale, templateImage.height * this.scale)
     this.cv.resize(templateMat, targetTemplateMat, targetTemplateSize, 0, 0, this.cv.INTER_AREA)
 
     const mtDst = new this.cv.Mat()
     const mtMask = new this.cv.Mat()
 
-    console.time('mt')
     this.cv.matchTemplate(targetSearchMat, targetTemplateMat, mtDst, this.cv.TM_CCOEFF, mtMask)
     const maxPoint = this.cv.minMaxLoc(mtDst, mtMask).maxLoc
     const maxVal = this.cv.minMaxLoc(mtDst, mtMask).maxVal
-    console.timeEnd('mt')
 
-    console.log(maxPoint, ': ', maxVal)
+    UI.print('mt:', maxPoint, ':', maxVal)
 
     const clickX = maxPoint.x + targetTemplateSize.width / 2 + shotX
     const clickY = maxPoint.y + targetTemplateSize.height / 2 + shotY

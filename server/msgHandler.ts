@@ -222,7 +222,7 @@ class MsgHandler {
       for (const optionalOperation of operationList) { /* 遍历每一个可选操作 */
         if (optionalOperation.type === 8) { /* 自摸 */
           const { choice, info } = this.analyser.analyseHule(round)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'zimo' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'zimo' : 'tiaoguo', wait)
@@ -231,7 +231,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 9) { /* 荣和 */
           const { choice, info } = this.analyser.analyseHule(round)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'hule' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'hu' : 'tiaoguo', wait)
@@ -240,7 +240,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 2) { /* 吃 */
           const { choice, info } = this.analyser.analyseChi(round, (msg.data.data as Action.ActionDiscardTile).tile)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'chi' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'chi' : 'tiaoguo', wait)
@@ -249,7 +249,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 3) { /* 碰 */
           const { choice, info } = this.analyser.analysePeng(round, (msg.data.data as Action.ActionDiscardTile).tile)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'peng' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'peng' : 'tiaoguo', wait)
@@ -258,7 +258,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 4) { /* 暗杠 */
           const { choice, info, discard } = this.analyser.analyseAnGang(round, (msg.data.data as Action.ActionDiscardTile).tile)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'AnGang' : 'tiaoguo'}`)
             if (choice) {
@@ -271,7 +271,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 5) { /* 杠 */
           const { choice, info } = this.analyser.analyseGang(round, (msg.data.data as Action.ActionDiscardTile).tile)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'AnGang' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'gang' : 'tiaoguo', wait)
@@ -280,7 +280,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 7) { /* 立直 */
           const { choice, info, discard } = this.analyser.analyseLiqi(round)
-          console.log({ choice, info, discard })
+          UI.print({ choice, info, discard })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'lizhi:' + discard : 'moting:' + discard}`)
             if (choice) {
@@ -294,7 +294,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 11) { /* 拔北 */
           const { choice, info } = this.analyser.analyseBabei(round)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click ${choice ? 'babei' : 'tiaoguo'}`)
             this.bot.ensureClick(choice ? 'babei' : 'tiaoguo', wait)
@@ -303,7 +303,7 @@ class MsgHandler {
         }
         if (optionalOperation.type === 1) { /* discard 切牌 */
           const { choice, info } = this.analyser.analyseDiscard(round)
-          console.log({ choice, info })
+          UI.print({ choice, info })
           if (this.bot !== undefined) {
             logger.info(`<bot> bot click tile(${choice})`)
             this.bot.ensureClick(choice, wait)

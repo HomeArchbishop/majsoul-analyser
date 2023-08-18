@@ -17,5 +17,5 @@ for (let i = 0; i < mock.length; i++) {
       body: Buffer.from(JSON.parse(mock[i].slice(3)))
     }, () => { setTimeout(() => resolveFn(), 1000) })
     return await promise
-  }).catch((err) => console.log(err))
+  }).catch((err) => console.error(err))
 }

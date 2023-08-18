@@ -56,8 +56,7 @@ app
   .use(router.routes()).use(router.allowedMethods())
 
 process.on('uncaughtException', function (err) {
-  console.log(err)
-  console.log(err.stack)
+  console.error(err)
   logger.error(`<server-base> Server service shutdown: ${err.message}`)
   process.exit(1)
 })
