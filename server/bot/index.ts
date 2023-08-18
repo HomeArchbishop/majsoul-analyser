@@ -58,6 +58,8 @@ class Bot {
     if (this.cv === undefined) { return }
     await this.#useScale()
 
+    await new Promise<void>(resolve => setTimeout(() => { resolve() }, 1500))
+
     if (wait) { await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000)) }
 
     const [clickX, clickY] = await this.#getClickPointByCalculation(tile)
