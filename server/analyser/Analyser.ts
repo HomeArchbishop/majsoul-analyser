@@ -52,7 +52,7 @@ class Analyser extends BaseAnalyser {
     const anGang = round.players[round.meSeat].anGang
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
-    const out = shell.exec(`${binPath} ${daraArgs} ${args}`, { silent: true }).stdout
+    const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
     const choiceLine = out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null)
     if (choiceLine === undefined) {
       return { choice: false, info: '不副露' }
