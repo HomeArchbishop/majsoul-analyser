@@ -123,6 +123,7 @@ class MsgHandler {
           for (let i = 0; i < hand.length; i++) {
             if (hand[i] === actionData.tiles) {
               hand.splice(i, 1)
+              i--
             }
           }
         }
