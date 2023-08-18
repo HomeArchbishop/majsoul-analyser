@@ -221,6 +221,7 @@ class MsgHandler {
       const priority = [8, 9, 2, 3, 4, 5, 7, 11, 1]
       operationList.sort(({ type: t1 }, { type: t2 }) => priority.findIndex(n => n === t1) - priority.findIndex(n => n === t2))
       for (const optionalOperation of operationList) { /* 遍历每一个可选操作 */
+        UI.print('analysing, type:', optionalOperation.type)
         if (optionalOperation.type === 8) { /* 自摸 */
           const { choice, info } = this.analyser.analyseHule(round)
           UI.print({ choice, info })
