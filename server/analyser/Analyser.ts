@@ -53,16 +53,43 @@ class Analyser extends BaseAnalyser {
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
     const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
-    const choiceLine = out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null)
-    if (choiceLine === undefined) {
+    const currentLine = {
+      line: out.split('\n').find((l, i, a) => l.match(/(无役)|(振听)/) === null && i > 0 && a[i - 1].match(/当前/) !== null),
+      title: out.split('\n').find(l => l.match(/当前/) !== null)
+    }
+    const fuluLine = {
+      line: out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null && l.match(/碰|杠/) !== null),
+      tile: out.split('\n').find(l => l.match(/鸣牌后/) !== null)
+    }
+    if (currentLine.line === undefined && fuluLine.line === undefined) {
       return { choice: false, info: '不副露' }
     }
-    const choiceInfo = choiceLine.match(/(?<=\s)\S*?(切|ド)\s*?\S*?(?=\s*?=>)/)
-    if (choiceInfo !== null) {
-      return { choice: true, info: choiceInfo[0] }
-    } else {
+    if (currentLine.line === undefined && fuluLine.line !== undefined) {
+      const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(切|ド)\s*?\S*?(?=\s*?=>)/)
+      if (choiceInfo !== null) {
+        return { choice: true, info: choiceInfo[0] }
+      } else {
+        return { choice: false, info: '不副露' }
+      }
+    }
+    if (currentLine.line !== undefined && fuluLine.line === undefined) {
       return { choice: false, info: '不副露' }
     }
+    if (currentLine.line !== undefined && fuluLine.line !== undefined) {
+      const currentMark = +(currentLine.line.match(/^\s*\d+/) ?? [-1])[0]
+      const fuluMark = +(fuluLine.line.match(/^\s*\d+/) ?? [-1])[0]
+      if (currentMark >= fuluMark) {
+        const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(切|ド)\s*?\S*?(?=\s*?=>)/)
+        if (choiceInfo !== null) {
+          return { choice: true, info: choiceInfo[0] }
+        } else {
+          return { choice: false, info: '不副露' }
+        }
+      } else {
+        return { choice: false, info: '不副露' }
+      }
+    }
+    return { choice: false, info: '不副露' }
   }
 
   analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
