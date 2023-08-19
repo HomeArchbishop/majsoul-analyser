@@ -51,6 +51,67 @@ class Bot {
     this.scale = this.canvasW / 1536 /* 1536 是手牌宽度 80 时的 canvas 宽度 */
   }
 
+  returnToHomePageWhenEnd (): void {
+    this.#lastClickTask = this.#lastClickTask.then(async () => {
+      await this.#useScale()
+      logger.info('<bot> Start returning to homepage when end')
+      let noConfirmCnt: number = 0
+      let hasConfirmCnt: number = 0
+      while (noConfirmCnt <= 5) {
+        await new Promise<void>(resolve => setTimeout(() => { resolve() }, 8000))
+        const shotX = this.canvasScreenX + this.canvasW * 0.8741
+        const shotY = this.canvasScreenY + this.canvasH * 0.9083
+        const shotW = this.canvasW * 0.0187
+        const shotH = this.canvasH * 0.0077
+        const screenshotBitmap = screenshot(shotX * this.dpi, shotY * this.dpi, shotW * this.dpi, shotH * this.dpi)
+        let [b, g, r]: number[] = [screenshotBitmap.image[0], screenshotBitmap.image[1], screenshotBitmap.image[2]]
+        for (let i = 4; i < (screenshotBitmap.width * screenshotBitmap.height) * 4; i += 4) {
+          b = (b + Number(screenshotBitmap.image[i])) / 2
+          g = (g + Number(screenshotBitmap.image[i + 1])) / 2
+          r = (r + Number(screenshotBitmap.image[i + 2])) / 2
+        }
+        if (b < r || b < g) {
+          noConfirmCnt++
+          hasConfirmCnt = 0
+          UI.print('No Comfirm', noConfirmCnt)
+          logger.info('<bot> No comfirm button ' + String(noConfirmCnt))
+          continue
+        }
+        const [clickX, clickY] = await this.#getClickPointByCV('confirm')
+        noConfirmCnt = 0
+        hasConfirmCnt++
+        click(clickX, clickY)
+        if (hasConfirmCnt >= 6) {
+          click(0.898 * this.canvasW + this.canvasScreenX, 0.924 * this.canvasH + this.canvasScreenY)
+          hasConfirmCnt = 0
+        }
+      }
+      logger.info('<bot> Returned to homepage when end')
+    })
+  }
+
+  startNewGameFromHomePage (): void {
+    this.#lastClickTask = this.#lastClickTask.then(async () => {
+      logger.info('<bot> Start new game from homepage')
+      UI.print('Starting a new game')
+      await this.#useScale()
+      click(0.917 * this.canvasW + this.canvasScreenX, 0.171 * this.canvasH + this.canvasScreenY)
+      await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
+      click(0.723 * this.canvasW + this.canvasScreenX, 0.316 * this.canvasH + this.canvasScreenY)
+      await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
+      click(0.723 * this.canvasW + this.canvasScreenX, 0.384 * this.canvasH + this.canvasScreenY)
+      await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
+      click(0.723 * this.canvasW + this.canvasScreenX, 0.384 * this.canvasH + this.canvasScreenY)
+      logger.info('<bot> Started new game from homepage')
+    })
+  }
+
+  startNewGameFromEnd (): void {
+    this.returnToHomePageWhenEnd()
+    this.#lastClickTask = this.#lastClickTask.then(async () => await new Promise<void>(resolve => setTimeout(() => { resolve() }, 3000)))
+    this.startNewGameFromHomePage()
+  }
+
   ensureClick (tile: string, wait: boolean = false): void {
     this.#lastClickTask = this.#lastClickTask.then(async () => await this.clickTask(tile, wait).catch((err) => { logger.info(`<bot> err: ${err as string}`) }))
   }
@@ -111,6 +172,9 @@ class Bot {
     UI.print('shot:', shotX, shotY, shotW, shotH)
     await new Promise<void>(resolve => setTimeout(() => { resolve() }, 800))
     const screenshotBitmap = screenshot(shotX * this.dpi, shotY * this.dpi, shotW * this.dpi, shotH * this.dpi)
+    for (let i = 0; i < (screenshotBitmap.width * screenshotBitmap.height) * 4; i += 4) {
+      [screenshotBitmap.image[i], screenshotBitmap.image[i + 2]] = [screenshotBitmap.image[i + 2], screenshotBitmap.image[i]]
+    }
     const screenshotImageData = new ImageData(new Uint8ClampedArray(screenshotBitmap.image as Buffer), screenshotBitmap.width, screenshotBitmap.height)
     const searchMat = this.cv.matFromImageData(screenshotImageData)
     const targetSearchMat = new this.cv.Mat()
