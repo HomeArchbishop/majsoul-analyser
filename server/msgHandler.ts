@@ -34,7 +34,7 @@ class MsgHandler {
     this.reqQueue[index] = { resName }
   }
 
-  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number }): void {
+  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean }): void {
     if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
     if (this.bot !== undefined && botOptions === undefined) { this.bot = undefined } /* 没有自动化机器人传入, 就说明关闭自动化 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateDPI(botOptions.dpi) } /* 记录更新模版放大比 */
@@ -84,7 +84,7 @@ class MsgHandler {
     /*        对局结束消息       */
     /* ======================== */
     if (msg.name === 'NotifyGameEndResult') { /* 单个 ActionPrototype msg */
-      this.bot?.startNewGameFromEnd()
+      if (botOptions?.autoGame === true) { this.bot?.startNewGameFromEnd() }
     }
     logger.info(`<res-handler> handled ResMsg${_rand}`)
   }
