@@ -81,7 +81,7 @@ class Analyser extends BaseAnalyser {
 
   analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile } {
     const discard = this.analyseDiscard(round).choice
-    const choice = discard === targetTile
+    const choice = discard !== targetTile
     return { choice, info: '', discard }
   }
 
