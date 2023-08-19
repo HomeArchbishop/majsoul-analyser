@@ -22,7 +22,7 @@ if (platform === 'darwin') {
 
 function callMahjongHelperShell (command: string): string {
   let cmd: any = {}
-  cmd = shell.exec(command, { silent: true, timeout: 5000 })
+  cmd = shell.exec(command, { silent: true, timeout: 3900 })
   const stdout = cmd.stdout
   return stdout
 }
