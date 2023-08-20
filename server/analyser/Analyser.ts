@@ -35,7 +35,7 @@ class Analyser extends BaseAnalyser {
     const daraArgs = `-d=${formatTiles(round.doras.map(nextTile)).replace(/\s/g, '')}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase()
     const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
-    const choiceName = out.split('\n').find(l => l.match(/(无役)|(振听)/) === null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
+    const choiceName = out.split('\n').find(l => l.match(/无役/) === null && l.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/) !== null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null && choiceName !== undefined) {
       const choice = tile2nameSimplified(choiceName[0]) as Tile
       return { choice, info: `分析打出${choice}` }
