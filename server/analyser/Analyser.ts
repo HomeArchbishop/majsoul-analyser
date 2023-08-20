@@ -47,6 +47,10 @@ class Analyser extends BaseAnalyser {
   }
 
   analyseChi (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+    return { choice: false, info: '不副露' }
+  }
+
+  analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
     const meHand = round.players[round.meSeat].hand as Tile[]
     const fulu = round.players[round.meSeat].fulu
     const anGang = round.players[round.meSeat].anGang
@@ -58,7 +62,7 @@ class Analyser extends BaseAnalyser {
       title: out.split('\n').find(l => l.match(/当前/) !== null)
     }
     const fuluLine = {
-      line: out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null && l.match(/碰|杠/) !== null),
+      line: out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null && l.match(/碰/) !== null),
       tile: out.split('\n').find(l => l.match(/鸣牌后/) !== null)
     }
     if (currentLine.line === undefined && fuluLine.line === undefined) {
@@ -92,12 +96,11 @@ class Analyser extends BaseAnalyser {
     return { choice: false, info: '不副露' }
   }
 
-  analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
-    return this.analyseChi(round, targetTile)
-  }
-
   analyseGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
-    return this.analyseChi(round, targetTile)
+    if (targetTile === '5z' || targetTile === '6z' || targetTile === '7z' || Number(targetTile[0]) === (round.changfeng + 1) % 4 || Number(targetTile[0]) === (round.zifeng + 1) % 4) {
+      return { choice: true, info: '杠' + targetTile }
+    }
+    return { choice: false, info: '不副露' }
   }
 
   analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile } {
