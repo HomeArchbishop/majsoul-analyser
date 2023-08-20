@@ -54,7 +54,7 @@ class Analyser extends BaseAnalyser {
     const meHand = round.players[round.meSeat].hand as Tile[]
     const fulu = round.players[round.meSeat].fulu
     const anGang = round.players[round.meSeat].anGang
-    const daraArgs = `-d=${formatTiles(round.doras.map(nextTile))}`
+    const daraArgs = `-d=${formatTiles(round.doras.map(nextTile)).replace(/\s/g, '')}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
     const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
     const currentLine = {
