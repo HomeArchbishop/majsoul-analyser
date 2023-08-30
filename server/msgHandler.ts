@@ -286,6 +286,15 @@ class MsgHandler {
             break
           }
         }
+        if (optionalOperation.type === 6) { /* 加杠 */
+          const { choice, info } = this.analyser.analyseAddGang(round, (msg.data.data as Action.ActionDiscardTile).tile)
+          UI.print({ choice, info })
+          if (this.bot !== undefined) {
+            logger.info(`<bot> bot click ${choice ? 'AddGang' : 'tiaoguo'}`)
+            this.bot.ensureClick(choice ? 'gang' : 'tiaoguo', wait)
+            break
+          }
+        }
         if (optionalOperation.type === 7) { /* 立直 */
           const { choice, info, discard } = this.analyser.analyseLiqi(round)
           UI.print({ choice, info, discard })
