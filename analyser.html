@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>分析器模块 | majsoul-analyser</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    
+    <meta name="description" content="雀力全开">
+    
+    <link rel="preload" href="/majsoul-analyser/assets/css/0.styles.3303765b.css" as="style"><link rel="preload" href="/majsoul-analyser/assets/js/app.846c4890.js" as="script"><link rel="preload" href="/majsoul-analyser/assets/js/2.4225613c.js" as="script"><link rel="preload" href="/majsoul-analyser/assets/js/1.df696285.js" as="script"><link rel="preload" href="/majsoul-analyser/assets/js/24.bb0d4e25.js" as="script"><link rel="prefetch" href="/majsoul-analyser/assets/js/10.23a1f579.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/11.c389195a.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/12.1d996921.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/13.96dcbf62.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/14.37ef2a72.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/15.5542c093.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/16.d48fd1ce.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/17.bd8d538c.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/18.6d3b94c1.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/19.eb35cfee.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/20.c11ec329.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/21.db1b5d88.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/22.9b300344.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/23.2673379c.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/25.6ac014f7.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/26.cd055c5a.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/3.5322f14a.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/4.94f04b6e.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/5.5aa64e8e.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/6.6e9b1f6c.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/7.3acf3203.js"><link rel="prefetch" href="/majsoul-analyser/assets/js/vendors~docsearch.5a4296f1.js">
+    <link rel="stylesheet" href="/majsoul-analyser/assets/css/0.styles.3303765b.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/majsoul-analyser/" class="home-link router-link-active"><!----> <span class="site-name">majsoul-analyser</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/majsoul-analyser/" aria-current="page" class="sidebar-link">majsoul-analyser 文档</a></li><li><a href="/majsoul-analyser/majsoul.html" class="sidebar-link">雀魂消息解析器模块</a></li><li><a href="/majsoul-analyser/gameRecords.html" class="sidebar-link">牌桌记录模块</a></li><li><a href="/majsoul-analyser/analyser.html" aria-current="page" class="active sidebar-link">分析器模块</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/majsoul-analyser/analyser.html#输入输出" class="sidebar-link">输入输出</a></li><li class="sidebar-sub-header"><a href="/majsoul-analyser/analyser.html#api" class="sidebar-link">API</a></li></ul></li><li><a href="/majsoul-analyser/bot.html" class="sidebar-link">自动操作模块</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="分析器模块"><a href="#分析器模块" class="header-anchor">#</a> 分析器模块</h1> <p>源码： <code>server/analyser/</code></p> <p>依据 gameRecords 模块记录的信息（即 Game 实例）进行分析，给出一些操作结果 (operations)。</p> <p><strong>注：</strong> 暂时使用 <a href="https://github.com/EndlessCheng/mahjong-helper" target="_blank" rel="noopener noreferrer">EndlessCheng/mahjong-helper<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 包装了一个初级分析器。效果不如机器学习的模型。希望有能力的开发者写出更有力的分析器模块。</p> <h2 id="输入输出"><a href="#输入输出" class="header-anchor">#</a> 输入输出</h2> <p>输入：</p> <ul><li>game.round (即 Game 实例中的当前 Round 实例，记录了当前牌桌。只读。)</li> <li>吃碰杠目标牌（<em>可能需要</em>）。</li></ul> <p>输出：JSON 格式，表示操作结果。</p> <h2 id="api"><a href="#api" class="header-anchor">#</a> API</h2> <h3 id="analyser-类"><a href="#analyser-类" class="header-anchor">#</a> <code>Analyser</code> 类</h3> <p><code>Analyser</code> 类须继承 <code>BaseAnalyser</code> 类（<code>/server/types/Analyser.ts</code>），即必须包含如下的方法：</p> <p>(注：<code>Tile</code> 类型即 '1p' '2m' '3z' 等，请参考 <code>server/types/General.ts</code>)</p> <div class="language-ts extra-class"><pre class="language-ts"><code><span class="token keyword">export</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseAnalyser</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 分析舍张</span>
+  <span class="token comment">// - choice：表示舍张</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseDiscard</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> Tile<span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析吃</span>
+  <span class="token comment">// - targetTile：表示要吃的那张牌（即别人打出的）</span>
+  <span class="token comment">// - choice：表示是否副露</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseChi</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">,</span> targetTile<span class="token operator">:</span> Tile<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析碰</span>
+  <span class="token comment">// - targetTile：表示要碰的那张牌（即别人打出的）</span>
+  <span class="token comment">// - choice：表示是否副露</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analysePeng</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">,</span> targetTile<span class="token operator">:</span> Tile<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析普通杠</span>
+  <span class="token comment">// - targetTile：表示要杠的那张牌（即别人打出的）</span>
+  <span class="token comment">// - choice：表示是否副露</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseGang</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">,</span> targetTile<span class="token operator">:</span> Tile<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析暗杠</span>
+  <span class="token comment">// - targetTile：表示要杠的那张牌</span>
+  <span class="token comment">// - choice：表示是否暗杠</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseAnGang</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">,</span> targetTile<span class="token operator">:</span> Tile<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析加杠</span>
+  <span class="token comment">// - targetTile：表示要杠的那张牌</span>
+  <span class="token comment">// - choice：表示是否加杠</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseAddGang</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">,</span> targetTile<span class="token operator">:</span> Tile<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析立直</span>
+  <span class="token comment">// - choice：表示是否立直</span>
+  <span class="token comment">// - discard：立直宣言牌</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseLiqi</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> discard<span class="token operator">:</span> Tile<span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析是否选择荣和</span>
+  <span class="token comment">// - choice：表示是否选择荣和</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseHule</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析是否选择自摸</span>
+  <span class="token comment">// - choice：表示是否选择自摸</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseZimo</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+
+  <span class="token comment">// 分析是否选择拔北</span>
+  <span class="token comment">// - choice：表示是否选择拔北</span>
+  <span class="token comment">// - info：无实际意义，可输出作为用户参考</span>
+  <span class="token keyword">abstract</span> <span class="token function">analyseBabei</span> <span class="token punctuation">(</span>round<span class="token operator">:</span> Round<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> choice<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> info<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/majsoul-analyser/gameRecords.html" class="prev">
+        牌桌记录模块
+      </a></span> <span class="next"><a href="/majsoul-analyser/bot.html">
+        自动操作模块
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/majsoul-analyser/assets/js/app.846c4890.js" defer></script><script src="/majsoul-analyser/assets/js/2.4225613c.js" defer></script><script src="/majsoul-analyser/assets/js/1.df696285.js" defer></script><script src="/majsoul-analyser/assets/js/24.bb0d4e25.js" defer></script>
+  </body>
+</html>
