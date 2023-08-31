@@ -17,5 +17,5 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         TARGET_REPO: username/repo
         TARGET_BRANCH: main
-        BUILD_SCRIPT: yarn add vuepress && npx vuepress build docs
+        BUILD_SCRIPT: rm package.json && yarn add vuepress && npx vuepress build docs
         BUILD_DIR: docs/.vuepress/dist
