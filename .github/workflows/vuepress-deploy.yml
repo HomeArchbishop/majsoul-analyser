@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'docs/**'
+      - '.github/workflows/vuepress-deploy.yml'
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
