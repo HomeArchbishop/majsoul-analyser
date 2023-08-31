@@ -4,6 +4,8 @@ module.exports = {
 
   base: '/majsoul-analyser/',
 
+  temp: '/github/workspace/temp',
+
   themeConfig: {
     sidebar: [
       '/',
