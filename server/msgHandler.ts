@@ -66,7 +66,7 @@ class MsgHandler {
     if (msg.name === 'ActionPrototype') { /* 单个 ActionPrototype msg */
       this.#handleActionPrototypeMsg(msg)
     }
-    if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列 */
+    if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && msg.data.game_restore.actions !== null && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列 */
       for (const action of msg.data.game_restore.actions) {
         this.#handleActionPrototypeMsg({ name: 'ActionPrototype', data: action })
       }
