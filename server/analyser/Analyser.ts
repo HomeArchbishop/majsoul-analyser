@@ -69,7 +69,7 @@ class Analyser extends BaseAnalyser {
       return { choice: false, info: '不副露' }
     }
     if (currentLine.line === undefined && fuluLine.line !== undefined) {
-      const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(切|ド)\s*?\S*?(?=\s*?=>)/)
+      const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
       if (choiceInfo !== null) {
         return { choice: true, info: choiceInfo[0] }
       } else {
@@ -83,7 +83,7 @@ class Analyser extends BaseAnalyser {
       const currentMark = +(currentLine.line.match(/^\s*\d+/) ?? [-1])[0]
       const fuluMark = +(fuluLine.line.match(/^\s*\d+/) ?? [-1])[0]
       if (currentMark <= fuluMark) {
-        const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(切|ド)\s*?\S*?(?=\s*?=>)/)
+        const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
         if (choiceInfo !== null) {
           return { choice: true, info: choiceInfo[0] }
         } else {
