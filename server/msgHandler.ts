@@ -34,7 +34,7 @@ class MsgHandler {
     this.reqQueue[index] = { resName }
   }
 
-  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean }): void {
+  handleRes (bufferMsg: Buffer, meID: string = '', botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean, jian: number, chang: number }): void {
     if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
     if (this.bot !== undefined && botOptions === undefined) { this.bot = undefined } /* 没有自动化机器人传入, 就说明关闭自动化 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateDPI(botOptions.dpi) } /* 记录更新模版放大比 */
@@ -66,7 +66,7 @@ class MsgHandler {
     if (msg.name === 'ActionPrototype') { /* 单个 ActionPrototype msg */
       this.#handleActionPrototypeMsg(msg)
     }
-    if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && msg.data.game_restore.actions !== null && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列 */
+    if (msg.name === 'ResSyncGame' && msg.data.game_restore !== undefined && msg.data.game_restore !== null && !msg.data.is_end) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列 */
       for (const action of msg.data.game_restore.actions) {
         this.#handleActionPrototypeMsg({ name: 'ActionPrototype', data: action })
       }
@@ -84,7 +84,7 @@ class MsgHandler {
     /*        对局结束消息       */
     /* ======================== */
     if (msg.name === 'NotifyGameEndResult') { /* 单个 ActionPrototype msg */
-      if (botOptions?.autoGame === true) { this.bot?.startNewGameFromEnd() }
+      if (botOptions?.autoGame === true) { this.bot?.startNewGameFromEnd(botOptions.jian, botOptions.chang) }
     }
     logger.info(`<res-handler> handled ResMsg${_rand}`)
   }

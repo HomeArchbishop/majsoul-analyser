@@ -96,7 +96,7 @@ class Bot {
     })
   }
 
-  startNewGameFromHomePage (): void {
+  startNewGameFromHomePage (jian: number, chang: number): void {
     this.#lastClickTask = this.#lastClickTask.then(async () => {
       logger.info('<bot> Start new game from homepage')
       UI.print('Starting a new game')
@@ -105,17 +105,18 @@ class Bot {
       await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
       click(0.723 * this.canvasW + this.canvasScreenX, 0.316 * this.canvasH + this.canvasScreenY)
       await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
-      click(0.723 * this.canvasW + this.canvasScreenX, 0.578 * this.canvasH + this.canvasScreenY)
+      click(0.723 * this.canvasW + this.canvasScreenX, (0.384 + 0.194 * jian) * this.canvasH + this.canvasScreenY)
+      // click(0.723 * this.canvasW + this.canvasScreenX, 0.578 * this.canvasH + this.canvasScreenY)
       await new Promise<void>(resolve => setTimeout(() => { resolve() }, 2000))
-      click(0.723 * this.canvasW + this.canvasScreenX, 0.384 * this.canvasH + this.canvasScreenY)
+      click(0.723 * this.canvasW + this.canvasScreenX, (0.384 + 0.194 * chang) * this.canvasH + this.canvasScreenY)
       logger.info('<bot> Started new game from homepage')
     })
   }
 
-  startNewGameFromEnd (): void {
+  startNewGameFromEnd (jian: number, chang: number): void {
     this.returnToHomePageWhenEnd()
     this.#lastClickTask = this.#lastClickTask.then(async () => await new Promise<void>(resolve => setTimeout(() => { resolve() }, 3000)))
-    this.startNewGameFromHomePage()
+    this.startNewGameFromHomePage(jian, chang)
   }
 
   ensureClick (tile: string, wait: boolean = false): void {
