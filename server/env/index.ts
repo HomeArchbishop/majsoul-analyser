@@ -12,7 +12,7 @@ const env = {
         process.env[key] = majENVJSON[key]
       }
     } else {
-      fs.writeFileSync(majENVJSONFile, JSON.stringify({}))
+      throw new Error('environment config file unexists. Please check `/.majenv.json`')
     }
   },
   write (key: string, value: any): boolean {
