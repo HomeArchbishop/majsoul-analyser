@@ -2,10 +2,12 @@ import Koa from 'koa'
 import cors from '@koa/cors'
 import Router from 'koa-router'
 import { MsgHandler } from './msgHandler'
-import './env'
+import env from './env'
 import logger from './logger'
 import { bot } from './bot'
 import UI from './UI'
+
+env.init()
 
 const app = new Koa()
 const router = new Router()

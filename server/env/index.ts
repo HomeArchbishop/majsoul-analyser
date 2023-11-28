@@ -4,16 +4,19 @@ import { type MAJ_ENV_JSON } from '../types/General'
 
 const majENVJSONFile = path.resolve(__dirname, '../../.majenv.json')
 
+let envCaches = {}
+
 const env = {
   init (): void {
     if (fs.existsSync(majENVJSONFile)) {
       const majENVJSON: MAJ_ENV_JSON = JSON.parse(fs.readFileSync(majENVJSONFile).toString())
-      for (const key in majENVJSON) {
-        process.env[key] = majENVJSON[key]
-      }
+      envCaches = majENVJSON
     } else {
       throw new Error('environment config file unexists. Please check `/.majenv.json`')
     }
+  },
+  reload (): void {
+    env.init()
   },
   write (key: string, value: any): boolean {
     const majENVJSON: MAJ_ENV_JSON = JSON.parse(fs.readFileSync(majENVJSONFile).toString())
@@ -26,11 +29,12 @@ const env = {
       return false
     }
   },
+  get <T> (path: string): T {
+    return path.split('.').reduce((p, c) => p[c], envCaches)
+  },
   delete (key: string): boolean {
     return env.write(key, undefined)
   }
 }
-
-env.init()
 
 export default env
