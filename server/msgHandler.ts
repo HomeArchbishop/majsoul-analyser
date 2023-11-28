@@ -1,6 +1,6 @@
 import structuredClone from '@ungap/structured-clone'
 import UI from './UI'
-import { Analyser } from './analyser/Analyser'
+import { analyser } from './analyser/Analyser'
 import { Game } from './gameRecords/Game'
 import { Round } from './gameRecords/Round'
 import logger from './logger'
@@ -10,6 +10,8 @@ import * as Action from './types/Action'
 import { ActionPrototype } from './types/ParsedMsg'
 import { type Bot } from './bot'
 import { sortTiles } from './utils/sortTiles'
+import type { BaseAnalyser } from './types/Analyser'
+import env from './env'
 
 function printIDerror (): void {
   UI.print('未获取玩家的ID或ID错误, 请重启游戏')
@@ -333,7 +335,7 @@ class MsgHandler {
 
   game?: Game
 
-  analyser: Analyser = new Analyser()
+  analyser: BaseAnalyser = new (analyser.select(env.get<number>('runtimeConf.analyser')))()
 
   bot?: Bot
 }
