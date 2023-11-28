@@ -10,9 +10,9 @@ export abstract class BaseAnalyser {
 
   abstract analyseGang (round: Round, targetTile: Tile): { choice: boolean, info: string }
 
-  abstract analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string }
+  abstract analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile }
 
-  abstract analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string }
+  abstract analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile }
 
   abstract analyseLiqi (round: Round): { choice: boolean, discard: Tile, info: string }
 
