@@ -31,4 +31,6 @@ const env = {
   }
 }
 
+env.init()
+
 export default env
