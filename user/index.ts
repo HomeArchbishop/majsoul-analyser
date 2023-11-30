@@ -79,7 +79,8 @@ wsHook.before = (data, url) => {
     const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
     const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
     const dpi = window.devicePixelRatio
-    req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}`)
+    req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
+&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
     req.send(data)
   } catch (err) {
     console.error(err)
@@ -95,7 +96,8 @@ wsHook.after = (messageEvent, url) => {
     const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
     const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
     const dpi = window.devicePixelRatio
-    req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}`)
+    req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
+&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
     req.send(binaryMsg)
   } catch (err) {
     console.error(err)
