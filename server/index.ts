@@ -75,7 +75,7 @@ UI.print('OpenCV loading...')
   try {
     const isBotInited = await bot.init()
     if (!isBotInited) { UI.print('OpenCV load failed...'); return }
-    msgHandler.setAnalyser((await analyserModule.load(env.get<string>('runtimeConf.analyser'))).analyser)
+    msgHandler.setAnalyser(await analyserModule.load(env.get<string>('runtimeConf.analyser')))
     if (!isBotInited) { UI.print('OpenCV load failed...'); return }
     app.listen(56556, () => {
       UI.clear()

@@ -7,12 +7,14 @@ const analyserCollectionDir = __dirname
 const reference = fs.readdirSync(analyserCollectionDir)
   .filter(n => /^analyser-/.test(n) && fs.lstatSync(path.resolve(analyserCollectionDir, n)).isDirectory())
 
+const typedRequire = (analyserName: string): { default: BaseAnalyser } => require(`./${analyserName}`)
+
 const analyserModule = {
-  async load (analyserName: string): Promise<{ analyser: BaseAnalyser }> {
+  async load (analyserName: string): Promise<BaseAnalyser> {
     if (!reference.includes(analyserName)) {
       throw new RangeError(`Analyser module (${analyserName}) not found`)
     }
-    return require(`./${analyserName}`)
+    return typedRequire(analyserName).default
   },
   detailizeParsedOperationList
 }

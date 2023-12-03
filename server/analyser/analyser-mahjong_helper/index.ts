@@ -184,4 +184,4 @@ class Analyser extends BaseAnalyser {
   }
 }
 
-export const analyser = new Analyser()
+export default new Analyser()
