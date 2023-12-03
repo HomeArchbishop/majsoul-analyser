@@ -4,7 +4,7 @@
 > 
 > 23-08-18 修复了由于命令行应用造成的线程阻塞
 > 
-> 23-12-3 发布Ma2: 重新组织业务逻辑。统一使用 [Mjai Protocol](https://mjai.app/docs/mjai-protocol)。降低代码耦合度
+> 23-12-3 发布Ma2: 重新组织业务逻辑。统一支持 [Mjai Protocol](https://mjai.app/docs/mjai-protocol)。降低代码耦合度
 > 
 > 【这个项目还在更新，请及时关注。有想法和 Bug 欢迎 issue。】
 
