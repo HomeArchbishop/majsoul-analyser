@@ -25,7 +25,7 @@ class MsgHandler {
     majsoul: {}
   }
 
-  handleReq (bufferMsg: Buffer, gameName: GameNameString): void {
+  async handleReq (bufferMsg: Buffer, gameName: GameNameString): Promise<void> {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
     const _rand = ~~(Math.random() * 10000)
     logger.info(`<req-handler> Begin to handle ReqMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
@@ -38,10 +38,10 @@ class MsgHandler {
     }
   }
 
-  handleRes (
+  async handleRes (
     bufferMsg: Buffer, meID: string = '', gameName: GameNameString,
     botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean, jian: number, chang: number }
-  ): void {
+  ): Promise<void> {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
     if (this.analyser === undefined) { return } /* analyser 未初始化 */
     if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
@@ -114,7 +114,7 @@ class MsgHandler {
     const round = this.game.rounds[this.game.roundPointer]
     const parsedOperationList = analyserModule.detailizeParsedOperationList(parsedRoughOperationList, round) /* 细分 operations */
     UI.print('analysing, type:', parsedOperationList)
-    const { choice: operationChoice, info } = this.analyser.analyseOperations(parsedOperationList, round)
+    const { choice: operationChoice, info } = await this.analyser.analyseOperations(parsedOperationList, round)
     UI.print('choice: ', JSON.stringify(structuredClone(operationChoice)), ' | ', info)
     logger.info('<res-handler> Analyser end')
     /* -------------------------- */

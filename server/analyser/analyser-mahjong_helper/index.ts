@@ -145,7 +145,7 @@ const operationJudge: Record<string, (round: Round, targetTile?: Tile) => { choi
 }
 
 class Analyser extends BaseAnalyser {
-  analyseOperations (parsedOperationList: ParsedOperationList, round: Round): { choice: ParsedOperation, info?: string } {
+  async analyseOperations (parsedOperationList: ParsedOperationList, round: Round): Promise<{ choice: ParsedOperation, info?: string }> {
     if (parsedOperationList.length === 0) { return { choice: { type: 'skip' }, info: 'No operation to analyse' } }
     const priority = ['horatsumo', 'horaron', 'reach', 'chi', 'pon', 'ankan', 'daiminkan', 'kakan', 'babei', 'dahai', 'skip']
     parsedOperationList

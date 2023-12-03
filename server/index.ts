@@ -43,15 +43,18 @@ router.post('/', async function (ctx, next) {
       const jian = +(ctx.query.jian ?? 0)
       const chang = +(ctx.query.chang ?? 0)
       const gameName = String(ctx.query.game) as GameNameString
+      let handleFuncPromise: Promise<void> = Promise.resolve()
       if (msgType === 'res') {
         logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-        msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
+        handleFuncPromise = msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
       } else if (msgType === 'req') {
         logger.info('<server-base> Server received req buffer')
-        msgHandler.handleReq(buffer, gameName)
+        handleFuncPromise = msgHandler.handleReq(buffer, gameName)
       }
-      ctx.status = 200
-      resolve()
+      handleFuncPromise.then(() => {
+        ctx.status = 200
+        resolve()
+      }).catch(() => null)
     })
   }))
   await next()
