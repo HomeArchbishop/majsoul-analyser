@@ -62,12 +62,14 @@ function record (game: Game, parsedMsg: ParsedMsg): number {
     round.players[parsedMsg.actor].fulu.push(sortTiles([...parsedMsg.consumed, parsedMsg.pai])) /* 放进副露队列 */
     round.players[parsedMsg.target].he.pop() /* 取走别家的牌河里的牌 */
     if (parsedMsg.actor === round.meSeat) { /* 如果是自己, 取走手牌 */
-      const index = round.players[parsedMsg.actor].hand.findIndex(t => t === parsedMsg.pai)
-      if (index > -1) {
-        round.players[parsedMsg.actor].hand.splice(index, 1)
+      for (const consumedTile of parsedMsg.consumed) {
+        const index = round.players[parsedMsg.actor].hand.findIndex(t => t === consumedTile)
+        if (index > -1) {
+          round.players[parsedMsg.actor].hand.splice(index, 1)
+        }
       }
     } else {
-      round.players[parsedMsg.actor].hand.splice(0, 2)
+      round.players[parsedMsg.actor].hand.splice(0, parsedMsg.consumed.length)
     }
   }
   if (parsedMsg.type === 'babei') { /* BaBei */
