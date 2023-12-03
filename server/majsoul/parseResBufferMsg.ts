@@ -156,12 +156,14 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
           type: 'ankan',
           actor: actionData.seat,
           consumed: [actionData.tiles, actionData.tiles, actionData.tiles, actionData.tiles]
-        },
-        {
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
         }
       )
+      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
+        parsedMsgList.push({
+          type: 'dora',
+          dora_marker: actionData.doras.slice(-1)[0]
+        })
+      }
     } else if (actionData.type === 4) { /* 加杠 */
       parsedMsgList.push(
         {
@@ -169,12 +171,14 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
           actor: actionData.seat,
           pai: actionData.tiles,
           consumed: [actionData.tiles, actionData.tiles, actionData.tiles]
-        },
-        {
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
         }
       )
+      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
+        parsedMsgList.push({
+          type: 'dora',
+          dora_marker: actionData.doras.slice(-1)[0]
+        })
+      }
     }
   }
   if (parsedMajsoulJSON.data.name === 'ActionChiPengGang') { /* ActionChiPengGang */
@@ -187,12 +191,14 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
           target: actionData.froms.find(n => n !== actionData.seat) as number,
           pai: actionData.tiles[0],
           consumed: actionData.tiles.slice(0, 3)
-        },
-        {
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
         }
       )
+      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
+        parsedMsgList.push({
+          type: 'dora',
+          dora_marker: actionData.doras.slice(-1)[0]
+        })
+      }
     } else if (actionData.type === 0) { /* 吃 */
       const targetIndex = actionData.froms.findIndex(n => n !== actionData.seat)
       parsedMsgList.push(
@@ -229,6 +235,12 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
       actor: actionData.seat,
       pai: actionData.tile !== '' ? actionData.tile : '?'
     })
+    if (actionData.doras !== undefined && actionData.doras.length !== 0) {
+      parsedMsgList.push({
+        type: 'dora',
+        dora_marker: actionData.doras.slice(-1)[0]
+      })
+    }
   }
   if (parsedMajsoulJSON.data.name === 'ActionDiscardTile') { /* ActionDiscardTile */
     const actionData = parsedMajsoulJSON.data.data as ActionDiscardTile
