@@ -14,7 +14,14 @@ const analyserModule = {
     if (!reference.includes(analyserName)) {
       throw new RangeError(`Analyser module (${analyserName}) not found`)
     }
-    return typedRequire(analyserName).default
+    const analyser = typedRequire(analyserName).default
+    if (analyser.init !== undefined) {
+      const inited = await analyser.init()
+      if (!inited) {
+        throw new Error(`Analyser module (${analyserName}) initialization failed`)
+      }
+    }
+    return analyser
   },
   detailizeParsedOperationList
 }
