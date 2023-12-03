@@ -1,5 +1,5 @@
 {
   "runtimeConf": {
-    "analyser": 0
+    "analyser": "analyser-mahjong_helper"
   }
 }

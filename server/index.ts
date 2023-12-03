@@ -7,6 +7,7 @@ import logger from './logger'
 import { bot } from './bot'
 import UI from './UI'
 import type { GameNameString } from './types/General'
+import { analyserModule } from './analyser/analyserModule'
 
 env.init()
 
@@ -67,13 +68,18 @@ process.on('uncaughtException', function (err) {
 })
 
 UI.print('OpenCV loading...')
-bot.init()
-  .then(inited => {
-    if (!inited) { UI.print('OpenCV load failed...'); return }
+;(async () => {
+  try {
+    const isBotInited = await bot.init()
+    if (!isBotInited) { UI.print('OpenCV load failed...'); return }
+    msgHandler.setAnalyser((await analyserModule.load(env.get<string>('runtimeConf.analyser'))).analyser)
+    if (!isBotInited) { UI.print('OpenCV load failed...'); return }
     app.listen(56556, () => {
       UI.clear()
       UI.print('OpenCV loaded. Service started at port: 56556')
       logger.info('<server-base> Server started at port 56556')
     })
-  })
-  .catch((err) => console.error(err))
+  } catch (err) {
+    console.error(err)
+  }
+})().catch(() => null)

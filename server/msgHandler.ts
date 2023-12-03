@@ -7,7 +7,6 @@ import { parseReqBufferMsg } from './majsoul/parseReqBufferMsg'
 import { parseResBufferMsg } from './majsoul/parseResBufferMsg'
 import { type Bot } from './bot'
 import type { BaseAnalyser } from './types/Analyser'
-import env from './env'
 import type { GameNameString } from './types/General'
 import { record } from './gameRecords/record'
 
@@ -44,6 +43,7 @@ class MsgHandler {
     botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean, jian: number, chang: number }
   ): void {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
+    if (this.analyser === undefined) { return } /* analyser 未初始化 */
     if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
     if (this.bot !== undefined && botOptions === undefined) { this.bot = undefined } /* 没有自动化机器人传入, 就说明关闭自动化 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateDPI(botOptions.dpi) } /* 记录更新模版放大比 */
@@ -102,6 +102,7 @@ class MsgHandler {
     /* --------------------------- */
 
     if (this.game?.rounds[this.game.roundPointer] === undefined) { return } /* 如果没有创建Game实例或无即时Round, 不进行下面的分析 */
+    if (this.analyser === undefined) { return } /* 如果没有analyser, 不进行下面的分析 */
     if (parsedRoughOperationList.length === 0) { return } /* 如果没有备选操作, 不进行下面的分析 */
 
     /* ---------------------------- */
@@ -141,7 +142,8 @@ class MsgHandler {
 
   game?: Game
 
-  analyser: BaseAnalyser = new (analyserModule.select(env.get<number>('runtimeConf.analyser')))()
+  analyser?: BaseAnalyser
+  setAnalyser (analyser: BaseAnalyser): void { this.analyser = analyser }
 
   bot?: Bot
 }
