@@ -7,6 +7,8 @@ import { Tile } from '../types/General'
 import { sortTiles } from '../utils/sortTiles'
 import logger from '../logger'
 import UI from '../UI'
+import { ParsedOperation } from '../types/ParsedOperation'
+import structuredClone from '@ungap/structured-clone'
 
 class Bot {
   async init (): Promise<boolean> {
@@ -119,6 +121,47 @@ class Bot {
     this.startNewGameFromHomePage(jian, chang)
   }
 
+  /**
+  * 处理一般流程 Action 消息的 operations
+  */
+  handleOperationChoice (operation: ParsedOperation): void {
+    logger.info(`<bot> bot click ${JSON.stringify(structuredClone(operation))}`)
+    if (operation.type === 'horatsumo') { /* 自摸 */
+      this.ensureClick('zimo')
+    }
+    if (operation.type === 'horaron') { /* 荣和 */
+      this.ensureClick('hu')
+    }
+    if (operation.type === 'chi') { /* 吃 */
+      this.ensureClick('chi')
+    }
+    if (operation.type === 'pon') { /* 碰 */
+      this.ensureClick('pon')
+    }
+    if (operation.type === 'ankan') { /* 暗杠 */
+      this.ensureClick('gang')
+    }
+    if (operation.type === 'daiminkan') { /* 杠 */
+      this.ensureClick('gang')
+    }
+    if (operation.type === 'kakan') { /* 加杠 */
+      this.ensureClick('gang')
+    }
+    if (operation.type === 'reach') { /* 立直 */
+      this.ensureClick('lizhi')
+      this.ensureClick(operation.pai, true)
+    }
+    if (operation.type === 'babei') { /* 拔北 */
+      this.ensureClick('babei')
+    }
+    if (operation.type === 'dahai') { /* 舍张 */
+      this.ensureClick(operation.pai)
+    }
+    if (operation.type === 'skip') { /* skip */
+      this.ensureClick('tiaoguo')
+    }
+  }
+
   ensureClick (tile: string, wait: boolean = false): void {
     this.#lastClickTask = this.#lastClickTask.then(async () => await this.clickTask(tile, wait).catch((err) => { logger.info(`<bot> err: ${err as string}`) }))
   }
@@ -145,15 +188,15 @@ class Bot {
       return await this.#getClickPointByCV(tile)
     }
     const player = this.round.players[this.round.meSeat]
-    if (player.hand === undefined) { return [NaN, NaN] }
+    if (player.hand[0] === '?') { return [NaN, NaN] }
 
     const formatedTiles: Tile[] = []
-    const is14Tiles = player.hand.length + player.anGang.length * 3 + player.fulu.length * 3 === 14
+    const is14Tiles = player.hand.length + player.ankan.length * 3 + player.fulu.length * 3 === 14
     if (is14Tiles) {
-      formatedTiles.push(...sortTiles(player.hand.slice(0, -1)))
-      formatedTiles.push(player.hand.slice(-1)[0])
+      formatedTiles.push(...sortTiles((player.hand as Tile[]).slice(0, -1)))
+      formatedTiles.push((player.hand as Tile[]).slice(-1)[0])
     } else {
-      formatedTiles.push(...sortTiles(player.hand))
+      formatedTiles.push(...sortTiles((player.hand as Tile[])))
     }
     let index = formatedTiles.findIndex(t => t === tile)
     if (index === -1 && /5(s|m|p)/.test(tile)) { index = formatedTiles.findIndex(t => t === tile.replace(/5/g, '0')) }

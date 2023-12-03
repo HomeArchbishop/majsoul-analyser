@@ -1,10 +1,7 @@
 import { Root, AnyNestedObject } from 'protobufjs'
 import liqi from './liqi'
 
-function parseReqBufferMsg (binaryReq: Buffer): {
-  index: number
-  resName: string
-} | null {
+function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: string }> {
   const binaryReqArr = new Uint8Array(binaryReq)
 
   // load('./liqi', (err, root) => {
@@ -24,14 +21,14 @@ function parseReqBufferMsg (binaryReq: Buffer): {
     if (
       /(authGame)|(syncGame)|(oauth2Login)/i.test(name)
     ) {
-      return {
+      return [{
         resName, index: (binaryReqArr[2] << 8) + binaryReqArr[1]
-      }
+      }]
     } else {
-      return null
+      return []
     }
   } catch {
-    return null
+    return []
   }
 }
 

@@ -6,6 +6,7 @@ import env from './env'
 import logger from './logger'
 import { bot } from './bot'
 import UI from './UI'
+import type { GameNameString } from './types/General'
 
 env.init()
 
@@ -40,12 +41,13 @@ router.post('/', async function (ctx, next) {
       const dpi = +(ctx.query.dpi ?? 1)
       const jian = +(ctx.query.jian ?? 0)
       const chang = +(ctx.query.chang ?? 0)
+      const gameName = String(ctx.query.game) as GameNameString
       if (msgType === 'res') {
         logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-        msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
+        msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
       } else if (msgType === 'req') {
         logger.info('<server-base> Server received req buffer')
-        msgHandler.handleReq(buffer)
+        msgHandler.handleReq(buffer, gameName)
       }
       ctx.status = 200
       resolve()

@@ -8,7 +8,8 @@
     "do-install": "build-opencv build",
     "install:dependence": "sh scripts/install.sh",
     "build:user": "sh scripts/build-user.sh",
-    "start": "npx ts-node server/index.ts"
+    "start": "npx ts-node server/index.ts",
+    "dev:wip": "npx ts-node --transpile-only server/index.ts"
   },
   "devDependencies": {
     "@koa/cors": "^4.0.0",
@@ -16,6 +17,7 @@
     "@types/koa-cors": "^0.0.2",
     "@types/koa-router": "^7.4.4",
     "@types/koa__cors": "^4.0.0",
+    "@types/lodash.findlastindex": "^4.6.9",
     "@types/request": "^2.48.8",
     "@types/shelljs": "^0.8.12",
     "@types/ungap__structured-clone": "^0.3.0",
@@ -43,6 +45,7 @@
     "koa": "^2.14.2",
     "koa-body": "^6.0.1",
     "koa-router": "^12.0.0",
+    "lodash.findlastindex": "^4.6.0",
     "protobufjs": "^7.2.4",
     "request": "^2.88.2",
     "robotjs": "^0.6.0",

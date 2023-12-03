@@ -8,6 +8,7 @@ import { tile2nameSimplified } from '../../utils/tile2name'
 import { nextTile } from '../../utils/nextTile'
 import os from 'node:os'
 import logger from '../../logger'
+import { OperationDahai, ParsedOperation, ParsedOperationList } from '../../types/ParsedOperation'
 
 let binPath: string
 
@@ -27,34 +28,34 @@ function callMahjongHelperShell (command: string): string {
   return stdout
 }
 
-class Analyser extends BaseAnalyser {
-  analyseDiscard (round: Round): { choice: Tile, info: string } {
+const operationJudge: Record<string, (round: Round, targetTile?: Tile) => { choice: boolean, info?: string, discard?: Tile }> = {
+  dahai: function analyseDiscard (round: Round): { choice: true, discard: Tile, info: string } {
     const meHand = round.players[round.meSeat].hand as Tile[]
     const fulu = round.players[round.meSeat].fulu
-    const anGang = round.players[round.meSeat].anGang
-    const daraArgs = `-d=${formatTiles(round.doras.map(nextTile)).replace(/\s/g, '')}`
+    const anGang = round.players[round.meSeat].ankan
+    const daraArgs = `-d=${formatTiles(round.doraMarkers.map(nextTile)).replace(/\s/g, '')}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase()
     const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
     const choiceName = out.split('\n').find(l => l.match(/无役/) === null && l.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/) !== null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null && choiceName !== undefined) {
-      const choice = tile2nameSimplified(choiceName[0]) as Tile
-      return { choice, info: `分析打出${choice}` }
+      const discard = tile2nameSimplified(choiceName[0]) as Tile
+      return { choice: true, discard, info: `分析打出${discard}` }
     } else {
       logger.info(`<analyser> Got unexpected output: \`${out}\`, command: \`${binPath} ${daraArgs} ${args}\``)
-      const choice = meHand[~~(Math.random() * meHand.length)]
-      return { choice, info: `随机打出${choice}` }
+      const discard = meHand[~~(Math.random() * meHand.length)]
+      return { choice: true, discard, info: `随机打出${discard}` }
     }
-  }
+  },
 
-  analyseChi (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+  chi: function analyseChi (round: Round, targetTile: Tile): { choice: boolean, info: string } {
     return { choice: false, info: '不副露' }
-  }
+  },
 
-  analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+  pon: function analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
     const meHand = round.players[round.meSeat].hand as Tile[]
     const fulu = round.players[round.meSeat].fulu
-    const anGang = round.players[round.meSeat].anGang
-    const daraArgs = `-d=${formatTiles(round.doras.map(nextTile)).replace(/\s/g, '')}`
+    const anGang = round.players[round.meSeat].ankan
+    const daraArgs = `-d=${formatTiles(round.doraMarkers.map(nextTile)).replace(/\s/g, '')}`
     const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
     const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
     const currentLine = {
@@ -94,48 +95,92 @@ class Analyser extends BaseAnalyser {
       }
     }
     return { choice: false, info: '不副露' }
-  }
+  },
 
-  analyseGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
-    if (targetTile === '5z' || targetTile === '6z' || targetTile === '7z' || Number(targetTile[0]) === (round.changfeng + 1) % 4 || Number(targetTile[0]) === (round.zifeng + 1) % 4) {
+  daiminkan: function analyseGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+    if (targetTile === '5z' || targetTile === '6z' || targetTile === '7z' || targetTile === round.bakaze || Number(targetTile[0]) === (round.meSeat - round.oya) % 4 + 1) {
       return { choice: true, info: '杠' + targetTile }
     }
     return { choice: false, info: '不副露' }
-  }
+  },
 
-  analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile } {
-    const discard = this.analyseDiscard(round).choice
+  ankan: function analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+    const discard = operationJudge.dahai(round).discard
     const choice = discard === targetTile
-    return { choice, info: '', discard }
-  }
+    return { choice, info: '' }
+  },
 
-  analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string, discard: Tile } {
-    const discard = this.analyseDiscard(round).choice
+  kakan: function analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+    const discard = operationJudge.dahai(round).discard
     const choice = discard !== targetTile
-    return { choice, info: '', discard }
-  }
+    return { choice, info: '' }
+  },
 
-  analyseLiqi (round: Round): { choice: boolean, discard: Tile, info: string } {
+  reach: function analyseLiqi (round: Round): { choice: boolean, discard: Tile, info: string } {
     const choice = round.leftTileCnt >= 10
-    const discard = this.analyseDiscard(round).choice
+    const discard = operationJudge.dahai(round).discard as Tile
     const info = (choice ? '立直 ' : '默听 ') + `切${discard}`
     return { choice, discard, info }
-  }
+  },
 
-  analyseHule (round: Round): { choice: boolean, info: string } {
+  horaron: function analyseHule (round: Round): { choice: boolean, info: string } {
     const choice = true
     return { choice, info: '荣和' }
-  }
+  },
 
-  analyseZimo (round: Round): { choice: boolean, info: string } {
+  horatsumo: function analyseZimo (round: Round): { choice: boolean, info: string } {
     const choice = true
     return { choice, info: '自摸' }
-  }
+  },
 
-  analyseBabei (round: Round): { choice: boolean, info: string } {
+  babei: function analyseBabei (round: Round): { choice: boolean, info: string } {
     const meHand = round.players[round.meSeat].hand as Tile[]
     const choice = meHand.reduce((p, c) => { c === '3z' ? p += 1 : p += 0; return p }, 0) < 3
     return { choice, info: '拔北' }
+  },
+
+  skip: function analyseSkip (round: Round): { choice: true, info: string } {
+    return { choice: true, info: 'skip' }
+  }
+}
+
+class Analyser extends BaseAnalyser {
+  analyseOperations (parsedOperationList: ParsedOperationList, round: Round): { choice: ParsedOperation, info?: string } {
+    if (parsedOperationList.length === 0) { return { choice: { type: 'skip' }, info: 'No operation to analyse' } }
+    const priority = ['horatsumo', 'horaron', 'reach', 'chi', 'pon', 'ankan', 'daiminkan', 'kakan', 'babei', 'dahai', 'skip']
+    parsedOperationList
+      .sort(({ type: t1 }, { type: t2 }) => priority.findIndex(n => n === t1) - priority.findIndex(n => n === t2))
+    const handledOperationType: Array<ParsedOperation['type']> = []
+    for (const parsedOperation of parsedOperationList) {
+      if (handledOperationType.includes(parsedOperation.type)) { continue }
+      handledOperationType.push(parsedOperation.type)
+      const judgeResult = operationJudge[parsedOperation.type](round, 'pai' in parsedOperation ? parsedOperation.pai : undefined)
+      if (judgeResult.choice) {
+        if (parsedOperation.type === 'dahai') {
+          return {
+            choice: {
+              ...parsedOperation,
+              pai: judgeResult.discard as Tile,
+              tsumogiri: (parsedOperationList.find(o => o.type === 'dahai' && o.pai === judgeResult.discard) as OperationDahai)?.tsumogiri ?? false
+            },
+            info: judgeResult.info
+          }
+        } else if (parsedOperation.type === 'reach') {
+          return {
+            choice: { ...parsedOperation, pai: judgeResult.discard as Tile }, info: judgeResult.info
+          }
+        } else {
+          return {
+            choice: parsedOperation, info: judgeResult.info
+          }
+        }
+      }
+    }
+    /* Logically, by no means will the code following run */
+    return {
+      choice: parsedOperationList[~~(Math.random() * parsedOperationList.length)],
+      info: 'Random selection'
+    }
   }
 }
 

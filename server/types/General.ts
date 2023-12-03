@@ -4,3 +4,5 @@ export type Tile = '1s' | '2s' | '3s' | '4s' | '5s' | '6s' | '7s' | '8s' | '9s' 
 '1z' | '2z' | '3z' | '4z' | '5z' | '6z' | '7z'
 
 export interface MAJ_ENV_JSON extends Record<string, any> {}
+
+export type GameNameString = 'majsoul'
