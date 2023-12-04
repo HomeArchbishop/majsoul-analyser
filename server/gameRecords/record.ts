@@ -42,7 +42,7 @@ function record (game: Game, parsedMsg: ParsedMsg): number {
         }
       }
     } else {
-      hand.splice(0, 3)
+      hand.splice(0, 4)
     }
   }
   if (parsedMsg.type === 'kakan') { /* 加杠 */
