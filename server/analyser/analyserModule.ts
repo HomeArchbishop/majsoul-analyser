@@ -22,7 +22,6 @@ const analyserModule = {
       }
     }
     process.on('SIGINT', () => {
-      console.log('sigint')
       if (analyser.end !== undefined) { analyser.end().finally(() => { process.exit(0) }) }
     })
     return analyser
