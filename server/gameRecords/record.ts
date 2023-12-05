@@ -15,7 +15,7 @@ function record (game: Game, parsedMsg: ParsedMsg): number {
       scores: parsedMsg.scores,
       meSeat: game.meSeat,
       tehais: parsedMsg.tehais,
-      leftTileCnt: parsedMsg.scores.length === 4 ? 84 : 56,
+      leftTileCnt: parsedMsg.scores.length === 4 ? 70 : 42,
       doraMarkers: [parsedMsg.dora_marker],
       kyotaku: parsedMsg.kyotaku,
       oya: parsedMsg.oya
@@ -86,6 +86,14 @@ function record (game: Game, parsedMsg: ParsedMsg): number {
   if (parsedMsg.type === 'tsumo') { /* 摸牌 */
     console.log(parsedMsg.pai)
     round.players[parsedMsg.actor].hand.push(parsedMsg.pai)
+    let isDrawFromLeftTiles = true
+    for (let i = round.steps.length - 2; i >= 0; i--) { /* 从steps倒数第二步开始遍历 */
+      if (round.steps[i].type === 'daiminkan' || round.steps[i].type === 'ankan' || round.steps[i].type === 'kakan') { isDrawFromLeftTiles = false; break }
+      if (round.steps[i].type === 'tsumo') { break }
+    }
+    if (isDrawFromLeftTiles) { /* 如果不从牌山摸牌，减少剩余牌数 */
+      round.leftTileCnt--
+    }
   }
   if (parsedMsg.type === 'dahai') { /* 舍张 */
     round.players[parsedMsg.actor].he.push(parsedMsg.pai)
