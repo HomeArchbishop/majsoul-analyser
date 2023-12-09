@@ -1,7 +1,7 @@
 {
   "name": "majsoul-analyser",
   "author": "拆家大主教",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "install_arm64": "build-opencv --version 4.5.4 --flag=\"-DCMAKE_SYSTEM_PROCESSOR=arm64 -DCMAKE_OSX_ARCHITECTURES=arm64\" build",
     "install_4.5.5_cuda": "build-opencv --version 4.5.5 --flags=\"-DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_DNN_CUDA=ON -DCUDA_FAST_MATH=ON\" build",
