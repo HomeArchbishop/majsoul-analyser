@@ -70,15 +70,18 @@ process.on('uncaughtException', function (err) {
   process.exit(1)
 })
 
+UI.clear()
 UI.print('OpenCV loading...')
 ;(async () => {
   try {
     const isBotInited = await bot.init()
     if (!isBotInited) { UI.print('OpenCV load failed...'); return }
-    msgHandler.setAnalyser(await analyserModule.load(env.get<string>('runtimeConf.analyser')))
+    const analyserName = env.get<string>('runtimeConf.analyser')
+    UI.print(`Analyser module (${analyserName}) loading...`)
+    msgHandler.setAnalyser(await analyserModule.load(analyserName))
     app.listen(56556, () => {
       UI.clear()
-      UI.print('OpenCV loaded. Service started at port: 56556')
+      UI.print('All modules loaded. Service started at port: 56556')
       logger.info('<server-base> Server started at port 56556')
     })
   } catch (err) {
