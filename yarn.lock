@@ -8647,6 +8647,11 @@ pupa@^2.0.1:
   dependencies:
     escape-goat "^2.0.0"
 
+python-shell@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmmirror.com/python-shell/-/python-shell-5.0.0.tgz#26fc9a0e477cb30fc98ef2d9d5f53ab38a060eac"
+  integrity sha512-RUOOOjHLhgR1MIQrCtnEqz/HJ1RMZBIN+REnpSUrfft2bXqXy69fwJASVziWExfFXsR1bCY0TznnHooNsCo0/w==
+
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.npmmirror.com/q/-/q-1.5.1.tgz"
