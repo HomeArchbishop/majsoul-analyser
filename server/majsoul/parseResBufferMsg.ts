@@ -208,7 +208,7 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
           target: actionData.froms[targetIndex],
           pai: actionData.tiles[targetIndex],
           consumed: actionData.tiles.reduce<Tile[]>((p, c, i) => {
-            if (i === actionData.seat) { p.push(c) }; return p
+            if (actionData.froms[i] === actionData.seat) { p.push(c) }; return p
           }, [])
         }
       )
