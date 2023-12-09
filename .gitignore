@@ -5,3 +5,5 @@ dist
 .majenv.json
 
 TODOs.txt
+
+server/analyser/analyser-local-*/
