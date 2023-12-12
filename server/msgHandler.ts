@@ -3,8 +3,8 @@ import UI from './UI'
 import { analyserModule } from './analyser/analyserModule'
 import { Game } from './gameRecords/Game'
 import logger from './logger'
-import { parseReqBufferMsg } from './majsoul/parseReqBufferMsg'
-import { parseResBufferMsg } from './majsoul/parseResBufferMsg'
+import { parseReqBufferMsg as MajsoulParseReqBufferMsg } from './majsoul/parseReqBufferMsg'
+import { parseResBufferMsg as MajsoulParseResBufferMsg } from './majsoul/parseResBufferMsg'
 import { type Bot } from './bot'
 import type { BaseAnalyser } from './types/Analyser'
 import type { GameNameString } from './types/General'
@@ -25,11 +25,18 @@ class MsgHandler {
     majsoul: {}
   }
 
+  gameMsgParser: Record<GameNameString, Record<'parseReq' | 'parseRes', any>> = {
+    majsoul: {
+      parseReq: MajsoulParseReqBufferMsg,
+      parseRes: MajsoulParseResBufferMsg
+    }
+  }
+
   async handleReq (bufferMsg: Buffer, gameName: GameNameString): Promise<void> {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
     const _rand = ~~(Math.random() * 10000)
     logger.info(`<req-handler> Begin to handle ReqMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
-    const msgList = parseReqBufferMsg(bufferMsg)
+    const msgList = this.gameMsgParser[gameName].parseReq(bufferMsg)
     logger.info(`<req-handler> Parsed ReqMsg(${gameName}${_rand}) ${JSON.stringify(structuredClone(msgList))}`)
     for (let i = 0; i < msgList.length; i++) {
       const msg = msgList[i]
@@ -55,7 +62,7 @@ class MsgHandler {
     /* ------------------------------ */
     const _rand = ~~(Math.random() * 10000)
     logger.info(`<res-handler> Begin to handle ResMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
-    const [parsedMsgList, parsedRoughOperationList] = parseResBufferMsg(bufferMsg, this.reqQueue[gameName], { meID, meSeat: this.game?.meSeat })
+    const [parsedMsgList, parsedRoughOperationList] = this.gameMsgParser[gameName].parseRes(bufferMsg, this.reqQueue[gameName], { meID, meSeat: this.game?.meSeat })
     logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) ${JSON.stringify(structuredClone(parsedMsgList))}`)
     /* ----------------------------- */
     /*      Majsoul 转译模块 END      */
