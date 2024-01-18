@@ -16,13 +16,18 @@ const uiDOM = document.createElement('div')
 const headerDOM = document.createElement('div')
 const bodyDOM = document.createElement('div')
 const line1 = document.createElement('div')
-const line1text = document.createTextNode('auto game')
+const line1text = document.createTextNode('自动下一场')
 const line1opt = document.createElement('div')
+const line2 = document.createElement('div')
+const line2text = document.createTextNode('bot代打')
+const line2opt = document.createElement('div')
 
 line1.append(line1text, line1opt)
+line2.append(line2text, line2opt)
 bodyDOM.append(line1)
+bodyDOM.append(line2)
 uiDOM.append(headerDOM, bodyDOM)
-// document.body.append(uiDOM)
+document.body.append(uiDOM)
 
 uiDOM.style.position = 'fixed'
 uiDOM.style.top = '0'
@@ -48,6 +53,17 @@ line1.style.fontSize = '16px'
 line1.style.fontSize = '16px'
 line1opt.style.width = line1opt.style.height = '12px'
 line1opt.style.border = '1px solid #4f4f4f'
+line2.style.width = '100%'
+line2.style.height = '20px'
+line2.style.color = '#4f4f4f'
+line2.style.fontSize = '16px'
+line2.style.display = 'flex'
+line2.style.justifyContent = 'space-between'
+line2.style.alignItems = 'center'
+line2.style.fontSize = '16px'
+line2.style.fontSize = '16px'
+line2opt.style.width = line2opt.style.height = '12px'
+line2opt.style.border = '1px solid #4f4f4f'
 
 let isDown = false
 let offsetY = 0
@@ -69,6 +85,12 @@ line1opt.addEventListener('click', () => {
   autoGame = !autoGame
   line1opt.style.background = autoGame ? '#4f4f4f' : 'transparent'
 })
+
+let useBot = false
+line2opt.addEventListener('click', () => {
+  useBot = !useBot
+  line2opt.style.background = useBot ? '#4f4f4f' : 'transparent'
+})
 /** UI END **/
 
 if (window.location.host === 'game.maj-soul.com') {
@@ -81,7 +103,7 @@ if (window.location.host === 'game.maj-soul.com') {
       const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
       const dpi = window.devicePixelRatio
       req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
-&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
+&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul&bot=${String(useBot)}`)
       req.send(data)
     } catch (err) {
       console.error(err)
@@ -98,7 +120,7 @@ if (window.location.host === 'game.maj-soul.com') {
       const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
       const dpi = window.devicePixelRatio
       req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}
-&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
+&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul&bot=${String(useBot)}`)
       req.send(binaryMsg)
     } catch (err) {
       console.error(err)

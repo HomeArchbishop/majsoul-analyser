@@ -39,6 +39,7 @@ router.post('/', async function (ctx, next) {
       const canvasScreenY = +(ctx.query.y ?? 0)
       const isWindowFocus = ctx.query.f === 'true'
       const autoGame = ctx.query.ag === 'true'
+      const useBot = ctx.query.bot === 'true'
       const dpi = +(ctx.query.dpi ?? 1)
       const jian = +(ctx.query.jian ?? 0)
       const chang = +(ctx.query.chang ?? 0)
@@ -46,7 +47,7 @@ router.post('/', async function (ctx, next) {
       let handleFuncPromise: Promise<void> = Promise.resolve()
       if (msgType === 'res') {
         logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-        handleFuncPromise = msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName, isWindowFocus ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
+        handleFuncPromise = msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName, (isWindowFocus && useBot) ? { bot, canvasW, canvasH, canvasScreenX, canvasScreenY, dpi, autoGame, jian, chang } : undefined)
       } else if (msgType === 'req') {
         logger.info('<server-base> Server received req buffer')
         handleFuncPromise = msgHandler.handleReq(buffer, gameName)
