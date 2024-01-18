@@ -25,7 +25,7 @@ class MsgHandler {
     majsoul: {}
   }
 
-  gameMsgParser: Record<GameNameString, Record<'parseReq' | 'parseRes', any>> = {
+  gameMsgParser = {
     majsoul: {
       parseReq: MajsoulParseReqBufferMsg,
       parseRes: MajsoulParseResBufferMsg
