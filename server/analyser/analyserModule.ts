@@ -21,9 +21,6 @@ const analyserModule = {
         throw new Error(`Analyser module (${analyserName}) initialization failed`)
       }
     }
-    process.on('SIGINT', () => {
-      if (analyser.end !== undefined) { analyser.end().finally(() => { process.exit(0) }) }
-    })
     return analyser
   },
   detailizeParsedOperationList
