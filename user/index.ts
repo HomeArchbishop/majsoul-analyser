@@ -71,36 +71,58 @@ line1opt.addEventListener('click', () => {
 })
 /** UI END **/
 
-wsHook.before = (data, url) => {
-  if (!url.includes('/game-gateway')) { return data }
-  try {
-    const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0) / window.devicePixelRatio
-    const screenY = window.screenY + window.outerHeight - window.innerHeight + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.getBoundingClientRect().y ?? 0)
-    const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
-    const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
-    const dpi = window.devicePixelRatio
-    req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
+if (window.location.host === 'game.maj-soul.com') {
+  wsHook.before = (data, url) => {
+    if (!url.includes('/game-gateway')) { return data }
+    try {
+      const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0) / window.devicePixelRatio
+      const screenY = window.screenY + window.outerHeight - window.innerHeight + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.getBoundingClientRect().y ?? 0)
+      const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
+      const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
+      const dpi = window.devicePixelRatio
+      req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
 &w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
-    req.send(data)
-  } catch (err) {
-    console.error(err)
+      req.send(data)
+    } catch (err) {
+      console.error(err)
+    }
+    return data
   }
-  return data
+  wsHook.after = (messageEvent, url) => {
+    if (!url.includes('/game-gateway')) { return messageEvent }
+    try {
+      const binaryMsg = messageEvent.data as ArrayBuffer
+      const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0) / window.devicePixelRatio
+      const screenY = window.screenY + window.outerHeight - window.innerHeight + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.getBoundingClientRect().y ?? 0)
+      const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
+      const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
+      const dpi = window.devicePixelRatio
+      req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}
+&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
+      req.send(binaryMsg)
+    } catch (err) {
+      console.error(err)
+    }
+    return messageEvent
+  }
 }
-wsHook.after = (messageEvent, url) => {
-  if (!url.includes('/game-gateway')) { return messageEvent }
-  try {
-    const binaryMsg = messageEvent.data as ArrayBuffer
-    const screenX = window.screenX + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.offsetLeft ?? 0) / window.devicePixelRatio
-    const screenY = window.screenY + window.outerHeight - window.innerHeight + (document.querySelector<HTMLCanvasElement>('#layaCanvas')?.getBoundingClientRect().y ?? 0)
-    const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
-    const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
-    const dpi = window.devicePixelRatio
-    req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
-&w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul`)
-    req.send(binaryMsg)
-  } catch (err) {
-    console.error(err)
+
+if (window.location.host === 'tenhou.net') {
+  wsHook.after = (messageEvent, url) => {
+    if (!url.includes('mjv.jp')) { return messageEvent }
+    try {
+      const msgString = messageEvent.data as string
+      req.open('POST', `${serverURL}?msg=res&game=tenhou`)
+
+      const binaryMsg = new ArrayBuffer(msgString.length)
+      const bufView = new Uint8Array(binaryMsg)
+      for (let i = 0; i < msgString.length; i++) {
+        bufView[i] = msgString.charCodeAt(i)
+      }
+      req.send(binaryMsg)
+    } catch (err) {
+      console.error(err)
+    }
+    return messageEvent
   }
-  return messageEvent
 }
