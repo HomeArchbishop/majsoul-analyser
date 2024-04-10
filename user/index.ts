@@ -26,7 +26,7 @@ line2.append(line2text, line2opt)
 bodyDOM.append(line1)
 bodyDOM.append(line2)
 uiDOM.append(headerDOM, bodyDOM)
-document.body.append(uiDOM)
+// document.body.append(uiDOM)
 
 uiDOM.style.position = 'fixed'
 uiDOM.style.top = '0'
