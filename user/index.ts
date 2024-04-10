@@ -1,6 +1,5 @@
 import { wsHook } from './wshook'
 
-const req = new XMLHttpRequest()
 const serverURL = 'http://localhost:56556/'
 
 let isWindowFocus: boolean = window.document.hasFocus()
@@ -102,6 +101,7 @@ if (window.location.host === 'game.maj-soul.com') {
       const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
       const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
       const dpi = window.devicePixelRatio
+      const req = new XMLHttpRequest()
       req.open('POST', `${serverURL}?msg=req&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}\
 &w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul&bot=${String(useBot)}`)
       req.send(data)
@@ -119,6 +119,7 @@ if (window.location.host === 'game.maj-soul.com') {
       const w = (window.layaCanvas.width ?? 0) / window.devicePixelRatio
       const h = (window.layaCanvas.height ?? 0) / window.devicePixelRatio
       const dpi = window.devicePixelRatio
+      const req = new XMLHttpRequest()
       req.open('POST', `${serverURL}?msg=res&meID=${window?.GameMgr?.Inst?.account_data?.account_id ?? ''}
 &w=${w}&h=${h}&x=${screenX}&y=${screenY}&f=${String(isWindowFocus)}&dpi=${dpi}&ag=${String(autoGame)}&jian=${1}&chang=${2}&game=majsoul&bot=${String(useBot)}`)
       req.send(binaryMsg)
@@ -130,11 +131,20 @@ if (window.location.host === 'game.maj-soul.com') {
 }
 
 if (window.location.host === 'tenhou.net') {
+  const msgStringQueue: string[] = []
+  let msgIndex = new Date().getTime()
+
   wsHook.after = (messageEvent, url) => {
     if (!url.includes('mjv.jp')) { return messageEvent }
     try {
-      const msgString = messageEvent.data as string
-      req.open('POST', `${serverURL}?msg=res&game=tenhou`)
+      msgStringQueue.push(messageEvent.data as string)
+
+      const req = new XMLHttpRequest()
+
+      req.open('POST', `${serverURL}?msg=res&game=tenhou&i=${msgIndex++}`)
+
+      const msgString = msgStringQueue.shift()
+      if (msgString === undefined) { return messageEvent }
 
       const binaryMsg = new ArrayBuffer(msgString.length)
       const bufView = new Uint8Array(binaryMsg)
