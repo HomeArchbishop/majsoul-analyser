@@ -5,6 +5,7 @@ import { Game } from './gameRecords/Game'
 import logger from './logger'
 import { parseReqBufferMsg as MajsoulParseReqBufferMsg } from './majsoul/parseReqBufferMsg'
 import { parseResBufferMsg as MajsoulParseResBufferMsg } from './majsoul/parseResBufferMsg'
+import { parseResBufferMsg as TenhouParseResBufferMsg } from './tenhou/parseResBufferMsg'
 import { type Bot } from './bot'
 import type { BaseAnalyser } from './types/Analyser'
 import type { GameNameString } from './types/General'
@@ -22,13 +23,18 @@ function printIDerror (): void {
  */
 class MsgHandler {
   reqQueue: Record<GameNameString, Record<number, { resName: string }>> = {
-    majsoul: {}
+    majsoul: {},
+    tenhou: {} // never used
   }
 
   gameMsgParser = {
     majsoul: {
       parseReq: MajsoulParseReqBufferMsg,
       parseRes: MajsoulParseResBufferMsg
+    },
+    tenhou: {
+      parseReq: () => [],
+      parseRes: TenhouParseResBufferMsg
     }
   }
 
@@ -57,16 +63,16 @@ class MsgHandler {
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasWH(botOptions.canvasW, botOptions.canvasH) } /* 记录更新模版放大比 */
     if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasXY(botOptions.canvasScreenX, botOptions.canvasScreenY) } /* 记录canvas屏幕位置 */
 
-    /* ------------------------------ */
-    /*      Majsoul 转译模块 START     */
-    /* ------------------------------ */
+    /* ----------------------- */
+    /*       转译模块 START     */
+    /* ----------------------- */
     const _rand = ~~(Math.random() * 10000)
     logger.info(`<res-handler> Begin to handle ResMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
     const [parsedMsgList, parsedRoughOperationList] = this.gameMsgParser[gameName].parseRes(bufferMsg, this.reqQueue[gameName], { meID, meSeat: this.game?.meSeat })
     logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) ${JSON.stringify(structuredClone(parsedMsgList))}`)
-    /* ----------------------------- */
-    /*      Majsoul 转译模块 END      */
-    /* ----------------------------- */
+    /* --------------------- */
+    /*      Majsoul END      */
+    /* ------------ -------- */
 
     if (parsedMsgList.length === 0) { return }
 
@@ -79,7 +85,7 @@ class MsgHandler {
       /*        Game进程通知       */
       /* ======================== */
       if (parsedMsg.type === 'start_game') { /* 整场游戏开始, 创建新游戏记录实例 */
-        if (meID.length < 1) { return printIDerror() }
+        if (gameName === 'majsoul' && meID.length < 1) { return printIDerror() }
         const meSeat = parsedMsg.id
         if (meSeat === -1) { return printIDerror() }
         this.game = new Game({ meSeat })
