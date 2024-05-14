@@ -60,6 +60,7 @@ export interface ActionNewRound {
   chang: number
   ju: number
   ben: number
+  liqibang: number
   tiles: Tile[]
   doras: Tile[]
   dora: Tile[] // useless

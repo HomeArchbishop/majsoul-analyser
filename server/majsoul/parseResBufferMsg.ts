@@ -137,7 +137,7 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
         dora_marker: actionData.doras[0],
         kyoku: actionData.ju,
         honba: actionData.ben,
-        kyotaku: 1000,
+        kyotaku: actionData.liqibang,
         scores: actionData.scores,
         oya,
         tehais: Array.from({ length: 4 }).map((_, i) => i === meSeat ? sortedTiles.slice(0, 13) : Array.from<'?'>({ length: 13 }).fill('?'))
