@@ -21,7 +21,7 @@ export interface MsgStartKyoku {
   type: 'start_kyoku'
   bakaze: '1z' | '2z' | '3z' | '4z'
   dora_marker: Tile
-  kyoku: number // 局
+  kyoku: number // 局 1, 2, 3, 4
   honba: number // 本場
   kyotaku: number // 供託
   scores: number[]

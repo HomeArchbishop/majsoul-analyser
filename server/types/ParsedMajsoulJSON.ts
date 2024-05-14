@@ -58,7 +58,7 @@ export interface HuleInfo {
 
 export interface ActionNewRound {
   chang: number
-  ju: number
+  ju: number // 0, 1, 2, 3
   ben: number
   liqibang: number
   tiles: Tile[]

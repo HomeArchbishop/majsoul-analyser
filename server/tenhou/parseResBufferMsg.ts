@@ -107,7 +107,7 @@ function parseResBufferMsg (binaryMsg: Buffer): [ParsedMsgList, ParsedRoughOpera
         | '3z'
         | '4z',
       dora_marker: tenhouNum2Tile(parsedTenhouJSON.seed[5]),
-      kyoku: parsedTenhouJSON.seed[0],
+      kyoku: parsedTenhouJSON.seed[0] + 1,
       honba: parsedTenhouJSON.seed[1],
       kyotaku: parsedTenhouJSON.seed[2],
       scores: parsedTenhouJSON.ten,
