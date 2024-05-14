@@ -20,7 +20,7 @@ export interface RoundConstructorOptions {
 class Round {
   constructor (options: RoundConstructorOptions) {
     this.meSeat = options.meSeat
-    this.scores = options.scores
+    this.scores = [...options.scores]
     this.playerCnt = options.scores.length
     this.bakaze = options.bakaze
     this.kyoku = options.kyoku
@@ -34,7 +34,7 @@ class Round {
       this.players.push({
         discards: [],
         he: [],
-        hand: options.tehais[i],
+        hand: [...options.tehais[i]],
         fulu: [],
         ankan: [],
         isReach: false,
