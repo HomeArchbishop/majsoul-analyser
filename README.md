@@ -1,24 +1,37 @@
 # Majsoul-analyser 雀力展开！<sup>v2.x</sup>
 
-> START AT 2023-7
+> 2023-7 project started
 > 
 > 23-08-18 修复了由于命令行应用造成的线程阻塞
 > 
 > 23-12-3 发布Ma2: 重新组织业务逻辑。统一支持 [Mjai Protocol](https://mjai.app/docs/mjai-protocol)。降低代码耦合度
-> 
+>
 > 【这个项目还在更新，请及时关注。有想法和 Bug 欢迎 issue。】
 
-适用于: 
+平台支持: 
 
 - Darwin (MacOS)
 - Windows (test on Windows 11, works fine)
+- Linux 正在测试
 
-Linux 正在测试
+游戏支持：
+
+- 雀魂 / Majsoul / MahjongSoul
+- 天凤 / Tenhou (正在开发)
+
+> **【Notice】** 考虑到下列原因，已停用Bot自动点击
+>
+> - 2024年夏季雀魂的一次界面升级
+>
+> - 自动点击的cv识别不准确
+>
+> - 可能的自动化鼠标检测（反作弊）
+>
+> - 未来对天凤（tenhou）等其他平台的完整支持
 
 ## 介绍
 
-- 自动刷麻将，处理牌局
-- 窗口失去焦点后，不进行自动化点击
+- 自动提供帮助，处理麻将牌局
 
 ## Usage
 
