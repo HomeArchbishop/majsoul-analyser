@@ -2,7 +2,7 @@ npx vite build;
 
 sed -i "1i\
 // ==UserScript==\n\
-// @name        雀力全开！- 雀魂自动化代打\n\
+// @name        雀力全开！- 雀魂分析助手\n\
 // @match       https://game.maj-soul.com/*\n\
 // @match       https://tenhou.net/*\n\
 // @grant       none\n\

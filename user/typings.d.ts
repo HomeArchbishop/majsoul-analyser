@@ -6,5 +6,4 @@ declare interface Window {
       }
     }
   }
-  layaCanvas: HTMLCanvasElement
 }
