@@ -56,13 +56,16 @@ class MsgHandler {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
     if (this.analyser === undefined) { return } /* analyser 未初始化 */
 
+    const parseOptions = { meID: (meID !== undefined && meID.length > 0) ? meID : this.meID, meSeat: this.game?.meSeat }
+
     /* ----------------------- */
     /*       转译模块 START     */
     /* ----------------------- */
     const _rand = ~~(Math.random() * 10000)
     logger.info(`<res-handler> Begin to handle ResMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
-    const [parsedMsgList, parsedRoughOperationList] = this.gameMsgParser[gameName].parseRes(bufferMsg, this.reqQueue[gameName], { meID, meSeat: this.game?.meSeat })
-    logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) ${JSON.stringify(structuredClone(parsedMsgList))}`)
+    const [parsedMsgList, parsedRoughOperationList] = this.gameMsgParser[gameName].parseRes(bufferMsg, this.reqQueue[gameName], parseOptions)
+    if (parseOptions.meID !== undefined && parseOptions.meID.length > 0) { this.meID = parseOptions.meID }
+    logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) meID=${parseOptions.meID ?? ''} meSeat=${parseOptions.meSeat ?? ''} ${JSON.stringify(structuredClone(parsedMsgList))}`)
     /* --------------------- */
     /*      Majsoul END      */
     /* ------------ -------- */
@@ -78,7 +81,6 @@ class MsgHandler {
       /*        Game进程通知       */
       /* ======================== */
       if (parsedMsg.type === 'start_game') { /* 整场游戏开始, 创建新游戏记录实例 */
-        if (gameName === 'majsoul' && meID.length < 1) { return printIDerror() }
         const meSeat = parsedMsg.id
         if (meSeat === -1) { return printIDerror() }
         this.game = new Game({ meSeat })
@@ -125,6 +127,8 @@ class MsgHandler {
   }
 
   game?: Game
+
+  meID?: string
 
   analyser?: BaseAnalyser
   setAnalyser (analyser: BaseAnalyser): void { this.analyser = analyser }

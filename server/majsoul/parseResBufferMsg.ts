@@ -1,6 +1,6 @@
 import { Root, AnyNestedObject } from 'protobufjs'
 import liqi from './liqi'
-import { ParsedMajsoulJSON, ActionPrototype, ActionNewRound, ActionAnGangAddGang, ActionChiPengGang, ActionBaBei, ActionDealTile, ActionDiscardTile, OptionalOperationList } from '../types/ParsedMajsoulJSON'
+import { ParsedMajsoulJSON, ActionPrototype, ActionNewRound, ActionAnGangAddGang, ActionChiPengGang, ActionBaBei, ActionDealTile, ActionDiscardTile, OptionalOperationList, ResAuthGame } from '../types/ParsedMajsoulJSON'
 import { ParsedMsgList } from '../types/ParsedMsg'
 import { ParsedRoughOperationList } from '../types/ParsedOperation'
 import { sortTiles } from '../utils/sortTiles'
@@ -68,6 +68,33 @@ function parseMajsoulJSON (binaryMsg: Buffer, reqQueueMajsoul: Readonly<Record<n
   return null
 }
 
+function resolveMeSeatAndID (
+  data: ResAuthGame['data'],
+  meID?: string
+): { meSeat: number, meID: string } {
+  const seatList = data.seat_list
+
+  if (meID !== undefined && meID.length > 0) {
+    const meSeat = seatList.findIndex(id => String(id) === meID)
+    if (meSeat !== -1) { return { meSeat, meID } }
+  }
+
+  if (data.players.length === 1) {
+    const accountId = String(data.players[0].account_id)
+    const meSeat = seatList.findIndex(id => String(id) === accountId)
+    if (meSeat !== -1) { return { meSeat, meID: accountId } }
+  }
+
+  const humanSeats = seatList
+    .map((id, idx) => ({ id, idx }))
+    .filter(({ id }) => id !== 0)
+  if (humanSeats.length === 1) {
+    return { meSeat: humanSeats[0].idx, meID: String(humanSeats[0].id) }
+  }
+
+  return { meSeat: -1, meID: meID ?? '' }
+}
+
 function parseResBufferMsg (
   binaryMsg: Buffer,
   reqQueueMajsoul: Readonly<Record<number, { resName: string }>>, options: { meID?: string, meSeat?: number }): [ParsedMsgList, ParsedRoughOperationList] {
@@ -78,12 +105,20 @@ function parseResBufferMsg (
   const parsedMsgList: ParsedMsgList = []
   const parsedRoughOperationList: ParsedRoughOperationList = []
 
+  if (parsedMajsoulJSON.name === 'ResLogin') {
+    if (parsedMajsoulJSON.data.account_id !== undefined) {
+      options.meID = String(parsedMajsoulJSON.data.account_id)
+    }
+    return [parsedMsgList, parsedRoughOperationList]
+  }
+
   if (parsedMajsoulJSON.name === 'ResAuthGame') { /* 整场游戏开始 */
     if (parsedMajsoulJSON.data.error !== null && parsedMajsoulJSON.data.error !== undefined) { return [parsedMsgList, parsedRoughOperationList] } /* 对局游戏故障或已结束（from雀魂服务端） */
     if (parsedMajsoulJSON.data.seat_list.length < 1) { return [parsedMsgList, parsedRoughOperationList] } /* 多余的一次请求（雀魂有时会在有效ResAuthGame请求后再次请求, 得到空resp */
-    const meSeatID = parsedMajsoulJSON.data.seat_list.findIndex(id => String(id) === options.meID)
-    options.meSeat = meSeatID
-    parsedMsgList.push({ type: 'start_game', id: meSeatID })
+    const { meSeat, meID } = resolveMeSeatAndID(parsedMajsoulJSON.data, options.meID)
+    options.meSeat = meSeat
+    options.meID = meID
+    parsedMsgList.push({ type: 'start_game', id: meSeat })
   }
   if (parsedMajsoulJSON.name === 'NotifyGameTerminate') { /* 整场游戏结束 */
     parsedMsgList.push({ type: 'end_game' })

@@ -19,7 +19,7 @@ function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: 
     const resName = service.responseType
 
     if (
-      /(authGame)|(syncGame)|(oauth2Login)/i.test(name)
+      /(authGame)|(syncGame)|(oauth2Login)|(login)|(emailLogin)/i.test(name)
     ) {
       return [{
         resName, index: (binaryReqArr[2] << 8) + binaryReqArr[1]

@@ -36,7 +36,11 @@ router.post('/', async function (ctx, next) {
       let handleFuncPromise: Promise<void> = Promise.resolve()
       if (msgType === 'res') {
         logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-        handleFuncPromise = msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName)
+        handleFuncPromise = msgHandler.handleRes(buffer, ctx.query.meID as string | undefined, gameName).then(() => {
+          if (msgHandler.meID !== undefined) {
+            ctx.set('X-Majsoul-Account-Id', msgHandler.meID)
+          }
+        })
       } else if (msgType === 'req') {
         logger.info('<server-base> Server received req buffer')
         handleFuncPromise = msgHandler.handleReq(buffer, gameName)
@@ -51,7 +55,7 @@ router.post('/', async function (ctx, next) {
 })
 
 app
-  .use(cors())
+  .use(cors({ exposeHeaders: ['X-Majsoul-Account-Id'] }))
   .use(router.routes()).use(router.allowedMethods())
 
 process.on('uncaughtException', function (err) {
