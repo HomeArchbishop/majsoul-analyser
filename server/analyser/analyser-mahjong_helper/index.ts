@@ -1,14 +1,14 @@
-import { type Round } from '../../gameRecords/Round'
-import { BaseAnalyser } from '../../types/Analyser'
-import { Tile } from '../../types/General'
-import shell from 'shelljs'
-import path from 'path'
-import { formatTiles } from '../../utils/formatTiles'
-import { tile2nameSimplified } from '../../utils/tile2name'
-import { nextTile } from '../../utils/nextTile'
 import os from 'node:os'
+
+import path from 'path'
+import shell from 'shelljs'
+
+import { type Round } from '../../gameRecords/Round'
 import logger from '../../logger'
-import { OperationDahai, ParsedOperation, ParsedOperationList } from '../../types/ParsedOperation'
+import { BaseAnalyser } from '../../types/Analyser'
+import type { MjaiAction, MjaiActionList } from '../../types/Mjai'
+import { Pai } from '../../types/Mjai'
+import { formatPai, helperLabelToPai, nextPai } from '../../utils/pai'
 
 let binPath: string
 
@@ -22,49 +22,46 @@ if (platform === 'darwin') {
 }
 
 function callMahjongHelperShell (command: string): string {
-  let cmd: any = {}
-  cmd = shell.exec(command, { silent: true, timeout: 3900 })
-  const stdout = cmd.stdout
-  return stdout
+  const cmd = shell.exec(command, { silent: true, timeout: 3900 })
+  return cmd.stdout
 }
 
-const operationJudge: Record<string, (round: Round, targetTile?: Tile) => { choice: boolean, info?: string, discard?: Tile }> = {
-  dahai: function analyseDiscard (round: Round): { choice: true, discard: Tile, info: string } {
-    const meHand = round.players[round.meSeat].hand as Tile[]
+const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice: boolean, info?: string, discard?: Pai }> = {
+  dahai: function analyseDahai (round: Round): { choice: true, discard: Pai, info: string } {
+    const meHand = round.players[round.meSeat].hand
     const fulu = round.players[round.meSeat].fulu
-    const anGang = round.players[round.meSeat].ankan
-    const daraArgs = `-d=${formatTiles(round.doraMarkers.map(nextTile)).replace(/\s/g, '')}`
-    const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase()
-    const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
+    const ankan = round.players[round.meSeat].ankan
+    const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
+    const args = formatPai(meHand) + '#' + fulu.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase()
+    const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const choiceName = out.split('\n').find(l => l.match(/无役/) === null && l.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/) !== null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null && choiceName !== undefined) {
-      const discard = tile2nameSimplified(choiceName[0]) as Tile
+      const discard = helperLabelToPai(choiceName[0])
       return { choice: true, discard, info: `分析打出${discard}` }
-    } else {
-      logger.info(`<analyser> Got unexpected output: \`${out}\`, command: \`${binPath} ${daraArgs} ${args}\``)
-      const discard = meHand[~~(Math.random() * meHand.length)]
-      return { choice: true, discard, info: `随机打出${discard}` }
     }
+    logger.info(`<analyser> Got unexpected output: \`${out}\`, command: \`${binPath} ${doraArgs} ${args}\``)
+    const discard = meHand[~~(Math.random() * meHand.length)]
+    return { choice: true, discard, info: `随机打出${discard}` }
   },
 
-  chi: function analyseChi (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+  chi: function analyseChi (): { choice: boolean, info: string } {
     return { choice: false, info: '不副露' }
   },
 
-  pon: function analysePeng (round: Round, targetTile: Tile): { choice: boolean, info: string } {
-    const meHand = round.players[round.meSeat].hand as Tile[]
+  pon: function analysePon (round: Round, targetPai?: Pai): { choice: boolean, info: string } {
+    const meHand = round.players[round.meSeat].hand
     const fulu = round.players[round.meSeat].fulu
-    const anGang = round.players[round.meSeat].ankan
-    const daraArgs = `-d=${formatTiles(round.doraMarkers.map(nextTile)).replace(/\s/g, '')}`
-    const args = formatTiles(meHand) + '#' + fulu.map(formatTiles).join(' ') + ' ' + anGang.map(formatTiles).join(' ').toUpperCase() + ' + ' + targetTile
-    const out = callMahjongHelperShell(`${binPath} ${daraArgs} ${args}`)
+    const ankan = round.players[round.meSeat].ankan
+    const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
+    const args = formatPai(meHand) + '#' + fulu.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase() + ' + ' + (targetPai ?? '')
+    const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const currentLine = {
       line: out.split('\n').find((l, i, a) => l.match(/(无役)|(振听)/) === null && i > 0 && a[i - 1].match(/当前/) !== null),
-      title: out.split('\n').find(l => l.match(/当前/) !== null)
+      title: out.split('\n').find(l => l.match(/当前/) !== null),
     }
     const fuluLine = {
       line: out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null && l.match(/碰/) !== null),
-      tile: out.split('\n').find(l => l.match(/鸣牌后/) !== null)
+      tile: out.split('\n').find(l => l.match(/鸣牌后/) !== null),
     }
     if (currentLine.line === undefined && fuluLine.line === undefined) {
       return { choice: false, info: '不副露' }
@@ -73,9 +70,8 @@ const operationJudge: Record<string, (round: Round, targetTile?: Tile) => { choi
       const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
       if (choiceInfo !== null) {
         return { choice: true, info: choiceInfo[0] }
-      } else {
-        return { choice: false, info: '不副露' }
       }
+      return { choice: false, info: '不副露' }
     }
     if (currentLine.line !== undefined && fuluLine.line === undefined) {
       return { choice: false, info: '不副露' }
@@ -87,99 +83,93 @@ const operationJudge: Record<string, (round: Round, targetTile?: Tile) => { choi
         const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
         if (choiceInfo !== null) {
           return { choice: true, info: choiceInfo[0] }
-        } else {
-          return { choice: false, info: '不副露' }
         }
-      } else {
         return { choice: false, info: '不副露' }
       }
+      return { choice: false, info: '不副露' }
     }
     return { choice: false, info: '不副露' }
   },
 
-  daiminkan: function analyseGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
-    if (targetTile === '5z' || targetTile === '6z' || targetTile === '7z' || targetTile === round.bakaze || Number(targetTile[0]) === (round.meSeat - round.oya) % 4 + 1) {
-      return { choice: true, info: '杠' + targetTile }
+  daiminkan: function analyseDaiminkan (round: Round, targetPai?: Pai): { choice: boolean, info: string } {
+    if (targetPai === 'P' || targetPai === 'F' || targetPai === 'C' || targetPai === round.bakaze ||
+      (targetPai !== undefined && targetPai.length === 2 && Number(targetPai[0]) === (round.meSeat - round.oya) % 4 + 1)) {
+      return { choice: true, info: '杠' + targetPai }
     }
     return { choice: false, info: '不副露' }
   },
 
-  ankan: function analyseAnGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+  ankan: function analyseAnkan (round: Round, targetPai?: Pai): { choice: boolean, info: string } {
     const discard = operationJudge.dahai(round).discard
-    const choice = discard === targetTile
+    const choice = discard === targetPai
     return { choice, info: '' }
   },
 
-  kakan: function analyseAddGang (round: Round, targetTile: Tile): { choice: boolean, info: string } {
+  kakan: function analyseKakan (round: Round, targetPai?: Pai): { choice: boolean, info: string } {
     const discard = operationJudge.dahai(round).discard
-    const choice = discard !== targetTile
+    const choice = discard !== targetPai
     return { choice, info: '' }
   },
 
-  reach: function analyseLiqi (round: Round): { choice: boolean, discard: Tile, info: string } {
+  reach: function analyseReach (round: Round): { choice: boolean, discard: Pai, info: string } {
     const choice = round.leftTileCnt >= 10
-    const discard = operationJudge.dahai(round).discard as Tile
+    const discard = operationJudge.dahai(round).discard as Pai
     const info = (choice ? '立直 ' : '默听 ') + `切${discard}`
     return { choice, discard, info }
   },
 
-  horaron: function analyseHule (round: Round): { choice: boolean, info: string } {
-    const choice = true
-    return { choice, info: '荣和' }
+  hora: function analyseHora (): { choice: boolean, info: string } {
+    return { choice: true, info: '和牌' }
   },
 
-  horatsumo: function analyseZimo (round: Round): { choice: boolean, info: string } {
-    const choice = true
-    return { choice, info: '自摸' }
-  },
-
-  babei: function analyseBabei (round: Round): { choice: boolean, info: string } {
-    const meHand = round.players[round.meSeat].hand as Tile[]
-    const choice = meHand.reduce((p, c) => { c === '3z' ? p += 1 : p += 0; return p }, 0) < 3
+  nuki: function analyseNuki (round: Round): { choice: boolean, info: string } {
+    const meHand = round.players[round.meSeat].hand
+    const choice = meHand.reduce((p, c) => { c === 'N' ? p += 1 : p += 0; return p }, 0) < 3
     return { choice, info: '拔北' }
   },
 
-  skip: function analyseSkip (round: Round): { choice: true, info: string } {
-    return { choice: true, info: 'skip' }
-  }
+  ryukyoku: function analyseRyukyoku (): { choice: true, info: string } {
+    return { choice: true, info: 'ryukyoku' }
+  },
+
+  none: function analyseNone (): { choice: true, info: string } {
+    return { choice: true, info: 'none' }
+  },
 }
 
 class Analyser extends BaseAnalyser {
-  async analyseOperations (parsedOperationList: ParsedOperationList, round: Round): Promise<{ choice: ParsedOperation, info?: string }> {
-    if (parsedOperationList.length === 0) { return { choice: { type: 'skip' }, info: 'No operation to analyse' } }
-    const priority = ['horatsumo', 'horaron', 'reach', 'chi', 'pon', 'ankan', 'daiminkan', 'kakan', 'babei', 'dahai', 'skip']
-    parsedOperationList
-      .sort(({ type: t1 }, { type: t2 }) => priority.findIndex(n => n === t1) - priority.findIndex(n => n === t2))
-    const handledOperationType: Array<ParsedOperation['type']> = []
-    for (const parsedOperation of parsedOperationList) {
-      if (handledOperationType.includes(parsedOperation.type)) { continue }
-      handledOperationType.push(parsedOperation.type)
-      const judgeResult = operationJudge[parsedOperation.type](round, 'pai' in parsedOperation ? parsedOperation.pai : undefined)
+  async analyseOperations (mjaiActionList: MjaiActionList, round: Round): Promise<{ choice: MjaiAction, info?: string }> {
+    if (mjaiActionList.length === 0) { return { choice: { type: 'none' }, info: 'No operation to analyse' } }
+    const priority = ['hora', 'reach', 'chi', 'pon', 'ankan', 'daiminkan', 'kakan', 'nuki', 'dahai', 'ryukyoku', 'none']
+    mjaiActionList.sort(({ type: t1 }, { type: t2 }) => priority.findIndex(n => n === t1) - priority.findIndex(n => n === t2))
+    const handledTypes: Array<MjaiAction['type']> = []
+    for (const action of mjaiActionList) {
+      if (handledTypes.includes(action.type)) { continue }
+      handledTypes.push(action.type)
+      const judgeResult = operationJudge[action.type](round, 'pai' in action ? action.pai : undefined)
       if (judgeResult.choice) {
-        if (parsedOperation.type === 'dahai') {
+        if (action.type === 'dahai') {
           return {
             choice: {
-              ...parsedOperation,
-              pai: judgeResult.discard as Tile,
-              tsumogiri: (parsedOperationList.find(o => o.type === 'dahai' && o.pai === judgeResult.discard) as OperationDahai)?.tsumogiri ?? false
+              ...action,
+              pai: judgeResult.discard as Pai,
+              tsumogiri: (mjaiActionList.find(o => o.type === 'dahai' && o.pai === judgeResult.discard) as { tsumogiri?: boolean })?.tsumogiri ?? false,
             },
-            info: judgeResult.info
-          }
-        } else if (parsedOperation.type === 'reach') {
-          return {
-            choice: { ...parsedOperation, pai: judgeResult.discard as Tile }, info: judgeResult.info
-          }
-        } else {
-          return {
-            choice: parsedOperation, info: judgeResult.info
+            info: judgeResult.info,
           }
         }
+        if (action.type === 'reach') {
+          return {
+            choice: { ...action, pai: judgeResult.discard as Pai },
+            info: judgeResult.info,
+          }
+        }
+        return { choice: action, info: judgeResult.info }
       }
     }
-    /* Logically, by no means will the code following run */
     return {
-      choice: parsedOperationList[~~(Math.random() * parsedOperationList.length)],
-      info: 'Random selection'
+      choice: mjaiActionList[~~(Math.random() * mjaiActionList.length)],
+      info: 'Random selection',
     }
   }
 }

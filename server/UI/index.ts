@@ -8,8 +8,8 @@ const UI = {
     console.clear()
   },
   text: {
-    roundState
-  }
+    roundState,
+  },
 }
 
 export default UI

@@ -22,7 +22,7 @@ function parseEnvFile (content: string): Record<string, string> {
 
 function pathToEnvKey (dotPath: string): string {
   return dotPath.split('.').map((segment) =>
-    segment.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase()
+    segment.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase(),
   ).join('_')
 }
 
@@ -38,7 +38,7 @@ const env = {
   },
   get <T> (path: string): T {
     return process.env[pathToEnvKey(path)] as T
-  }
+  },
 }
 
 export default env

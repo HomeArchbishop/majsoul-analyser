@@ -16,6 +16,8 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": false,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "types": ["node"]
   }
 }

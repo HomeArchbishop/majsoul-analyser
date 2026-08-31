@@ -1,5 +1,5 @@
-import winston from 'winston'
 import path from 'path'
+import winston from 'winston'
 
 const logger = winston.createLogger({
   level: 'info',
@@ -8,9 +8,9 @@ const logger = winston.createLogger({
       filename: path.resolve(__dirname, '../../logs/server.log'),
       format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.simple()
-      )
-    })
+        winston.format.simple(),
+      ),
+    }),
     // new winston.transports.Console({
     //   format: winston.format.combine(
     //     winston.format.colorize(),
@@ -18,7 +18,7 @@ const logger = winston.createLogger({
     //     winston.format.simple()
     //   )
     // })
-  ]
+  ],
 })
 
 export default logger

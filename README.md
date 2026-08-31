@@ -19,32 +19,24 @@
 - 雀魂 / Majsoul / MahjongSoul
 - 天凤 / Tenhou (正在开发)
 
-> **【Notice】** 考虑到下列原因，已停用Bot自动点击
->
-> - 2024年夏季雀魂的一次界面升级
->
-> - 自动点击的cv识别不准确
->
-> - 可能的自动化鼠标检测（反作弊）
->
-> - 未来对天凤（tenhou）等其他平台的完整支持
+> **【Notice】** 本项目仅提供对局分析与操作建议，不包含自动点击功能。
 
 ## 介绍
 
-- 自动提供帮助，处理麻将牌局
+- 解析雀魂牌局消息，记录牌桌状态，并给出操作建议
 
 ## Usage
 
 **Step1** 安装依赖
 
 ```bash
-yarn run install:dependence
+bun run install:dependence
 ```
 
 **Step2** 构建前端注入脚本
 
 ```bash
-yarn run build:user
+bun run build:user
 ```
 
 **Step3** 将 `dist/majsoul-analyser.user.js` 脚本注入油猴/暴力猴中
@@ -52,7 +44,7 @@ yarn run build:user
 **Step4** 开启后端服务
 
 ```bash
-yarn start
+bun start
 # 直到出现 'Service started at port: xxxxx' 才真正开始
 ```
 
@@ -68,17 +60,14 @@ yarn start
 
 ## 实现讲解
 
-本程序由 Typescript 编写，用 vite 构建用户浏览器脚本，用 ts-node 运行服务端
+本程序由 Typescript 编写，用 vite 构建用户浏览器脚本，用 bun 运行服务端
 
 - 用户脚本，负责将雀魂的牌桌 WS 消息转发给服务端。目前仅转发对局消息，不转发Lobby类的消息。
 
-- 服务器由主入口启动，将收到的二进制消息转发给消息处理器（server/msgHandler.ts），通过雀魂消息解析器模块 (server/majsoul)、牌桌记录模块 (server/gameRecords)、分析器模块 (server/analyser)、自动操作模块 (server/bot)贯通处理
+- 服务器由主入口启动，将收到的二进制消息转发给消息处理器（`server/msgHandler.ts`），通过雀魂消息解析器模块 (`server/majsoul`)、牌桌记录模块 (`server/gameRecords`)、分析器模块 (`server/analyser`) 贯通处理
   
-  雀魂消息解析器模块 (server/majsoul)：解析雀魂的二进制消息，解析规则可能有更新而导致这一块解析出错，届时请及时提醒开发者更新。
+  雀魂消息解析器模块 (`server/majsoul`)：解析雀魂的二进制消息，输出标准 MJAI 事件。
   
-  牌桌记录模块 (server/gameRecords)：记录对局状态。因为雀魂的消息是流程化的，也就是每一条消息只会告诉前端这一步的动作，而非牌桌信息，所以需要记录流程。
+  牌桌记录模块 (`server/gameRecords`)：根据 MJAI 事件流记录对局状态。
   
-  分析器模块 (server/analyser)：暂时使用 [mahjong-helper
-  ](https://github.com/EndlessCheng/mahjong-helper) 包装了一个初级分析器，返回一些操作结果 (operations)
-  
-  自动操作模块 (server/bot)：使用 opencv.js 识别桌面，并通过 robot.js 操作鼠标点击
+  分析器模块 (`server/analyser`)：使用 [mahjong-helper](https://github.com/EndlessCheng/mahjong-helper) 包装了一个初级分析器，返回 MJAI action 建议。

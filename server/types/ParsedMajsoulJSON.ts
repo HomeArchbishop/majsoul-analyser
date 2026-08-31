@@ -1,4 +1,5 @@
-import type { Tile } from './General'
+/** 雀魂 Liqi 解码后的牌面字符串 */
+type MajsoulWirePai = string
 
 // === below: Actions ===
 export interface OptionalOperationList {
@@ -23,7 +24,7 @@ export interface LiQiSuccess {
   liqibang: number
 }
 export interface TingPaiInfo {
-  tile: Tile
+  tile: MajsoulWirePai
   haveyi: boolean
   yiman: boolean
   count: number
@@ -31,15 +32,15 @@ export interface TingPaiInfo {
   biao_dora_count: number
 }
 export interface HuleInfo {
-  hand: Tile[]
-  ming: Tile[]
-  hu_tile: Tile
+  hand: MajsoulWirePai[]
+  ming: MajsoulWirePai[]
+  hu_tile: MajsoulWirePai
   seat: number
   zimo: boolean
   qinjia: boolean
   liqi: boolean
-  doras: Tile[]
-  li_doras: Tile[]
+  doras: MajsoulWirePai[]
+  li_doras: MajsoulWirePai[]
   yiman: boolean
   count: number
   fans: Array<{
@@ -61,13 +62,13 @@ export interface ActionNewRound {
   ju: number // 0, 1, 2, 3
   ben: number
   liqibang: number
-  tiles: Tile[]
-  doras: Tile[]
-  dora: Tile[] // useless
+  tiles: MajsoulWirePai[]
+  doras: MajsoulWirePai[]
+  dora: MajsoulWirePai[] // useless
   scores: number[]
   operation: OptionalOperationList | null
   tingpais0: Array<{
-    tile: Tile
+    tile: MajsoulWirePai
     zhenting: boolean
     infos: TingPaiInfo[]
   }>
@@ -78,53 +79,53 @@ export interface ActionNewRound {
 export interface ActionAnGangAddGang {
   seat: number
   type: number
-  tiles: Tile
-  doras: Tile[]
+  tiles: MajsoulWirePai
+  doras: MajsoulWirePai[]
   zhenting: boolean
   tingpais: TingPaiInfo[]
   operation: OptionalOperationList | null
 }
 export interface ActionBaBei {
   seat: number
-  doras: Tile[]
+  doras: MajsoulWirePai[]
   zhenting: boolean
   operation: OptionalOperationList | null
   tingpais: TingPaiInfo[]
 }
 export interface ActionChiPengGang {
   seat: number
-  doras: Tile[]
+  doras: MajsoulWirePai[]
   zhenting: boolean
   type: number // 0: chi, 1: peng, 2: gang
-  tiles: Tile[] // [ '1s', '2s', '3s' ]
+  tiles: MajsoulWirePai[] // [ '1s', '2s', '3s' ]
   froms: number[] // [ 1, 1, 0 ] => 我是1, 从0seat位置吃3s
   operation: OptionalOperationList | null
   tingpais: Array<{
-    tile: Tile
+    tile: MajsoulWirePai
     zhenting: boolean
     infos: TingPaiInfo[]
   }>
 }
 export interface ActionDealTile {
   seat: number
-  doras: Tile[]
+  doras: MajsoulWirePai[]
   zhenting: boolean
-  tile: Tile | '' // 如果是我的回合, 则存在，表示我的摸排
+  tile: MajsoulWirePai | '' // 如果是我的回合, 则存在，表示我的摸排
   operation: OptionalOperationList | null
   left_tile_count: number
   tingpais: Array<{
-    tile: Tile
+    tile: MajsoulWirePai
     zhenting: boolean
     infos: TingPaiInfo[]
   }>
 }
 export interface ActionDiscardTile {
   seat: number
-  doras: Tile[]
+  doras: MajsoulWirePai[]
   zhenting: boolean
   moqie: boolean
   operation: OptionalOperationList | null
-  tile: Tile
+  tile: MajsoulWirePai
   tingpais: TingPaiInfo[]
   is_liqi: boolean
   is_wliqi: boolean
@@ -136,31 +137,31 @@ export interface ActionHule {
   wait_timeout: number[]
   scores: number[]
   gameend: { scores: number[] }
-  doras: Tile[]
+  doras: MajsoulWirePai[]
 }
 export interface ActionLiuJu {
   type: number
   gameend: { scores: number[] }
   seat: number
-  tiles: Tile[]
+  tiles: MajsoulWirePai[]
   liqi: LiQiSuccess
-  allplayertiles: Tile[]
+  allplayertiles: MajsoulWirePai[]
 }
 export interface ActionMJStart extends Record<string, any> {}
 export interface ActionNoTile {
   liujumanguan: boolean
   players: Array<{
     tingpai: boolean
-    hand: Tile[]
+    hand: MajsoulWirePai[]
     tings: TingPaiInfo[]
   }>
   scores: Array<{
     seat: number
     old_scores: number[]
     delta_scores: number[]
-    hand: Tile[]
-    ming: Tile[]
-    doras: Tile[]
+    hand: MajsoulWirePai[]
+    ming: MajsoulWirePai[]
+    doras: MajsoulWirePai[]
     score: number
   }>
   gameend: boolean

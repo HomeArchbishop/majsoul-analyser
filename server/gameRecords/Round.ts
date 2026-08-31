@@ -1,20 +1,17 @@
-import { type Tile } from '../types/General'
-import { ParsedMsgList } from '../types/ParsedMsg'
+import type { MjaiEventList } from '../types/Mjai'
+import { Kaze, Pai } from '../types/Mjai'
 
 export interface RoundConstructorOptions {
-  bakaze: '1z' | '2z' | '3z' | '4z' // 场风
-  kyoku: number // 局 0123
-  honba: number // 本場 0123
+  bakaze: Kaze
+  kyoku: number
+  honba: number
   scores: number[]
-  kyotaku: number // 供託
-  oya: number // 親 (庄)
-  doraMarkers: Tile[]
-
+  kyotaku: number
+  oya: number
+  doraMarkers: Pai[]
   leftTileCnt: number
-
   meSeat: number
-
-  tehais: Array<Array<(Tile | '?')>> // 所有玩家的起牌13张
+  tehais: Pai[][]
 }
 
 class Round {
@@ -38,7 +35,7 @@ class Round {
         fulu: [],
         ankan: [],
         isReach: false,
-        baBei: []
+        nuki: [],
       })
     }
   }
@@ -47,26 +44,26 @@ class Round {
   playerCnt: number
   scores: number[]
 
-  bakaze: '1z' | '2z' | '3z' | '4z'
+  bakaze: Kaze
   kyoku: number
   honba: number
   kyotaku: number
   oya: number
 
-  doraMarkers: Tile[]
+  doraMarkers: Pai[]
   leftTileCnt: number
 
   players: Array<{
-    discards: Tile[]
-    he: Tile[]
-    hand: Array<(Tile | '?')>
-    fulu: Tile[][] // 副露
-    ankan: Tile[][]
+    discards: Pai[]
+    he: Pai[]
+    hand: Pai[]
+    fulu: Pai[][]
+    ankan: Pai[][]
     isReach: boolean
-    baBei: Array<'4z'>
+    nuki: Pai[]
   }> = []
 
-  steps: ParsedMsgList = []
+  steps: MjaiEventList = []
 }
 
 export { Round }

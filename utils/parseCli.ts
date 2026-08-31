@@ -19,6 +19,6 @@ console.log(result)
 console.log(resultReq)
 
 const jsonReq = parseReqBufferMsg(Buffer.from(result))
-const json = parseResBufferMsg(Buffer.from(result), {})
+const json = parseResBufferMsg(Buffer.from(result), {}, {})
 
 console.log(jsonReq, json)

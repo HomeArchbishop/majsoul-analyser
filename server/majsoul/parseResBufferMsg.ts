@@ -1,12 +1,23 @@
-import { Root, AnyNestedObject } from 'protobufjs'
-import liqi from './liqi'
-import { ParsedMajsoulJSON, ActionPrototype, ActionNewRound, ActionAnGangAddGang, ActionChiPengGang, ActionBaBei, ActionDealTile, ActionDiscardTile, OptionalOperationList, ResAuthGame } from '../types/ParsedMajsoulJSON'
-import { ParsedMsgList } from '../types/ParsedMsg'
-import { ParsedRoughOperationList } from '../types/ParsedOperation'
-import { sortTiles } from '../utils/sortTiles'
-import { Tile } from '../types/General'
-import logger from '../logger'
 import structuredClone from '@ungap/structured-clone'
+import { AnyNestedObject, Root } from 'protobufjs'
+
+import logger from '../logger'
+import type { ActionCandidateList } from '../types/Mjai'
+import { MjaiEventList, Pai } from '../types/Mjai'
+import {
+  ActionAnGangAddGang, ActionBaBei,
+  ActionChiPengGang, ActionDealTile, ActionDiscardTile, ActionHule, ActionNewRound, ActionNoTile,
+  ActionPrototype, OptionalOperationList, ParsedMajsoulJSON,
+  ResAuthGame,
+} from '../types/ParsedMajsoulJSON'
+import { majsoulChangToKaze, majsoulPaiListToMjai, majsoulPaiToMjai, sortPai } from '../utils/pai'
+import liqi from './liqi'
+
+export interface MajsoulParseOptions {
+  meID?: string
+  meSeat?: number
+  lastDahai?: { actor: number, pai: Pai }
+}
 
 function parseMajsoulJSON (binaryMsg: Buffer, reqQueueMajsoul: Readonly<Record<number, { resName: string }>>): ParsedMajsoulJSON | null {
   const binaryMsgArr = new Uint8Array(binaryMsg)
@@ -24,13 +35,11 @@ function parseMajsoulJSON (binaryMsg: Buffer, reqQueueMajsoul: Readonly<Record<n
       return null
     }
     if (parsedMajsoulJSON.name === 'ActionPrototype') {
-      // 2023年初，雀魂在 protobuf 的 ActionPrototype 中加入了下方的混淆
       const keys = [0x84, 0x5e, 0x4e, 0x42, 0x39, 0xa2, 0x1f, 0x60, 0x1c]
       for (let i = 0; i < parsedMajsoulJSON.data.data.length; i++) {
         const u = (23 ^ parsedMajsoulJSON.data.data.length) + 5 * i + keys[i % keys.length] & 255
         parsedMajsoulJSON.data.data[i] ^= u
       }
-      // if this err happens, it will kill the whole process. I did it intendly
       parsedMajsoulJSON.data.data = root.lookupType(parsedMajsoulJSON.data.name).decode(parsedMajsoulJSON.data.data as Uint8Array)
     }
     return parsedMajsoulJSON
@@ -42,18 +51,19 @@ function parseMajsoulJSON (binaryMsg: Buffer, reqQueueMajsoul: Readonly<Record<n
       if (resName === undefined) { return null }
       const { data } = wrapper.decode(binaryMsgArr.slice(3)) as unknown as DecodeMsg
       const parsedMsg: any = { data: {}, name: resName as ParsedMajsoulJSON['name'] }
-      // => resName === eg. 'ResSyncGame'
       parsedMsg.data = root.lookupType('.lq.' + resName).decode(data)
       switch (resName) {
         case 'ResSyncGame':
           if (Array.isArray(parsedMsg.data.game_restore?.actions)) {
-            (parsedMsg.data.game_restore.actions).forEach(({ name: actionName, data }, index, list) => {
-              list[index].data = root.lookupType(actionName as string).decode(data as Uint8Array)
-            })
+            type SyncGameActionWire = { name: string, data: Uint8Array | object }
+            ;(parsedMsg.data.game_restore.actions as SyncGameActionWire[]).forEach(
+              ({ name: actionName, data }, index, list) => {
+                list[index].data = root.lookupType(actionName).decode(data as Uint8Array)
+              },
+            )
           }
           break
         case 'ResAuthGame':
-          break
         case 'ResLogin':
           break
         default:
@@ -70,7 +80,7 @@ function parseMajsoulJSON (binaryMsg: Buffer, reqQueueMajsoul: Readonly<Record<n
 
 function resolveMeSeatAndID (
   data: ResAuthGame['data'],
-  meID?: string
+  meID?: string,
 ): { meSeat: number, meID: string } {
   const seatList = data.seat_list
 
@@ -95,210 +105,158 @@ function resolveMeSeatAndID (
   return { meSeat: -1, meID: meID ?? '' }
 }
 
-function parseResBufferMsg (
-  binaryMsg: Buffer,
-  reqQueueMajsoul: Readonly<Record<number, { resName: string }>>, options: { meID?: string, meSeat?: number }): [ParsedMsgList, ParsedRoughOperationList] {
-  const parsedMajsoulJSON = parseMajsoulJSON(binaryMsg, reqQueueMajsoul)
-  logger.info(`<parser> parsed ResMsg Buffer to JSON(majsoul): ${JSON.stringify(structuredClone(parsedMajsoulJSON))}`)
-  if (parsedMajsoulJSON === null) { return [[], []] }
-
-  const parsedMsgList: ParsedMsgList = []
-  const parsedRoughOperationList: ParsedRoughOperationList = []
-
-  if (parsedMajsoulJSON.name === 'ResLogin') {
-    if (parsedMajsoulJSON.data.account_id !== undefined) {
-      options.meID = String(parsedMajsoulJSON.data.account_id)
-    }
-    return [parsedMsgList, parsedRoughOperationList]
-  }
-
-  if (parsedMajsoulJSON.name === 'ResAuthGame') { /* 整场游戏开始 */
-    if (parsedMajsoulJSON.data.error !== null && parsedMajsoulJSON.data.error !== undefined) { return [parsedMsgList, parsedRoughOperationList] } /* 对局游戏故障或已结束（from雀魂服务端） */
-    if (parsedMajsoulJSON.data.seat_list.length < 1) { return [parsedMsgList, parsedRoughOperationList] } /* 多余的一次请求（雀魂有时会在有效ResAuthGame请求后再次请求, 得到空resp */
-    const { meSeat, meID } = resolveMeSeatAndID(parsedMajsoulJSON.data, options.meID)
-    options.meSeat = meSeat
-    options.meID = meID
-    parsedMsgList.push({ type: 'start_game', id: meSeat })
-  }
-  if (parsedMajsoulJSON.name === 'NotifyGameTerminate') { /* 整场游戏结束 */
-    parsedMsgList.push({ type: 'end_game' })
-  }
-
-  /* BEGIN: msgJSONs which require meSeat */
-  if (options.meSeat === undefined || options.meSeat === -1) { return [parsedMsgList, parsedRoughOperationList] }
-  if (parsedMajsoulJSON.name === 'ActionPrototype') { /* 单个 ActionPrototype msg */
-    const [msgList, operationList] = parsehandleActionPrototypeMsgJSON(parsedMajsoulJSON, options.meSeat)
-    parsedMsgList.push(...msgList)
-    parsedRoughOperationList.push(...operationList)
-  }
-  if (
-    parsedMajsoulJSON.name === 'ResSyncGame' &&
-    parsedMajsoulJSON.data.game_restore !== undefined &&
-    parsedMajsoulJSON.data.game_restore !== null &&
-    !parsedMajsoulJSON.data.is_end
-  ) { /* 重回牌桌的同步消息, 含 ActionPrototype msg 队列 */
-    for (const action of parsedMajsoulJSON.data.game_restore.actions) {
-      const [msgList, operationList] = parsehandleActionPrototypeMsgJSON({ name: 'ActionPrototype', data: action }, options.meSeat)
-      parsedMsgList.push(...msgList)
-      parsedRoughOperationList.length = 0
-      parsedRoughOperationList.push(...operationList)
-    }
-  }
-  /* NED: msgJSONs which require meSeat */
-
-  return [parsedMsgList, parsedRoughOperationList]
+function toConsumedList (combination: string[]): Pai[][] {
+  return combination.map(s => majsoulPaiListToMjai(s.split('|')))
 }
 
-/**
- * 解析雀魂 ActionPrototype 消息 JSON
- */
-function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, meSeat: number): [ParsedMsgList, ParsedRoughOperationList] {
-  const parsedMsgList: ParsedMsgList = []
-  const parsedRoughOperationList: ParsedRoughOperationList = []
+function parsehandleActionPrototypeMsgJSON (
+  parsedMajsoulJSON: ActionPrototype,
+  meSeat: number,
+  options: MajsoulParseOptions,
+): [MjaiEventList, ActionCandidateList] {
+  const parsedMsgList: MjaiEventList = []
+  const actionCandidateList: ActionCandidateList = []
 
-  /* ========================= */
-  /*     ActionNewRound消息    */
-  /* ========================= */
-  if (parsedMajsoulJSON.data.name === 'ActionNewRound') { /* 新一轮(round)开始 */
+  if (parsedMajsoulJSON.data.name === 'ActionNewRound') {
     const actionData = parsedMajsoulJSON.data.data as ActionNewRound
-    const sortedTiles = sortTiles(actionData.tiles)
-
+    const sortedTiles = sortPai(majsoulPaiListToMjai(actionData.tiles))
     const oya = actionData.ju % actionData.scores.length
 
     parsedMsgList.push(
-      { /* TODO: May have mistakes when calculate under 3-player mahjong */
+      {
         type: 'start_kyoku',
-        bakaze: `${actionData.chang + 1}z` as '1z' | '2z' | '3z' | '4z',
-        dora_marker: actionData.doras[0],
+        bakaze: majsoulChangToKaze(actionData.chang),
+        dora_marker: majsoulPaiToMjai(actionData.doras[0]),
         kyoku: actionData.ju + 1,
         honba: actionData.ben,
         kyotaku: actionData.liqibang,
         scores: actionData.scores,
         oya,
-        tehais: Array.from({ length: 4 }).map((_, i) => i === meSeat ? sortedTiles.slice(0, 13) : Array.from<'?'>({ length: 13 }).fill('?'))
+        tehais: Array.from({ length: 4 }).map((_, i) =>
+          i === meSeat ? sortedTiles.slice(0, 13) : Array.from<Pai>({ length: 13 }).fill('?'),
+        ),
       },
-      { type: 'tsumo', pai: sortedTiles.length > 13 ? sortedTiles[13] : '?', actor: oya }
+      {
+        type: 'tsumo',
+        pai: sortedTiles.length > 13 ? sortedTiles[13] : '?',
+        actor: oya,
+      },
     )
   }
-  /* ======================== */
-  /*     一般流程Action消息    */
-  /* ======================== */
-  if (parsedMajsoulJSON.data.name === 'ActionAnGangAddGang') { /* ActionAnGangAddGang */
+
+  if (parsedMajsoulJSON.data.name === 'ActionAnGangAddGang') {
     const actionData = parsedMajsoulJSON.data.data as ActionAnGangAddGang
-    if (actionData.type === 3) { /* 暗杠 */
-      parsedMsgList.push(
-        {
-          type: 'ankan',
-          actor: actionData.seat,
-          consumed: [actionData.tiles, actionData.tiles, actionData.tiles, actionData.tiles]
-        }
-      )
-      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
-        parsedMsgList.push({
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
-        })
+    const tile = majsoulPaiToMjai(actionData.tiles)
+    if (actionData.type === 3) {
+      parsedMsgList.push({ type: 'ankan', actor: actionData.seat, consumed: [tile, tile, tile, tile] })
+      if (actionData.doras?.length) {
+        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
       }
-    } else if (actionData.type === 4) { /* 加杠 */
-      parsedMsgList.push(
-        {
-          type: 'kakan',
-          actor: actionData.seat,
-          pai: actionData.tiles,
-          consumed: [actionData.tiles, actionData.tiles, actionData.tiles]
-        }
-      )
-      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
-        parsedMsgList.push({
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
-        })
+    } else if (actionData.type === 4) {
+      parsedMsgList.push({ type: 'kakan', actor: actionData.seat, pai: tile, consumed: [tile, tile, tile] })
+      if (actionData.doras?.length) {
+        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
       }
     }
   }
-  if (parsedMajsoulJSON.data.name === 'ActionChiPengGang') { /* ActionChiPengGang */
+
+  if (parsedMajsoulJSON.data.name === 'ActionChiPengGang') {
     const actionData = parsedMajsoulJSON.data.data as ActionChiPengGang
-    if (actionData.type === 2) { /* 明杠 */
-      parsedMsgList.push(
-        {
-          type: 'daiminkan',
-          actor: actionData.seat,
-          target: actionData.froms.find(n => n !== actionData.seat) as number,
-          pai: actionData.tiles[0],
-          consumed: actionData.tiles.slice(0, 3)
-        }
-      )
-      if (actionData.doras !== undefined && actionData.doras.length !== 0) {
-        parsedMsgList.push({
-          type: 'dora',
-          dora_marker: actionData.doras.slice(-1)[0]
-        })
+    const tiles = majsoulPaiListToMjai(actionData.tiles)
+    if (actionData.type === 2) {
+      parsedMsgList.push({
+        type: 'daiminkan',
+        actor: actionData.seat,
+        target: actionData.froms.find(n => n !== actionData.seat) as number,
+        pai: tiles[0],
+        consumed: tiles.slice(0, 3),
+      })
+      if (actionData.doras?.length) {
+        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
       }
-    } else if (actionData.type === 0) { /* 吃 */
+    } else if (actionData.type === 0) {
       const targetIndex = actionData.froms.findIndex(n => n !== actionData.seat)
-      parsedMsgList.push(
-        {
-          type: 'chi',
-          actor: actionData.seat,
-          target: actionData.froms[targetIndex],
-          pai: actionData.tiles[targetIndex],
-          consumed: actionData.tiles.reduce<Tile[]>((p, c, i) => {
-            if (actionData.froms[i] === actionData.seat) { p.push(c) }; return p
-          }, [])
-        }
-      )
-    } else if (actionData.type === 1) { /* 碰 */
-      parsedMsgList.push(
-        {
-          type: 'pon',
-          actor: actionData.seat,
-          target: actionData.froms.find(n => n !== actionData.seat) as number,
-          pai: actionData.tiles[0],
-          consumed: actionData.tiles.slice(0, 2)
-        }
-      )
+      parsedMsgList.push({
+        type: 'chi',
+        actor: actionData.seat,
+        target: actionData.froms[targetIndex],
+        pai: tiles[targetIndex],
+        consumed: tiles.filter((_, i) => actionData.froms[i] === actionData.seat),
+      })
+    } else if (actionData.type === 1) {
+      parsedMsgList.push({
+        type: 'pon',
+        actor: actionData.seat,
+        target: actionData.froms.find(n => n !== actionData.seat) as number,
+        pai: tiles[0],
+        consumed: tiles.slice(0, 2),
+      })
     }
   }
-  if (parsedMajsoulJSON.data.name === 'ActionBaBei') { /* ActionBaBei */
+
+  if (parsedMajsoulJSON.data.name === 'ActionBaBei') {
     const actionData = parsedMajsoulJSON.data.data as ActionBaBei
-    parsedMsgList.push({ type: 'babei', actor: actionData.seat })
+    parsedMsgList.push({ type: 'nuki', actor: actionData.seat })
   }
-  if (parsedMajsoulJSON.data.name === 'ActionDealTile') { /* ActionDealTile */
+
+  if (parsedMajsoulJSON.data.name === 'ActionDealTile') {
     const actionData = parsedMajsoulJSON.data.data as ActionDealTile
     parsedMsgList.push({
       type: 'tsumo',
       actor: actionData.seat,
-      pai: actionData.tile !== '' ? actionData.tile : '?'
+      pai: actionData.tile !== '' ? majsoulPaiToMjai(actionData.tile) : '?',
     })
-    if (actionData.doras !== undefined && actionData.doras.length !== 0) {
-      parsedMsgList.push({
-        type: 'dora',
-        dora_marker: actionData.doras.slice(-1)[0]
-      })
+    if (actionData.doras?.length) {
+      parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
     }
   }
-  if (parsedMajsoulJSON.data.name === 'ActionDiscardTile') { /* ActionDiscardTile */
+
+  if (parsedMajsoulJSON.data.name === 'ActionDiscardTile') {
     const actionData = parsedMajsoulJSON.data.data as ActionDiscardTile
     if (actionData.is_liqi || actionData.is_wliqi) {
-      parsedMsgList.push({
-        type: 'reach',
-        actor: actionData.seat
-      })
+      parsedMsgList.push({ type: 'reach', actor: actionData.seat })
     }
+    const pai = majsoulPaiToMjai(actionData.tile)
     parsedMsgList.push({
       type: 'dahai',
       actor: actionData.seat,
-      pai: actionData.tile,
-      tsumogiri: actionData.moqie
+      pai,
+      tsumogiri: actionData.moqie,
     })
+    options.lastDahai = { actor: actionData.seat, pai }
   }
-  /* =========== */
-  /*     rest    */
-  /* =========== */
 
-  /* ==================== */
-  /*    处理 Operation    */
-  /* ==================== */
+  if (parsedMajsoulJSON.data.name === 'ActionHule') {
+    const actionData = parsedMajsoulJSON.data.data as ActionHule
+    for (const hule of actionData.hules) {
+      parsedMsgList.push({
+        type: 'hora',
+        actor: hule.seat,
+        target: hule.zimo ? undefined : options.lastDahai?.actor,
+        pai: majsoulPaiToMjai(hule.hu_tile),
+      })
+    }
+    parsedMsgList.push({ type: 'end_kyoku', scores: actionData.scores })
+  }
+
+  if (parsedMajsoulJSON.data.name === 'ActionLiuJu') {
+    parsedMsgList.push({ type: 'ryukyoku' })
+    parsedMsgList.push({ type: 'end_kyoku' })
+  }
+
+  if (parsedMajsoulJSON.data.name === 'ActionNoTile') {
+    parsedMsgList.push({ type: 'ryukyoku', reason: 'haitei' })
+    const actionData = parsedMajsoulJSON.data.data as ActionNoTile
+    if (actionData.scores?.length) {
+      parsedMsgList.push({
+        type: 'end_kyoku',
+        scores: actionData.scores.map(s => s.score),
+      })
+    } else {
+      parsedMsgList.push({ type: 'end_kyoku' })
+    }
+  }
+
   if (
     /Action(NewRound|AnGangAddGang|BaBei|ChiPengGang|DealTile|DiscardTile)/.test(parsedMajsoulJSON.data.name) &&
     (parsedMajsoulJSON.data.data as { operation: OptionalOperationList | null }).operation !== null &&
@@ -306,41 +264,94 @@ function parsehandleActionPrototypeMsgJSON (parsedMajsoulJSON: ActionPrototype, 
     (parsedMajsoulJSON.data.data as { operation: OptionalOperationList }).operation.operation_list.length > 0
   ) {
     const { operation_list: operationList } = (parsedMajsoulJSON.data.data as ActionNewRound |
-    ActionAnGangAddGang |
-    ActionBaBei |
-    ActionChiPengGang |
-    ActionDealTile |
-    ActionDiscardTile).operation as OptionalOperationList
+    ActionAnGangAddGang | ActionBaBei | ActionChiPengGang | ActionDealTile | ActionDiscardTile).operation as OptionalOperationList
     for (const optionalOperation of operationList) {
-      // discard: 1, chi: 2, peng: 3, angang: 4, gang: 5, addgang: 6,
-      // liqi: 7, zimo: 8, hule(ron): 9, jiuzhongjiupai: 10, babei: 11
-      if (optionalOperation.type === 1) { /* discard */
-        parsedRoughOperationList.push({ type: 'dahai' })
-      } else if (optionalOperation.type === 2) { /* chi */
-        parsedRoughOperationList.push({ type: 'chi', consumedList: optionalOperation.combination.map<Tile[]>(s => s.split('|') as Tile[]) })
-      } else if (optionalOperation.type === 3) { /* peng */
-        parsedRoughOperationList.push({ type: 'pon', consumedList: optionalOperation.combination.map<Tile[]>(s => s.split('|') as Tile[]) })
-      } else if (optionalOperation.type === 4) { /* angang */
-        parsedRoughOperationList.push({ type: 'ankan', consumedList: optionalOperation.combination.map<Tile[]>(s => s.split('|') as Tile[]) })
-      } else if (optionalOperation.type === 5) { /* gang */
-        parsedRoughOperationList.push({ type: 'daiminkan', consumedList: optionalOperation.combination.map<Tile[]>(s => s.split('|') as Tile[]) })
-      } else if (optionalOperation.type === 6) { /* addgang */
-        parsedRoughOperationList.push({ type: 'kakan', consumedList: optionalOperation.combination.map<Tile[]>(s => s.split('|') as Tile[]) })
-      } else if (optionalOperation.type === 7) { /* liqi */
-        parsedRoughOperationList.push({ type: 'reach', pais: Array.from(new Set(optionalOperation.combination)) as Tile[] })
-      } else if (optionalOperation.type === 8) { /* zimo */
-        parsedRoughOperationList.push({ type: 'horatsumo' })
-      } else if (optionalOperation.type === 9) { /* ron */
-        parsedRoughOperationList.push({ type: 'horaron' })
-      } else if (optionalOperation.type === 10) { /* jiuzhongjiupai */
-        parsedRoughOperationList.push({ type: 'ryukyoku' })
-      } else if (optionalOperation.type === 11) { /* babei */
-        parsedRoughOperationList.push({ type: 'babei' })
+      if (optionalOperation.type === 1) {
+        actionCandidateList.push({ type: 'dahai' })
+      } else if (optionalOperation.type === 2) {
+        actionCandidateList.push({ type: 'chi', consumedList: toConsumedList(optionalOperation.combination) })
+      } else if (optionalOperation.type === 3) {
+        actionCandidateList.push({ type: 'pon', consumedList: toConsumedList(optionalOperation.combination) })
+      } else if (optionalOperation.type === 4) {
+        actionCandidateList.push({ type: 'ankan', consumedList: toConsumedList(optionalOperation.combination) })
+      } else if (optionalOperation.type === 5) {
+        actionCandidateList.push({ type: 'daiminkan', consumedList: toConsumedList(optionalOperation.combination) })
+      } else if (optionalOperation.type === 6) {
+        actionCandidateList.push({ type: 'kakan', consumedList: toConsumedList(optionalOperation.combination) })
+      } else if (optionalOperation.type === 7) {
+        actionCandidateList.push({
+          type: 'reach',
+          pais: majsoulPaiListToMjai(Array.from(new Set(optionalOperation.combination))),
+        })
+      } else if (optionalOperation.type === 8) {
+        actionCandidateList.push({ type: 'hora', tsumo: true })
+      } else if (optionalOperation.type === 9) {
+        actionCandidateList.push({ type: 'hora' })
+      } else if (optionalOperation.type === 10) {
+        actionCandidateList.push({ type: 'ryukyoku' })
+      } else if (optionalOperation.type === 11) {
+        actionCandidateList.push({ type: 'nuki' })
       }
     }
   }
 
-  return [parsedMsgList, parsedRoughOperationList]
+  return [parsedMsgList, actionCandidateList]
+}
+
+function parseResBufferMsg (
+  binaryMsg: Buffer,
+  reqQueueMajsoul: Readonly<Record<number, { resName: string }>>,
+  options: MajsoulParseOptions,
+): [MjaiEventList, ActionCandidateList] {
+  const parsedMajsoulJSON = parseMajsoulJSON(binaryMsg, reqQueueMajsoul)
+  logger.info(`<parser> parsed ResMsg Buffer to JSON(majsoul): ${JSON.stringify(structuredClone(parsedMajsoulJSON))}`)
+  if (parsedMajsoulJSON === null) { return [[], []] }
+
+  const parsedMsgList: MjaiEventList = []
+  const actionCandidateList: ActionCandidateList = []
+
+  if (parsedMajsoulJSON.name === 'ResLogin') {
+    if (parsedMajsoulJSON.data.account_id !== undefined) {
+      options.meID = String(parsedMajsoulJSON.data.account_id)
+    }
+    return [parsedMsgList, actionCandidateList]
+  }
+
+  if (parsedMajsoulJSON.name === 'ResAuthGame') {
+    if (parsedMajsoulJSON.data.error !== null && parsedMajsoulJSON.data.error !== undefined) { return [parsedMsgList, actionCandidateList] }
+    if (parsedMajsoulJSON.data.seat_list.length < 1) { return [parsedMsgList, actionCandidateList] }
+    const { meSeat, meID } = resolveMeSeatAndID(parsedMajsoulJSON.data, options.meID)
+    options.meSeat = meSeat
+    options.meID = meID
+    parsedMsgList.push({ type: 'start_game', id: meSeat })
+  }
+  if (parsedMajsoulJSON.name === 'NotifyGameTerminate') {
+    parsedMsgList.push({ type: 'end_game' })
+  }
+
+  if (options.meSeat === undefined || options.meSeat === -1) { return [parsedMsgList, actionCandidateList] }
+  if (parsedMajsoulJSON.name === 'ActionPrototype') {
+    const [msgList, candidates] = parsehandleActionPrototypeMsgJSON(parsedMajsoulJSON, options.meSeat, options)
+    parsedMsgList.push(...msgList)
+    actionCandidateList.push(...candidates)
+  }
+  if (
+    parsedMajsoulJSON.name === 'ResSyncGame' &&
+    parsedMajsoulJSON.data.game_restore !== undefined &&
+    parsedMajsoulJSON.data.game_restore !== null &&
+    !parsedMajsoulJSON.data.is_end
+  ) {
+    for (const action of parsedMajsoulJSON.data.game_restore.actions) {
+      const [msgList, candidates] = parsehandleActionPrototypeMsgJSON(
+        { name: 'ActionPrototype', data: action }, options.meSeat, options,
+      )
+      parsedMsgList.push(...msgList)
+      actionCandidateList.length = 0
+      actionCandidateList.push(...candidates)
+    }
+  }
+
+  return [parsedMsgList, actionCandidateList]
 }
 
 export { parseResBufferMsg }

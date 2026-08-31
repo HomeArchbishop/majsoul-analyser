@@ -1,12 +1,13 @@
-import Koa from 'koa'
 import cors from '@koa/cors'
+import Koa from 'koa'
 import Router from 'koa-router'
-import { MsgHandler } from './msgHandler'
+
+import { analyserModule } from './analyser/analyserModule'
 import env from './env'
 import logger from './logger'
-import UI from './UI'
+import { MsgHandler } from './msgHandler'
 import type { GameNameString } from './types/General'
-import { analyserModule } from './analyser/analyserModule'
+import UI from './UI'
 
 env.init()
 
@@ -20,7 +21,7 @@ const msgQueue = {
   async add (promise: Promise<void>) {
     msgQueue.cur = msgQueue.cur.then(async () => await promise)
     await msgQueue.cur
-  }
+  },
 }
 
 router.post('/', async function (ctx, next) {

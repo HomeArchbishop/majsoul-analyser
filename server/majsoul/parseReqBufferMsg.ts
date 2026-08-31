@@ -1,4 +1,5 @@
-import { Root, AnyNestedObject } from 'protobufjs'
+import { AnyNestedObject, Root } from 'protobufjs'
+
 import liqi from './liqi'
 
 function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: string }> {
@@ -22,7 +23,7 @@ function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: 
       /(authGame)|(syncGame)|(oauth2Login)|(login)|(emailLogin)/i.test(name)
     ) {
       return [{
-        resName, index: (binaryReqArr[2] << 8) + binaryReqArr[1]
+        resName, index: (binaryReqArr[2] << 8) + binaryReqArr[1],
       }]
     } else {
       return []

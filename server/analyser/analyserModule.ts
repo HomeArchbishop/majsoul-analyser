@@ -1,7 +1,8 @@
-import { detailizeParsedOperationList } from './detailizeParsedOperationList'
-import { BaseAnalyser } from '../types/Analyser'
 import fs from 'node:fs'
 import path from 'node:path'
+
+import { BaseAnalyser } from '../types/Analyser'
+import { detailizeActionCandidateList } from './detailizeActionCandidateList'
 
 const analyserCollectionDir = __dirname
 const reference = fs.readdirSync(analyserCollectionDir)
@@ -23,9 +24,9 @@ const analyserModule = {
     }
     return analyser
   },
-  detailizeParsedOperationList
+  detailizeActionCandidateList,
 }
 
 export {
-  analyserModule
+  analyserModule,
 }

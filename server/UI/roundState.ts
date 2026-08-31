@@ -1,18 +1,18 @@
 import { Round } from '../gameRecords/Round'
-import { Tile } from '../types/General'
-import { formatTiles } from '../utils/formatTiles'
+import { Pai } from '../types/Mjai'
+import { formatPai } from '../utils/pai'
 
-const feng = ['东', '南', '西', '北']
+const KAZE_LABEL: Record<string, string> = { E: '东', S: '南', W: '西', N: '北' }
 
 function roundState (round: Round): string {
   let text = ''
-  text += `${feng[+round.bakaze.slice(0, 1) - 1]}${round.kyoku + 1}局${round.honba + 1}本場 場風${feng[+round.bakaze.slice(0, 1) - 1]} 莊位${round.oya}\n`
-  text += `寶牌指示${round.doraMarkers.join(' ')}\n`
+  text += `${KAZE_LABEL[round.bakaze]}${round.kyoku}局${round.honba}本场 场风${KAZE_LABEL[round.bakaze]} 庄位${round.oya}\n`
+  text += `宝牌指示${round.doraMarkers.join(' ')}\n`
   for (let i = 0; i < round.players.length; i++) {
     const player = round.players[(round.meSeat + i) % 4]
-    text += ['自家', '下家', '對家', '上家'][i] + '\n'
+    text += ['自家', '下家', '对家', '上家'][i] + '\n'
     if ((round.meSeat + i) % 4 === round.meSeat) {
-      text += formatTiles(player.hand as Tile[])
+      text += formatPai(player.hand)
     }
     if (player.ankan.length > 0) {
       text += `(${player.ankan.map(t => t.join('')).join(' ')})`
