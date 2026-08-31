@@ -1,4 +1,3 @@
 dist
 *.d.ts
-server/bot/opencv/opencv.js
 **/liqi.ts

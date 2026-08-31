@@ -6,7 +6,6 @@ import logger from './logger'
 import { parseReqBufferMsg as MajsoulParseReqBufferMsg } from './majsoul/parseReqBufferMsg'
 import { parseResBufferMsg as MajsoulParseResBufferMsg } from './majsoul/parseResBufferMsg'
 import { parseResBufferMsg as TenhouParseResBufferMsg } from './tenhou/parseResBufferMsg'
-import { type Bot } from './bot'
 import type { BaseAnalyser } from './types/Analyser'
 import type { GameNameString } from './types/General'
 import { record } from './gameRecords/record'
@@ -52,16 +51,10 @@ class MsgHandler {
   }
 
   async handleRes (
-    bufferMsg: Buffer, meID: string = '', gameName: GameNameString,
-    botOptions?: { bot: Bot, canvasW: number, canvasH: number, canvasScreenX: number, canvasScreenY: number, dpi: number, autoGame: boolean, jian: number, chang: number }
+    bufferMsg: Buffer, meID: string = '', gameName: GameNameString
   ): Promise<void> {
     if (!Object.keys(this.reqQueue).includes(gameName)) { return } // 不支持的游戏平台
     if (this.analyser === undefined) { return } /* analyser 未初始化 */
-    if (this.bot === undefined && botOptions !== undefined) { this.bot = botOptions.bot } /* 有自动化机器人传入, 就说明需要自动化启用 */
-    if (this.bot !== undefined && botOptions === undefined) { this.bot = undefined } /* 没有自动化机器人传入, 就说明关闭自动化 */
-    if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateDPI(botOptions.dpi) } /* 记录更新模版放大比 */
-    if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasWH(botOptions.canvasW, botOptions.canvasH) } /* 记录更新模版放大比 */
-    if (this.bot !== undefined && botOptions !== undefined) { this.bot.updateCanvasXY(botOptions.canvasScreenX, botOptions.canvasScreenY) } /* 记录canvas屏幕位置 */
 
     /* ----------------------- */
     /*       转译模块 START     */
@@ -92,13 +85,6 @@ class MsgHandler {
         continue
       }
       if (parsedMsg.type === 'end_game') { /* 整场游戏结束, 销毁游戏记录实例 */
-        /* ================================== */
-        /*   对局结束消息 Bot 模块 hook START  */
-        /* ================================== */
-        if (botOptions?.autoGame === true) { this.bot?.startNewGameFromEnd(botOptions.jian, botOptions.chang) }
-        /* =============================== */
-        /*  对局结束消息 Bot 模块 hook END  */
-        /* =============================== */
         delete this.game
         continue
       }
@@ -135,21 +121,6 @@ class MsgHandler {
     /*      处理 operations       */
     /* -------------------------- */
 
-    if (this.bot === undefined) { return }
-
-    /* ----------------------- */
-    /*      Bot 模块 START      */
-    /*      处理 operations     */
-    /* ----------------------- */
-    logger.info('<res-handler> Bot start')
-    this.bot.updateRound(round)
-    this.bot.handleOperationChoice(operationChoice)
-    logger.info('<res-handler> Bot end')
-    /* ----------------------- */
-    /*       Bot 模块 END      */
-    /*      处理 operations    */
-    /* ----------------------- */
-
     logger.info(`<res-handler> handled ResMsg${_rand}`)
   }
 
@@ -157,8 +128,6 @@ class MsgHandler {
 
   analyser?: BaseAnalyser
   setAnalyser (analyser: BaseAnalyser): void { this.analyser = analyser }
-
-  bot?: Bot
 }
 
 export { MsgHandler }
