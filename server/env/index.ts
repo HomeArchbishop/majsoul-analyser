@@ -1,39 +1,43 @@
 import fs from 'fs'
 import path from 'path'
-import { type MAJ_ENV_JSON } from '../types/General'
 
-const majENVJSONFile = path.resolve(__dirname, '../../.majenv.json')
+const envFile = path.resolve(__dirname, '../../.env')
 
-let envCaches = {}
+function parseEnvFile (content: string): Record<string, string> {
+  const result: Record<string, string> = {}
+  for (const line of content.split('\n')) {
+    const trimmed = line.trim()
+    if (trimmed === '' || trimmed.startsWith('#')) continue
+    const eqIndex = trimmed.indexOf('=')
+    if (eqIndex === -1) continue
+    const key = trimmed.slice(0, eqIndex).trim()
+    let value = trimmed.slice(eqIndex + 1).trim()
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1)
+    }
+    result[key] = value
+  }
+  return result
+}
+
+function pathToEnvKey (dotPath: string): string {
+  return dotPath.split('.').map((segment) =>
+    segment.replace(/([a-z])([A-Z])/g, '$1_$2').toUpperCase()
+  ).join('_')
+}
 
 const env = {
   init (): void {
-    if (fs.existsSync(majENVJSONFile)) {
-      const majENVJSON: MAJ_ENV_JSON = JSON.parse(fs.readFileSync(majENVJSONFile).toString())
-      envCaches = majENVJSON
-    } else {
-      throw new Error('environment config file unexists. Please check `/.majenv.json`')
+    if (!fs.existsSync(envFile)) {
+      throw new Error('environment config file unexists. Please check `/.env`')
     }
-  },
-  reload (): void {
-    env.init()
-  },
-  write (key: string, value: any): boolean {
-    const majENVJSON: MAJ_ENV_JSON = JSON.parse(fs.readFileSync(majENVJSONFile).toString())
-    majENVJSON[key] = value
-    try {
-      fs.writeFileSync(majENVJSONFile, JSON.stringify(majENVJSON))
+    const parsed = parseEnvFile(fs.readFileSync(envFile, 'utf-8'))
+    for (const [key, value] of Object.entries(parsed)) {
       process.env[key] = value
-      return true
-    } catch {
-      return false
     }
   },
   get <T> (path: string): T {
-    return path.split('.').reduce((p, c) => p[c], envCaches)
-  },
-  delete (key: string): boolean {
-    return env.write(key, undefined)
+    return process.env[pathToEnvKey(path)] as T
   }
 }
 
