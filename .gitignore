@@ -1,6 +1,8 @@
 node_modules
 logs
 dist
+docs/.vitepress/dist
+docs/.vuepress/dist
 
 .env
 

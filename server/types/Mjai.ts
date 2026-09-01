@@ -24,12 +24,12 @@ export interface EventStartGame {
   id: number
 }
 
-export interface EventEndGame {
+interface EventEndGame {
   type: 'end_game'
   scores?: number[]
 }
 
-export interface EventStartKyoku {
+interface EventStartKyoku {
   type: 'start_kyoku'
   bakaze: Kaze
   dora_marker: Pai
@@ -41,12 +41,12 @@ export interface EventStartKyoku {
   tehais: Pai[][]
 }
 
-export interface EventEndKyoku {
+interface EventEndKyoku {
   type: 'end_kyoku'
   scores?: number[]
 }
 
-export interface EventTsumo {
+interface EventTsumo {
   type: 'tsumo'
   actor: number
   pai: Pai
@@ -59,7 +59,7 @@ export interface EventDahai {
   tsumogiri: boolean
 }
 
-export interface EventChi {
+interface EventChi {
   type: 'chi'
   actor: number
   target: number
@@ -67,7 +67,7 @@ export interface EventChi {
   consumed: Pai[]
 }
 
-export interface EventPon {
+interface EventPon {
   type: 'pon'
   actor: number
   target: number
@@ -75,7 +75,7 @@ export interface EventPon {
   consumed: Pai[]
 }
 
-export interface EventDaiminkan {
+interface EventDaiminkan {
   type: 'daiminkan'
   actor: number
   target: number
@@ -83,43 +83,43 @@ export interface EventDaiminkan {
   consumed: Pai[]
 }
 
-export interface EventAnkan {
+interface EventAnkan {
   type: 'ankan'
   actor: number
   consumed: Pai[]
 }
 
-export interface EventKakan {
+interface EventKakan {
   type: 'kakan'
   actor: number
   pai: Pai
   consumed: Pai[]
 }
 
-export interface EventReach {
+interface EventReach {
   type: 'reach'
   actor: number
 }
 
-export interface EventHora {
+interface EventHora {
   type: 'hora'
   actor: number
   target?: number
   pai?: Pai
 }
 
-export interface EventRyukyoku {
+interface EventRyukyoku {
   type: 'ryukyoku'
   reason?: string
 }
 
-export interface EventNuki {
+interface EventNuki {
   type: 'nuki'
   actor: number
 }
 
 /** 追加宝牌指示牌 */
-export interface EventDora {
+interface EventDora {
   type: 'dora'
   dora_marker: Pai
 }
@@ -146,18 +146,18 @@ export type MjaiEventList = MjaiEvent[]
 
 /* ── Action candidates (平台 operation_list 粗粒度候选项) ── */
 
-export interface CandidateDahai { type: 'dahai' }
-export interface CandidateChi { type: 'chi', consumedList: Pai[][] }
-export interface CandidatePon { type: 'pon', consumedList: Pai[][] }
-export interface CandidateKakan { type: 'kakan', consumedList: Pai[][] }
-export interface CandidateDaiminkan { type: 'daiminkan', consumedList: Pai[][] }
-export interface CandidateAnkan { type: 'ankan', consumedList: Pai[][] }
-export interface CandidateReach { type: 'reach', pais: Pai[] }
-export interface CandidateNuki { type: 'nuki' }
-export interface CandidateHora { type: 'hora', tsumo?: boolean }
-export interface CandidateRyukyoku { type: 'ryukyoku' }
+interface CandidateDahai { type: 'dahai' }
+interface CandidateChi { type: 'chi', consumedList: Pai[][] }
+interface CandidatePon { type: 'pon', consumedList: Pai[][] }
+interface CandidateKakan { type: 'kakan', consumedList: Pai[][] }
+interface CandidateDaiminkan { type: 'daiminkan', consumedList: Pai[][] }
+interface CandidateAnkan { type: 'ankan', consumedList: Pai[][] }
+interface CandidateReach { type: 'reach', pais: Pai[] }
+interface CandidateNuki { type: 'nuki' }
+interface CandidateHora { type: 'hora', tsumo?: boolean }
+interface CandidateRyukyoku { type: 'ryukyoku' }
 
-export type ActionCandidate =
+type ActionCandidate =
   | CandidateDahai
   | CandidateChi
   | CandidatePon
@@ -173,66 +173,66 @@ export type ActionCandidateList = ActionCandidate[]
 
 /* ── MJAI actions (完整合法动作，对应 possible_actions 子项) ── */
 
-export interface ActionDahai {
+interface ActionDahai {
   type: 'dahai'
   pai: Pai
   tsumogiri: boolean
 }
 
-export interface ActionChi {
+interface ActionChi {
   type: 'chi'
   target: number
   pai: Pai
   consumed: Pai[]
 }
 
-export interface ActionPon {
+interface ActionPon {
   type: 'pon'
   target: number
   pai: Pai
   consumed: Pai[]
 }
 
-export interface ActionKakan {
+interface ActionKakan {
   type: 'kakan'
   pai: Pai
   consumed: Pai[]
 }
 
-export interface ActionDaiminkan {
+interface ActionDaiminkan {
   type: 'daiminkan'
   target: number
   pai: Pai
   consumed: Pai[]
 }
 
-export interface ActionAnkan {
+interface ActionAnkan {
   type: 'ankan'
   pai: Pai
   consumed: Pai[]
 }
 
-export interface ActionReach {
+interface ActionReach {
   type: 'reach'
   /** 立直宣言牌；雀魂等平台在 reach 与 dahai 合并选择时携带 */
   pai?: Pai
 }
 
-export interface ActionHora {
+interface ActionHora {
   type: 'hora'
   target?: number
   pai?: Pai
 }
 
-export interface ActionRyukyoku {
+interface ActionRyukyoku {
   type: 'ryukyoku'
 }
 
-export interface ActionNuki {
+interface ActionNuki {
   type: 'nuki'
 }
 
-export interface ActionNone {
+interface ActionNone {
   type: 'none'
 }
 

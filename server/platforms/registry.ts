@@ -1,10 +1,10 @@
-export type { Platform, PlatformId, PlatformSession, WireParseResult } from './types'
+export type { Platform, PlatformId, PlatformSession } from './types'
 
 import { majsoulPlatform } from './majsoul'
 import { tenhouPlatform } from './tenhou'
 import type { Platform, PlatformId } from './types'
 
-export const platforms: Record<PlatformId, Platform> = {
+const platforms: Record<PlatformId, Platform> = {
   majsoul: majsoulPlatform,
   tenhou: tenhouPlatform,
 }

@@ -2,9 +2,9 @@
 
 set -e
 
-npx vuepress build docs
+bun run docs:build
 
-cd docs/.vuepress/dist
+cd docs/.vitepress/dist
 
 git init
 git add -A

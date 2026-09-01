@@ -8,7 +8,8 @@ export interface OptionalOperationList {
   time_fixed: number
   operation_list: OptionalOperation[]
 }
-export interface OptionalOperation {
+
+interface OptionalOperation {
   type: number
   // discard: 1, chi: 2, peng: 3, angang: 4, gang: 5, addgang: 6,
   // liqi: 7, zimo: 8, hule(ron): 9, jiuzhongjiupai: 10, babei: 11,
@@ -18,12 +19,14 @@ export interface OptionalOperation {
   // 2chi => ['5s|5s', '0s'|'5s'] 与这些吃
   // 3/5peng gang => ['5s|5s|5s', '0s'|'5s'] 与这些碰
 }
-export interface LiQiSuccess {
+
+interface LiQiSuccess {
   seat: number
   score: number
   liqibang: number
 }
-export interface TingPaiInfo {
+
+interface TingPaiInfo {
   tile: MajsoulWirePai
   haveyi: boolean
   yiman: boolean
@@ -31,7 +34,8 @@ export interface TingPaiInfo {
   fu: number
   biao_dora_count: number
 }
-export interface HuleInfo {
+
+interface HuleInfo {
   hand: MajsoulWirePai[]
   ming: MajsoulWirePai[]
   hu_tile: MajsoulWirePai
@@ -76,6 +80,7 @@ export interface ActionNewRound {
   al: boolean
   left_tile_count: number
 }
+
 export interface ActionAnGangAddGang {
   seat: number
   type: number
@@ -85,6 +90,7 @@ export interface ActionAnGangAddGang {
   tingpais: TingPaiInfo[]
   operation: OptionalOperationList | null
 }
+
 export interface ActionBaBei {
   seat: number
   doras: MajsoulWirePai[]
@@ -92,6 +98,7 @@ export interface ActionBaBei {
   operation: OptionalOperationList | null
   tingpais: TingPaiInfo[]
 }
+
 export interface ActionChiPengGang {
   seat: number
   doras: MajsoulWirePai[]
@@ -106,6 +113,7 @@ export interface ActionChiPengGang {
     infos: TingPaiInfo[]
   }>
 }
+
 export interface ActionDealTile {
   seat: number
   doras: MajsoulWirePai[]
@@ -119,6 +127,7 @@ export interface ActionDealTile {
     infos: TingPaiInfo[]
   }>
 }
+
 export interface ActionDiscardTile {
   seat: number
   doras: MajsoulWirePai[]
@@ -130,6 +139,7 @@ export interface ActionDiscardTile {
   is_liqi: boolean
   is_wliqi: boolean
 }
+
 export interface ActionHule {
   hules: HuleInfo[]
   old_scores: number[]
@@ -139,7 +149,8 @@ export interface ActionHule {
   gameend: { scores: number[] }
   doras: MajsoulWirePai[]
 }
-export interface ActionLiuJu {
+
+interface ActionLiuJu {
   type: number
   gameend: { scores: number[] }
   seat: number
@@ -147,7 +158,9 @@ export interface ActionLiuJu {
   liqi: LiQiSuccess
   allplayertiles: MajsoulWirePai[]
 }
-export interface ActionMJStart extends Record<string, any> {}
+
+interface ActionMJStart extends Record<string, any> {}
+
 export interface ActionNoTile {
   liujumanguan: boolean
   players: Array<{
@@ -167,7 +180,7 @@ export interface ActionNoTile {
   gameend: boolean
 }
 
-export type ActionName = 'ActionAnGangAddGang' |
+type ActionName = 'ActionAnGangAddGang' |
 'ActionBaBei' |
 'ActionChiPengGang' |
 'ActionDealTile' |
@@ -178,7 +191,7 @@ export type ActionName = 'ActionAnGangAddGang' |
 'ActionNewRound' |
 'ActionNoTile'
 
-export type Action = ActionAnGangAddGang |
+type Action = ActionAnGangAddGang |
 ActionBaBei |
 ActionChiPengGang |
 ActionDealTile |
@@ -191,14 +204,14 @@ ActionNoTile
 
 // === below: Msg JSON ====
 
-export interface NotifyPlayerLoadGameReady {
+interface NotifyPlayerLoadGameReady {
   name: 'NotifyPlayerLoadGameReady'
   data: {
     ready_id_list: number[]
   }
 }
 
-export interface NotifyGameEndResult {
+interface NotifyGameEndResult {
   name: 'NotifyGameEndResult'
   data: {
     result: Array<{
@@ -212,14 +225,14 @@ export interface NotifyGameEndResult {
   }
 }
 
-export interface NotifyGameTerminate {
+interface NotifyGameTerminate {
   name: 'NotifyGameTerminate'
   data: {
     reason: string
   }
 }
 
-export interface ResSyncGame {
+interface ResSyncGame {
   name: 'ResSyncGame'
   data: {
     game_restore?: {
@@ -254,7 +267,7 @@ export interface ResAuthGame {
   }
 }
 
-export interface ResLogin {
+interface ResLogin {
   name: 'ResLogin'
   data: {
     account_id: number

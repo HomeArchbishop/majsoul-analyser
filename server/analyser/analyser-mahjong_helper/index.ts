@@ -1,7 +1,7 @@
+import { execSync } from 'node:child_process'
 import os from 'node:os'
 
 import path from 'path'
-import shell from 'shelljs'
 
 import { type Round } from '../../board/Round'
 import logger from '../../logger'
@@ -22,8 +22,7 @@ if (platform === 'darwin') {
 }
 
 function callMahjongHelperShell (command: string): string {
-  const cmd = shell.exec(command, { silent: true, timeout: 3900 })
-  return cmd.stdout
+  return execSync(command, { encoding: 'utf8', timeout: 3900, stdio: ['ignore', 'pipe', 'pipe'] })
 }
 
 const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice: boolean, info?: string, discard?: Pai }> = {

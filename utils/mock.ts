@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs'
-import { post } from 'request'
 import path from 'path'
 
 const baseURL = 'http://localhost:56556/'
@@ -28,13 +27,10 @@ for (let i = 0; i < mock.length; i++) {
   const item = mock[i]
   if (item === undefined) { continue }
   headPromise = headPromise.then(async () => {
-    let resolveFn
-    const promise: Promise<void> = new Promise((resolve, reject) => { resolveFn = resolve })
-    post({
-      url: `${baseURL}?msg=${item.type}`,
-      body: Buffer.from(JSON.parse(item.binary))
-    }, (err, resp) => { if (err !== null) { console.error(err) }; console.log(resp.statusCode); setTimeout(() => resolveFn(), 10) })
-    console.log(Buffer.from(JSON.parse(item.binary)).toJSON().data)
-    return await promise
+    const body = Buffer.from(JSON.parse(item.binary))
+    const resp = await fetch(`${baseURL}?msg=${item.type}`, { method: 'POST', body })
+    console.log(resp.status)
+    console.log(body.toJSON().data)
+    await new Promise(resolve => setTimeout(resolve, 10))
   }).catch((err) => console.log(err))
 }
