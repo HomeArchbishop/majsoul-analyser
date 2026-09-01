@@ -1,7 +1,7 @@
 import { Round } from './Round'
 
 interface GameConstructorOptions {
-  meSeat: number // 0 | 1 | 2 | 3
+  meSeat: number
 }
 
 class Game {
@@ -9,7 +9,7 @@ class Game {
     this.meSeat = meSeat
   }
 
-  meSeat: number // 0 | 1 | 2 | 3
+  meSeat: number
 
   roundPointer: number = -1
   rounds: Round[] = []

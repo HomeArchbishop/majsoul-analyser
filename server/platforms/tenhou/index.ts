@@ -1,9 +1,9 @@
 import structuredClone from '@ungap/structured-clone'
 
-import logger from '../logger'
-import type { ActionCandidateList, MjaiEventList } from '../types/Mjai'
-import { ParsedTenhouJSON } from '../types/ParsedTenhouJSON'
-import { tenhouNumToMjai, tenhouSeedToKaze } from '../utils/pai'
+import logger from '../../logger'
+import type { ActionCandidateList, MjaiEventList } from '../../types/Mjai'
+import { ParsedTenhouJSON } from '../../types/ParsedTenhouJSON'
+import { tenhouNumToMjai, tenhouSeedToKaze } from '../../utils/pai'
 
 function parseTenhouJSON (binaryMsg: Buffer): ParsedTenhouJSON | null {
   const text = binaryMsg.toString()
@@ -60,10 +60,8 @@ function parseTenhouJSON (binaryMsg: Buffer): ParsedTenhouJSON | null {
   return null
 }
 
-function parseResBufferMsg (
+function parseRes (
   binaryMsg: Buffer,
-  _reqQueue?: unknown,
-  _options?: unknown,
 ): [MjaiEventList, ActionCandidateList] {
   const parsedTenhouJSON = parseTenhouJSON(binaryMsg)
   logger.info(
@@ -155,4 +153,4 @@ function parseResBufferMsg (
   return [parsedMsgList, actionCandidateList]
 }
 
-export { parseResBufferMsg }
+export { parseRes }

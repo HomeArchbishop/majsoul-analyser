@@ -3,7 +3,7 @@ import { sortPai } from '../utils/pai'
 import { Game } from './Game'
 import { Round } from './Round'
 
-function record (game: Game, event: MjaiEvent): number {
+function applyEvent (game: Game, event: MjaiEvent): number {
   if (event.type === 'start_kyoku') {
     game.rounds[0] = new Round({
       bakaze: event.bakaze,
@@ -105,4 +105,4 @@ function record (game: Game, event: MjaiEvent): number {
   return round.steps.length - 1
 }
 
-export { record }
+export { applyEvent }

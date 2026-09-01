@@ -1,14 +1,9 @@
-import { roundState } from './roundState'
-
 const UI = {
-  print (...msgs) {
+  print (...msgs: any[]) {
     console.info(...msgs)
   },
   clear () {
     console.clear()
-  },
-  text: {
-    roundState,
   },
 }
 

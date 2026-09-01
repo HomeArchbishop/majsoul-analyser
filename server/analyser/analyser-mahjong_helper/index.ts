@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'path'
 import shell from 'shelljs'
 
-import { type Round } from '../../gameRecords/Round'
+import { type Round } from '../../board/Round'
 import logger from '../../logger'
 import { BaseAnalyser } from '../../types/Analyser'
 import type { MjaiAction, MjaiActionList } from '../../types/Mjai'
@@ -138,7 +138,7 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
 }
 
 class Analyser extends BaseAnalyser {
-  async analyseOperations (mjaiActionList: MjaiActionList, round: Round): Promise<{ choice: MjaiAction, info?: string }> {
+  async analyseActions (mjaiActionList: MjaiActionList, round: Round): Promise<{ choice: MjaiAction, info?: string }> {
     if (mjaiActionList.length === 0) { return { choice: { type: 'none' }, info: 'No operation to analyse' } }
     const priority = ['hora', 'reach', 'chi', 'pon', 'ankan', 'daiminkan', 'kakan', 'nuki', 'dahai', 'ryukyoku', 'none']
     mjaiActionList.sort(({ type: t1 }, { type: t2 }) => priority.findIndex(n => n === t1) - priority.findIndex(n => n === t2))

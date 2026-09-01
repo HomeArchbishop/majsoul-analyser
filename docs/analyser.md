@@ -23,7 +23,7 @@ export abstract class BaseAnalyser {
   init?: (...args: any) => Promise<boolean>
   end?: (...args: any) => Promise<void>
 
-  abstract analyseOperations (
+  abstract analyseActions (
     mjaiActionList: MjaiActionList,
     round: Round
   ): Promise<{ choice: MjaiAction, info?: string }>

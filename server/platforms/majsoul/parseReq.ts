@@ -2,12 +2,9 @@ import { AnyNestedObject, Root } from 'protobufjs'
 
 import liqi from './liqi'
 
-function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: string }> {
+function parseReq (binaryReq: Buffer): Array<{ index: number, resName: string }> {
   const binaryReqArr = new Uint8Array(binaryReq)
 
-  // load('./liqi', (err, root) => {
-  //   if (err !== null) { throw err }
-  // })
   const root = Root.fromJSON(liqi as AnyNestedObject)
   const wrapper = root.lookupType('Wrapper')
 
@@ -33,4 +30,4 @@ function parseReqBufferMsg (binaryReq: Buffer): Array<{ index: number, resName: 
   }
 }
 
-export { parseReqBufferMsg }
+export { parseReq }

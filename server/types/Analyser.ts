@@ -1,4 +1,4 @@
-import { Round } from '../gameRecords/Round'
+import { Round } from '../board/Round'
 import type { MjaiAction, MjaiActionList } from './Mjai'
 
 export abstract class BaseAnalyser {
@@ -6,5 +6,5 @@ export abstract class BaseAnalyser {
 
   end?: (...args: any) => Promise<void>
 
-  abstract analyseOperations (mjaiActionList: MjaiActionList, round: Round): Promise<{ choice: MjaiAction, info?: string }>
+  abstract analyseActions (mjaiActionList: MjaiActionList, round: Round): Promise<{ choice: MjaiAction, info?: string }>
 }
