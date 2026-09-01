@@ -14,7 +14,7 @@ export interface RoundConstructorOptions {
   tehais: Pai[][]
 }
 
-class Round {
+export class Round {
   constructor (options: RoundConstructorOptions) {
     this.meSeat = options.meSeat
     this.scores = [...options.scores]
@@ -65,5 +65,3 @@ class Round {
 
   steps: MjaiEventList = []
 }
-
-export { Round }

@@ -1,7 +1,7 @@
 import path from 'path'
 import winston from 'winston'
 
-const logger = winston.createLogger({
+export default winston.createLogger({
   level: 'info',
   transports: [
     new winston.transports.File({
@@ -11,14 +11,5 @@ const logger = winston.createLogger({
         winston.format.simple(),
       ),
     }),
-    // new winston.transports.Console({
-    //   format: winston.format.combine(
-    //     winston.format.colorize(),
-    //     winston.format.timestamp(),
-    //     winston.format.simple()
-    //   )
-    // })
   ],
 })
-
-export default logger

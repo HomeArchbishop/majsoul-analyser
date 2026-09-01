@@ -174,10 +174,8 @@ function appendAction (
   state.lastDahai = result.lastDahai
 }
 
-const majsoulPlatform: Platform = {
+export const majsoulPlatform: Platform = {
   createSession,
   onOutbound,
   onInbound,
 }
-
-export { majsoulPlatform }

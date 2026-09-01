@@ -3,7 +3,7 @@ import findLastIndex from 'lodash.findlastindex'
 import { Round } from '../board/Round'
 import type { ActionCandidateList, EventDahai, MjaiActionList, Pai } from '../types/Mjai'
 
-function expandActionCandidates (actionCandidateList: ActionCandidateList, round: Round): MjaiActionList {
+export function expandActionCandidates (actionCandidateList: ActionCandidateList, round: Round): MjaiActionList {
   if (actionCandidateList.length === 0) { return [] }
 
   const mjaiActionList: MjaiActionList = []
@@ -110,8 +110,4 @@ function expandActionCandidates (actionCandidateList: ActionCandidateList, round
   }
 
   return mjaiActionList
-}
-
-export {
-  expandActionCandidates,
 }

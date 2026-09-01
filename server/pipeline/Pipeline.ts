@@ -15,7 +15,7 @@ function printSeatError (): void {
   UI.print('牌局记录创建失败, 本场游戏不会进行分析')
 }
 
-class Pipeline {
+export class Pipeline {
   platformId?: PlatformId
   session?: PlatformSession
   game?: Game
@@ -111,5 +111,3 @@ class Pipeline {
     this.session = platform.createSession()
   }
 }
-
-export { Pipeline }

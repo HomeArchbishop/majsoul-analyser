@@ -3,7 +3,7 @@ import { AnyNestedObject, Root } from 'protobufjs'
 import { ParsedMajsoulJSON } from '../../types/ParsedMajsoulJSON'
 import liqi from './liqi'
 
-function decodeMajsoulWire (
+export function decodeMajsoulWire (
   binaryMsg: Buffer,
   resByIndex: Readonly<Record<number, { resName: string }>>,
 ): ParsedMajsoulJSON | null {
@@ -64,5 +64,3 @@ function decodeMajsoulWire (
   }
   return null
 }
-
-export { decodeMajsoulWire }

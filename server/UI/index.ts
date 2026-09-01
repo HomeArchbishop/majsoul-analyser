@@ -1,4 +1,4 @@
-const UI = {
+export default {
   print (...msgs: any[]) {
     console.info(...msgs)
   },
@@ -6,5 +6,3 @@ const UI = {
     console.clear()
   },
 }
-
-export default UI

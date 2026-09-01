@@ -26,7 +26,7 @@ function pathToEnvKey (dotPath: string): string {
   ).join('_')
 }
 
-const env = {
+export default {
   init (): void {
     if (!fs.existsSync(envFile)) {
       throw new Error('environment config file unexists. Please check `/.env`')
@@ -40,5 +40,3 @@ const env = {
     return process.env[pathToEnvKey(path)] as T
   },
 }
-
-export default env

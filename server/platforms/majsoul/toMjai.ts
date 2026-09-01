@@ -21,7 +21,7 @@ function toConsumedList (combination: string[]): Pai[][] {
   return combination.map(s => wirePaiListToMjai(s.split('|')))
 }
 
-function actionToMjai (
+export function actionToMjai (
   parsedMajsoulJSON: ActionPrototype,
   meSeat: number,
   ctx: ActionToMjaiCtx,
@@ -211,5 +211,3 @@ function actionToMjai (
 
   return { events: parsedMsgList, candidates: actionCandidateList, lastDahai }
 }
-
-export { actionToMjai }

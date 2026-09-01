@@ -161,10 +161,8 @@ function onInbound (buffer: Buffer, session: PlatformSession): PlatformProcessRe
   return { result, session }
 }
 
-const tenhouPlatform: Platform = {
+export const tenhouPlatform: Platform = {
   createSession,
   onOutbound,
   onInbound,
 }
-
-export { tenhouPlatform }

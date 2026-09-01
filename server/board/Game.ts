@@ -4,7 +4,7 @@ interface GameConstructorOptions {
   meSeat: number
 }
 
-class Game {
+export class Game {
   constructor ({ meSeat }: GameConstructorOptions) {
     this.meSeat = meSeat
   }
@@ -14,5 +14,3 @@ class Game {
   roundPointer: number = -1
   rounds: Round[] = []
 }
-
-export { Game }

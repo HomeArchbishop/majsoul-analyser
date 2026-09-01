@@ -13,11 +13,11 @@ function paiSortKey (pai: Pai): string {
   return pai[1] + rank.padStart(2, '0')
 }
 
-function sortPai (pais: Pai[]): Pai[] {
+export function sortPai (pais: Pai[]): Pai[] {
   return [...pais].sort((a, b) => paiSortKey(a).localeCompare(paiSortKey(b)))
 }
 
-function nextPai (pai: Pai): Pai {
+export function nextPai (pai: Pai): Pai {
   if (pai === 'E') { return 'S' }
   if (pai === 'S') { return 'W' }
   if (pai === 'W') { return 'N' }
@@ -36,7 +36,7 @@ function nextPai (pai: Pai): Pai {
 }
 
 /** mahjong-helper CLI 用牌面标签 */
-function paiToHelperLabel (pai: Pai): string {
+export function paiToHelperLabel (pai: Pai): string {
   const map: Record<string, string> = {
     E: '东',
     S: '南',
@@ -53,7 +53,7 @@ function paiToHelperLabel (pai: Pai): string {
   return pai
 }
 
-function formatPai (pais: Pai[]): string {
+export function formatPai (pais: Pai[]): string {
   return sortPai(pais)
     .map(p => paiToHelperLabel(p))
     .reduce((acc, c, i, arr) => {
@@ -69,7 +69,7 @@ function formatPai (pais: Pai[]): string {
     .slice(0, -1)
 }
 
-function helperLabelToPai (label: string): Pai {
+export function helperLabelToPai (label: string): Pai {
   const map: Record<string, Pai> = {
     东: 'E',
     南: 'S',
@@ -84,12 +84,4 @@ function helperLabelToPai (label: string): Pai {
   }
   if (label in map) { return map[label] }
   return label as Pai
-}
-
-export {
-  formatPai,
-  helperLabelToPai,
-  nextPai,
-  paiToHelperLabel,
-  sortPai,
 }

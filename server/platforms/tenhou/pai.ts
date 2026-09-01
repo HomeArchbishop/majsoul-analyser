@@ -4,7 +4,7 @@ const KAZE_FROM_INDEX: Record<string, Kaze> = {
   '1z': 'E', '2z': 'S', '3z': 'W', '4z': 'N',
 }
 
-function numToMjai (num: number): Pai {
+export function numToMjai (num: number): Pai {
   const suit = ['m', 'p', 's', 'z'][~~(num / 36)]
   if (num === 16 || num === 52 || num === 88) {
     if (suit === 'm') { return '5mr' }
@@ -19,12 +19,7 @@ function numToMjai (num: number): Pai {
   return `${rank}${suit}` as Pai
 }
 
-function seedToKaze (seed0: number): Kaze {
+export function seedToKaze (seed0: number): Kaze {
   const idx = ((~~(seed0 / 4) - 1) % 4) + 1
   return KAZE_FROM_INDEX[`${idx}z`] ?? 'E'
-}
-
-export {
-  numToMjai,
-  seedToKaze,
 }

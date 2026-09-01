@@ -10,7 +10,7 @@ const HONOR_FROM_WIRE: Record<string, Pai> = {
   '5z': 'P', '6z': 'F', '7z': 'C',
 }
 
-function wirePaiToMjai (tile: WirePai): Pai {
+export function wirePaiToMjai (tile: WirePai): Pai {
   if (tile === '?') { return '?' }
   if (tile === '0m') { return '5mr' }
   if (tile === '0p') { return '5pr' }
@@ -21,16 +21,10 @@ function wirePaiToMjai (tile: WirePai): Pai {
   return tile as Pai
 }
 
-function wirePaiListToMjai (tiles: WirePai[]): Pai[] {
+export function wirePaiListToMjai (tiles: WirePai[]): Pai[] {
   return tiles.map(wirePaiToMjai)
 }
 
-function changToKaze (chang: number): Kaze {
+export function changToKaze (chang: number): Kaze {
   return KAZE_FROM_WIRE[`${chang + 1}z`] ?? 'E'
-}
-
-export {
-  changToKaze,
-  wirePaiListToMjai,
-  wirePaiToMjai,
 }

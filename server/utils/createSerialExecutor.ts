@@ -1,4 +1,4 @@
-function createSerialExecutor () {
+export function createSerialExecutor () {
   let tail = Promise.resolve()
   return <T>(fn: () => Promise<T>): Promise<T> => {
     const run = tail.then(fn)
@@ -7,5 +7,3 @@ function createSerialExecutor () {
     return run
   }
 }
-
-export { createSerialExecutor }

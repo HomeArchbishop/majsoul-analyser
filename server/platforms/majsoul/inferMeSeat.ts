@@ -4,7 +4,7 @@ import {
 } from '../../types/ParsedMajsoulJSON'
 
 /** Resolve 己方座位 from ResAuthGame heuristics; -1 if unknown (ranked). */
-function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {
+export function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {
   const seatList = data.seat_list
 
   if (data.players.length === 1) {
@@ -24,7 +24,7 @@ function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {
 }
 
 /** Infer 己方座位 from a private action visible only to this client. */
-function inferMeSeatFromAction (action: ActionPrototype): number | undefined {
+export function inferMeSeatFromAction (action: ActionPrototype): number | undefined {
   const { name, data } = action.data
 
   if (name === 'ActionNewRound') {
@@ -48,9 +48,4 @@ function inferMeSeatFromAction (action: ActionPrototype): number | undefined {
   }
 
   return undefined
-}
-
-export {
-  inferMeSeatFromAction,
-  resolveMeSeatFromAuth,
 }

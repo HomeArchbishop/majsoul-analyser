@@ -9,7 +9,7 @@ const reference = fs.readdirSync(analyserCollectionDir)
 
 const typedRequire = (analyserName: string): { default: BaseAnalyser } => require(`./${analyserName}`)
 
-async function loadAnalyser (analyserName: string): Promise<BaseAnalyser> {
+export async function loadAnalyser (analyserName: string): Promise<BaseAnalyser> {
   if (!reference.includes(analyserName)) {
     throw new RangeError(`Analyser module (${analyserName}) not found`)
   }
@@ -21,8 +21,4 @@ async function loadAnalyser (analyserName: string): Promise<BaseAnalyser> {
     }
   }
   return analyser
-}
-
-export {
-  loadAnalyser,
 }
