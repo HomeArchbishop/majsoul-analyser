@@ -28,11 +28,11 @@ function callMahjongHelperShell (command: string): string {
 
 const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice: boolean, info?: string, discard?: Pai }> = {
   dahai: function analyseDahai (round: Round): { choice: true, discard: Pai, info: string } {
-    const meHand = round.players[round.meSeat].hand
-    const fulu = round.players[round.meSeat].fulu
+    const meTehai = round.players[round.meSeat].tehai
+    const furo = round.players[round.meSeat].furo
     const ankan = round.players[round.meSeat].ankan
     const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
-    const args = formatPai(meHand) + '#' + fulu.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase()
+    const args = formatPai(meTehai) + '#' + furo.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase()
     const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const choiceName = out.split('\n').find(l => l.match(/无役/) === null && l.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/) !== null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null && choiceName !== undefined) {
@@ -40,7 +40,7 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
       return { choice: true, discard, info: `分析打出${discard}` }
     }
     logger.info(`<analyser> Got unexpected output: \`${out}\`, command: \`${binPath} ${doraArgs} ${args}\``)
-    const discard = meHand[~~(Math.random() * meHand.length)]
+    const discard = meTehai[~~(Math.random() * meTehai.length)]
     return { choice: true, discard, info: `随机打出${discard}` }
   },
 
@@ -49,38 +49,38 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
   },
 
   pon: function analysePon (round: Round, targetPai?: Pai): { choice: boolean, info: string } {
-    const meHand = round.players[round.meSeat].hand
-    const fulu = round.players[round.meSeat].fulu
+    const meTehai = round.players[round.meSeat].tehai
+    const furo = round.players[round.meSeat].furo
     const ankan = round.players[round.meSeat].ankan
     const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
-    const args = formatPai(meHand) + '#' + fulu.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase() + ' + ' + (targetPai ?? '')
+    const args = formatPai(meTehai) + '#' + furo.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase() + ' + ' + (targetPai ?? '')
     const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const currentLine = {
       line: out.split('\n').find((l, i, a) => l.match(/(无役)|(振听)/) === null && i > 0 && a[i - 1].match(/当前/) !== null),
       title: out.split('\n').find(l => l.match(/当前/) !== null),
     }
-    const fuluLine = {
+    const furoLine = {
       line: out.split('\n').find(l => l.match(/(无役)|(振听)/) === null && l.match(/=>/) !== null && l.match(/碰/) !== null),
       tile: out.split('\n').find(l => l.match(/鸣牌后/) !== null),
     }
-    if (currentLine.line === undefined && fuluLine.line === undefined) {
+    if (currentLine.line === undefined && furoLine.line === undefined) {
       return { choice: false, info: '不副露' }
     }
-    if (currentLine.line === undefined && fuluLine.line !== undefined) {
-      const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
+    if (currentLine.line === undefined && furoLine.line !== undefined) {
+      const choiceInfo = furoLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
       if (choiceInfo !== null) {
         return { choice: true, info: choiceInfo[0] }
       }
       return { choice: false, info: '不副露' }
     }
-    if (currentLine.line !== undefined && fuluLine.line === undefined) {
+    if (currentLine.line !== undefined && furoLine.line === undefined) {
       return { choice: false, info: '不副露' }
     }
-    if (currentLine.line !== undefined && fuluLine.line !== undefined) {
+    if (currentLine.line !== undefined && furoLine.line !== undefined) {
       const currentMark = +(currentLine.line.match(/^\s*\d+/) ?? [-1])[0]
-      const fuluMark = +(fuluLine.line.match(/^\s*\d+/) ?? [-1])[0]
-      if (currentMark <= fuluMark) {
-        const choiceInfo = fuluLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
+      const furoMark = +(furoLine.line.match(/^\s*\d+/) ?? [-1])[0]
+      if (currentMark <= furoMark) {
+        const choiceInfo = furoLine.line.match(/(?<=\s)\S*?(?=(切|ド)\s*?\S*?\s*?=>)/)
         if (choiceInfo !== null) {
           return { choice: true, info: choiceInfo[0] }
         }
@@ -112,7 +112,7 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
   },
 
   reach: function analyseReach (round: Round): { choice: boolean, discard: Pai, info: string } {
-    const choice = round.leftTileCnt >= 10
+    const choice = round.tilesLeft >= 10
     const discard = operationJudge.dahai(round).discard as Pai
     const info = (choice ? '立直 ' : '默听 ') + `切${discard}`
     return { choice, discard, info }
@@ -123,8 +123,8 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
   },
 
   nuki: function analyseNuki (round: Round): { choice: boolean, info: string } {
-    const meHand = round.players[round.meSeat].hand
-    const choice = meHand.reduce((p, c) => { c === 'N' ? p += 1 : p += 0; return p }, 0) < 3
+    const meTehai = round.players[round.meSeat].tehai
+    const choice = meTehai.reduce((p, c) => { c === 'N' ? p += 1 : p += 0; return p }, 0) < 3
     return { choice, info: '拔北' }
   },
 

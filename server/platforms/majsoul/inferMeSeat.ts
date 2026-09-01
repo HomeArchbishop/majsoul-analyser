@@ -28,12 +28,12 @@ export function inferMeSeatFromAction (action: ActionPrototype): number | undefi
   const { name, data } = action.data
 
   if (name === 'ActionNewRound') {
-    const round = data as ActionNewRound
-    if (round.tiles.length >= 14) {
-      return round.ju % round.scores.length
+    const newRound = data as ActionNewRound
+    if (newRound.tiles.length >= 14) {
+      return newRound.ju % newRound.scores.length
     }
-    if (round.operation !== null && round.operation !== undefined) {
-      return round.operation.seat
+    if (newRound.operation !== null && newRound.operation !== undefined) {
+      return newRound.operation.seat
     }
   }
 

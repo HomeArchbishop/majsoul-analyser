@@ -5,7 +5,7 @@ import {
   ActionPrototype, OptionalOperationList,
 } from '../../types/ParsedMajsoulJSON'
 import { sortPai } from '../../utils/pai'
-import { changToKaze, wirePaiListToMjai, wirePaiToMjai } from './pai'
+import { toBakaze, wirePaiListToMjai, wirePaiToMjai } from './pai'
 
 export interface ActionToMjaiCtx {
   lastDahai?: { actor: number, pai: Pai }
@@ -38,7 +38,7 @@ export function actionToMjai (
     parsedMsgList.push(
       {
         type: 'start_kyoku',
-        bakaze: changToKaze(actionData.chang),
+        bakaze: toBakaze(actionData.chang),
         dora_marker: wirePaiToMjai(actionData.doras[0]),
         kyoku: actionData.ju + 1,
         honba: actionData.ben,

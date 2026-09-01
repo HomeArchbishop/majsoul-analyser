@@ -1,8 +1,5 @@
-import type { Kaze, Pai } from '../../types/Mjai'
-
-const KAZE_FROM_INDEX: Record<string, Kaze> = {
-  '1z': 'E', '2z': 'S', '3z': 'W', '4z': 'N',
-}
+import type { Pai } from '../../types/Mjai'
+import { toBakaze } from '../../utils/pai'
 
 export function numToMjai (num: number): Pai {
   const suit = ['m', 'p', 's', 'z'][~~(num / 36)]
@@ -19,7 +16,7 @@ export function numToMjai (num: number): Pai {
   return `${rank}${suit}` as Pai
 }
 
-export function seedToKaze (seed0: number): Kaze {
-  const idx = ((~~(seed0 / 4) - 1) % 4) + 1
-  return KAZE_FROM_INDEX[`${idx}z`] ?? 'E'
+/** 天凤 INIT seed[0] → MJAI bakaze。 */
+export function toBakazeFromTenhouSeed (seed0: number): ReturnType<typeof toBakaze> {
+  return toBakaze(((~~(seed0 / 4) - 1) % 4))
 }

@@ -4,7 +4,7 @@ import logger from '../../logger'
 import type { ActionCandidateList, MjaiEventList } from '../../types/Mjai'
 import { ParsedTenhouJSON } from '../../types/ParsedTenhouJSON'
 import type { Platform, PlatformProcessResult, PlatformSession, WireParseResult } from '../types'
-import { numToMjai, seedToKaze } from './pai'
+import { numToMjai, toBakazeFromTenhouSeed } from './pai'
 
 function decodeWire (binaryMsg: Buffer): ParsedTenhouJSON | null {
   const text = binaryMsg.toString()
@@ -72,7 +72,7 @@ function wireToMjai (wire: ParsedTenhouJSON): WireParseResult {
   if (wire.tag === 'INIT') {
     events.push({
       type: 'start_kyoku',
-      bakaze: seedToKaze(wire.seed[0]),
+      bakaze: toBakazeFromTenhouSeed(wire.seed[0]),
       dora_marker: numToMjai(wire.seed[5]),
       kyoku: wire.seed[0] + 1,
       honba: wire.seed[1],

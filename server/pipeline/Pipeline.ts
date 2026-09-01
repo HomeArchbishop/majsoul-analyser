@@ -93,8 +93,8 @@ export class Pipeline {
         continue
       }
       if (this.game === undefined) { break }
-      const stepIndex = applyEvent(this.game, event)
-      UI.print(`new msg... ${stepIndex}`, event)
+      const eventIndex = applyEvent(this.game, event)
+      UI.print(`new msg... ${eventIndex}`, event)
     }
     logger.info('<inbound> board apply end')
   }

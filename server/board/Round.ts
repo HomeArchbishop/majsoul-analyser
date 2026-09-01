@@ -9,7 +9,7 @@ export interface RoundConstructorOptions {
   kyotaku: number
   oya: number
   doraMarkers: Pai[]
-  leftTileCnt: number
+  tilesLeft: number
   meSeat: number
   tehais: Pai[][]
 }
@@ -24,17 +24,16 @@ export class Round {
     this.honba = options.honba
     this.kyotaku = options.kyotaku
     this.oya = options.oya
-    this.leftTileCnt = options.leftTileCnt
+    this.tilesLeft = options.tilesLeft
     this.doraMarkers = options.doraMarkers
 
     for (let i = 0; i < this.playerCnt; i++) {
       this.players.push({
-        discards: [],
-        he: [],
-        hand: [...options.tehais[i]],
-        fulu: [],
+        tehai: [...options.tehais[i]],
+        sutehai: [],
+        furo: [],
         ankan: [],
-        isReach: false,
+        reached: false,
         nuki: [],
       })
     }
@@ -51,17 +50,16 @@ export class Round {
   oya: number
 
   doraMarkers: Pai[]
-  leftTileCnt: number
+  tilesLeft: number
 
   players: Array<{
-    discards: Pai[]
-    he: Pai[]
-    hand: Pai[]
-    fulu: Pai[][]
+    tehai: Pai[]
+    sutehai: Pai[]
+    furo: Pai[][]
     ankan: Pai[][]
-    isReach: boolean
+    reached: boolean
     nuki: Pai[]
   }> = []
 
-  steps: MjaiEventList = []
+  events: MjaiEventList = []
 }

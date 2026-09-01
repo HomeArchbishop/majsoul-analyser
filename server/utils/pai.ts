@@ -1,5 +1,36 @@
 import type { Pai } from '../types/Mjai'
 
+/** 5 与赤 5 视为同牌（碰/杠/删手牌时）。 */
+export function paiMatches (a: Pai, b: Pai): boolean {
+  if (a === b) { return true }
+  if (a === '5mr' && b === '5m') { return true }
+  if (a === '5m' && b === '5mr') { return true }
+  if (a === '5pr' && b === '5p') { return true }
+  if (a === '5p' && b === '5pr') { return true }
+  if (a === '5sr' && b === '5s') { return true }
+  if (a === '5s' && b === '5sr') { return true }
+  return false
+}
+
+/** 从 tehai 移除 count 张与 pai 匹配的牌（含赤 5 等价）。 */
+export function removeMatchingFromTehai (tehai: Pai[], pai: Pai, count: number): void {
+  let removed = 0
+  for (let i = 0; i < tehai.length && removed < count; i++) {
+    if (paiMatches(tehai[i], pai)) {
+      tehai.splice(i, 1)
+      i--
+      removed++
+    }
+  }
+}
+
+const BAKAZE_ORDER: Array<'E' | 'S' | 'W' | 'N'> = ['E', 'S', 'W', 'N']
+
+/** 场风 wire 序号 (0–3) → MJAI bakaze。 */
+export function toBakaze (wireIndex: number): 'E' | 'S' | 'W' | 'N' {
+  return BAKAZE_ORDER[wireIndex] ?? 'E'
+}
+
 function paiSortKey (pai: Pai): string {
   if (pai === '?') { return 'z99' }
   if (pai === '5mr' || pai === '5pr' || pai === '5sr') {

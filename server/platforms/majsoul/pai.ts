@@ -1,4 +1,5 @@
 import type { Kaze, Pai } from '../../types/Mjai'
+import { toBakaze } from '../../utils/pai'
 
 export type WirePai = string
 
@@ -25,6 +26,4 @@ export function wirePaiListToMjai (tiles: WirePai[]): Pai[] {
   return tiles.map(wirePaiToMjai)
 }
 
-export function changToKaze (chang: number): Kaze {
-  return KAZE_FROM_WIRE[`${chang + 1}z`] ?? 'E'
-}
+export { toBakaze }

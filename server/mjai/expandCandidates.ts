@@ -8,25 +8,25 @@ export function expandActionCandidates (actionCandidateList: ActionCandidateList
 
   const mjaiActionList: MjaiActionList = []
 
-  const latestMeTileStepIndex = findLastIndex(round.steps, step => {
+  const latestMeTileEventIndex = findLastIndex(round.events, event => {
     return (
-      step.type === 'chi' || step.type === 'pon' || step.type === 'daiminkan' ||
-      step.type === 'ankan' || step.type === 'kakan' || step.type === 'tsumo'
+      event.type === 'chi' || event.type === 'pon' || event.type === 'daiminkan' ||
+      event.type === 'ankan' || event.type === 'kakan' || event.type === 'tsumo'
     ) &&
-      step.actor === round.meSeat
+      event.actor === round.meSeat
   })
-  const latestMeTile = latestMeTileStepIndex !== -1 ? (round.steps[latestMeTileStepIndex] as { pai: Pai }).pai : undefined
+  const latestMeTile = latestMeTileEventIndex !== -1 ? (round.events[latestMeTileEventIndex] as { pai: Pai }).pai : undefined
 
-  const latestDiscardTileStepIndex = findLastIndex(round.steps, step => {
-    return step.type === 'dahai' && step.actor !== round.meSeat
+  const latestDiscardEventIndex = findLastIndex(round.events, event => {
+    return event.type === 'dahai' && event.actor !== round.meSeat
   })
-  const latestDiscardTileStep = latestDiscardTileStepIndex !== -1 ? round.steps[latestDiscardTileStepIndex] as EventDahai : undefined
+  const latestDiscardEvent = latestDiscardEventIndex !== -1 ? round.events[latestDiscardEventIndex] as EventDahai : undefined
 
   for (const candidate of actionCandidateList) {
     if (candidate.type === 'dahai') {
       if (latestMeTile === undefined) { continue }
       let isLatestTileFound = false
-      for (const pai of round.players[round.meSeat].hand) {
+      for (const pai of round.players[round.meSeat].tehai) {
         if (pai === '?') { break }
         mjaiActionList.push({
           type: 'dahai',
@@ -37,23 +37,23 @@ export function expandActionCandidates (actionCandidateList: ActionCandidateList
       }
     }
     if (candidate.type === 'pon') {
-      if (latestDiscardTileStep === undefined) { continue }
+      if (latestDiscardEvent === undefined) { continue }
       for (const consumed of candidate.consumedList) {
         mjaiActionList.push({
           type: 'pon',
-          pai: latestDiscardTileStep.pai,
-          target: latestDiscardTileStep.actor,
+          pai: latestDiscardEvent.pai,
+          target: latestDiscardEvent.actor,
           consumed,
         })
       }
     }
     if (candidate.type === 'chi') {
-      if (latestDiscardTileStep === undefined) { continue }
+      if (latestDiscardEvent === undefined) { continue }
       for (const consumed of candidate.consumedList) {
         mjaiActionList.push({
           type: 'chi',
-          pai: latestDiscardTileStep.pai,
-          target: latestDiscardTileStep.actor,
+          pai: latestDiscardEvent.pai,
+          target: latestDiscardEvent.actor,
           consumed,
         })
       }
@@ -65,12 +65,12 @@ export function expandActionCandidates (actionCandidateList: ActionCandidateList
       }
     }
     if (candidate.type === 'daiminkan') {
-      if (latestDiscardTileStep === undefined) { continue }
+      if (latestDiscardEvent === undefined) { continue }
       for (const consumed of candidate.consumedList) {
         mjaiActionList.push({
           type: 'daiminkan',
-          pai: latestDiscardTileStep.pai,
-          target: latestDiscardTileStep.actor,
+          pai: latestDiscardEvent.pai,
+          target: latestDiscardEvent.actor,
           consumed,
         })
       }
@@ -92,11 +92,11 @@ export function expandActionCandidates (actionCandidateList: ActionCandidateList
     if (candidate.type === 'hora') {
       if (candidate.tsumo === true) {
         mjaiActionList.push({ type: 'hora' })
-      } else if (latestDiscardTileStep !== undefined) {
+      } else if (latestDiscardEvent !== undefined) {
         mjaiActionList.push({
           type: 'hora',
-          target: latestDiscardTileStep.actor,
-          pai: latestDiscardTileStep.pai,
+          target: latestDiscardEvent.actor,
+          pai: latestDiscardEvent.pai,
         })
       }
     }
