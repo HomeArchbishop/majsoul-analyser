@@ -3,7 +3,7 @@ import structuredClone from '@ungap/structured-clone'
 import { applyEvent } from '../board/applyEvent'
 import { Game } from '../board/Game'
 import logger from '../logger'
-import { expandActionCandidates } from '../mjai/expandCandidates'
+import { materializeMjaiActions } from '../mjai/materializeMjaiActions'
 import { getPlatform, type Platform, type PlatformId, type PlatformSession } from '../platforms/registry'
 import type { BaseAnalyser } from '../types/Analyser'
 import type { EventStartGame, MjaiEventList } from '../types/Mjai'
@@ -64,7 +64,7 @@ export class Pipeline {
     logger.info('<inbound> Analyser start')
     UI.print('action candidates', actionCandidateList)
     const round = this.game.rounds[this.game.roundPointer]
-    const mjaiActionList = expandActionCandidates(actionCandidateList, round)
+    const mjaiActionList = materializeMjaiActions(actionCandidateList, round)
     UI.print('analysing actions', mjaiActionList)
     const { choice: actionChoice, info } = await this.analyser.analyseActions(mjaiActionList, round)
     UI.print('choice: ', JSON.stringify(structuredClone(actionChoice)), ' | ', info)

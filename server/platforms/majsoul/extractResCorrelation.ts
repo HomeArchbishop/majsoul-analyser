@@ -1,31 +1,32 @@
-import { AnyNestedObject, Root } from 'protobufjs'
+import { getLiqiRoot, getWrapperType } from './liqiRoot'
 
-import liqi from './liqi'
+const TRACKED_REQUEST = /(authGame)|(syncGame)|(oauth2Login)|(login)|(emailLogin)/i
 
-/** Decode outbound Majsoul wire and return res-name correlations by request index. */
-export function extractResCorrelation (binaryReq: Buffer): Array<{ index: number, resName: string }> {
-  const binaryReqArr = new Uint8Array(binaryReq)
+interface WrapperPayload {
+  data: Uint8Array
+  name: string
+}
 
-  const root = Root.fromJSON(liqi as AnyNestedObject)
-  const wrapper = root.lookupType('Wrapper')
+function readRequestIndex (bytes: Uint8Array): number {
+  return (bytes[2] << 8) + bytes[1]
+}
+
+/** 解析 outbound 请求，记录 request index → 预期 inbound res 类型名。 */
+export function extractResCorrelation (
+  binaryReq: Buffer,
+): Array<{ index: number, resName: string }> {
+  const bytes = new Uint8Array(binaryReq)
+  const wrapper = getWrapperType()
 
   try {
-    interface DecodeReq { data: Uint8Array, name: string }
+    const { name } = wrapper.decode(bytes.slice(3)) as unknown as WrapperPayload
+    if (!TRACKED_REQUEST.test(name)) { return [] }
 
-    const { name } = wrapper.decode(binaryReqArr.slice(3)) as unknown as DecodeReq
-
-    const service = root.lookup(name) as unknown as { responseType: string }
-    const resName = service.responseType
-
-    if (
-      /(authGame)|(syncGame)|(oauth2Login)|(login)|(emailLogin)/i.test(name)
-    ) {
-      return [{
-        resName, index: (binaryReqArr[2] << 8) + binaryReqArr[1],
-      }]
-    } else {
-      return []
-    }
+    const service = getLiqiRoot().lookup(name) as unknown as { responseType: string }
+    return [{
+      index: readRequestIndex(bytes),
+      resName: service.responseType,
+    }]
   } catch {
     return []
   }

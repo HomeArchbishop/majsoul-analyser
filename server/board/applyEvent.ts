@@ -1,106 +1,197 @@
-import type { MjaiEvent } from '../types/Mjai'
+import type { MjaiEvent, Pai } from '../types/Mjai'
 import { paiMatches, removeMatchingFromTehai, sortPai } from '../utils/pai'
 import { Game } from './Game'
 import { Round } from './Round'
 
 const REACH_COST = 1000
 
-export function applyEvent (game: Game, event: MjaiEvent): number {
-  if (event.type === 'start_kyoku') {
-    game.rounds[0] = new Round({
-      bakaze: event.bakaze,
-      kyoku: event.kyoku,
-      honba: event.honba,
-      scores: [...event.scores],
-      meSeat: game.meSeat,
-      tehais: event.tehais.map(tehai => [...tehai]),
-      tilesLeft: event.scores.length === 4 ? 70 : 42,
-      doraMarkers: [event.dora_marker],
-      kyotaku: event.kyotaku,
-      oya: event.oya,
-    })
-    game.roundPointer = 0
-  }
-  const round = game.rounds[game.roundPointer]
-  if (round === undefined) { return NaN }
-  round.events.push(event)
+const KAN_EVENT_TYPES = new Set(['daiminkan', 'ankan', 'kakan'])
 
-  if (event.type === 'ankan') {
-    round.players[event.actor].ankan.push([
-      event.consumed[0], event.consumed[0],
-      event.consumed[0], event.consumed[0],
-    ])
-    const tehai = round.players[event.actor].tehai
-    if (event.actor === round.meSeat) {
-      removeMatchingFromTehai(tehai, event.consumed[0], 4)
-    } else {
-      tehai.splice(0, 4)
+function applyStartKyoku (
+  game: Game,
+  event: Extract<MjaiEvent, { type: 'start_kyoku' }>,
+): void {
+  game.rounds[0] = new Round({
+    bakaze: event.bakaze,
+    kyoku: event.kyoku,
+    honba: event.honba,
+    scores: [...event.scores],
+    meSeat: game.meSeat,
+    tehais: event.tehais.map(tehai => [...tehai]),
+    tilesLeft: event.scores.length === 4 ? 70 : 42,
+    doraMarkers: [event.dora_marker],
+    kyotaku: event.kyotaku,
+    oya: event.oya,
+  })
+  game.roundPointer = 0
+}
+
+function removeFromTehai (
+  round: Round,
+  actor: number,
+  pai: Pai,
+  count: number,
+): void {
+  const tehai = round.players[actor].tehai
+  if (actor === round.meSeat) {
+    removeMatchingFromTehai(tehai, pai, count)
+  } else {
+    tehai.splice(0, count)
+  }
+}
+
+function removeConsumedFromTehai (
+  round: Round,
+  actor: number,
+  consumed: Pai[],
+): void {
+  if (actor === round.meSeat) {
+    const tehai = round.players[actor].tehai
+    for (const pai of consumed) {
+      removeMatchingFromTehai(tehai, pai, 1)
     }
+  } else {
+    round.players[actor].tehai.splice(0, consumed.length)
   }
-  if (event.type === 'kakan') {
-    const player = round.players[event.actor]
-    const ponIndex = player.furo.findIndex(
-      group => group.length === 3 && group.every(t => paiMatches(t, event.pai)),
-    )
-    if (ponIndex >= 0) {
-      player.furo[ponIndex] = sortPai([...player.furo[ponIndex], event.pai])
-    }
-    if (event.actor === round.meSeat) {
-      removeMatchingFromTehai(player.tehai, event.pai, 1)
-    } else {
-      player.tehai.splice(0, 1)
-    }
+}
+
+function applyAnkan (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'ankan' }>,
+): void {
+  const tile = event.consumed[0]
+  round.players[event.actor].ankan.push([tile, tile, tile, tile])
+  removeFromTehai(round, event.actor, tile, 4)
+}
+
+function applyKakan (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'kakan' }>,
+): void {
+  const player = round.players[event.actor]
+  const ponIndex = player.furo.findIndex(group => {
+    return group.length === 3 && group.every(tile => paiMatches(tile, event.pai))
+  })
+  if (ponIndex >= 0) {
+    player.furo[ponIndex] = sortPai([...player.furo[ponIndex], event.pai])
   }
-  if (event.type === 'pon' || event.type === 'chi' || event.type === 'daiminkan') {
-    round.players[event.actor].furo.push(sortPai([...event.consumed, event.pai]))
-    round.players[event.target].sutehai.pop()
-    if (event.actor === round.meSeat) {
-      for (const consumedPai of event.consumed) {
-        removeMatchingFromTehai(round.players[event.actor].tehai, consumedPai, 1)
-      }
-    } else {
-      round.players[event.actor].tehai.splice(0, event.consumed.length)
-    }
+  removeFromTehai(round, event.actor, event.pai, 1)
+}
+
+function applyChiPonDaiminkan (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'chi' | 'pon' | 'daiminkan' }>,
+): void {
+  const { actor, target, consumed, pai } = event
+  round.players[actor].furo.push(sortPai([...consumed, pai]))
+  round.players[target].sutehai.pop()
+  removeConsumedFromTehai(round, actor, consumed)
+}
+
+function applyNuki (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'nuki' }>,
+): void {
+  round.players[event.actor].nuki.push('N')
+  removeFromTehai(round, event.actor, 'N', 1)
+}
+
+function isDrawFromTilesLeft (events: MjaiEvent[]): boolean {
+  for (let i = events.length - 2; i >= 0; i--) {
+    const prev = events[i]
+    if (KAN_EVENT_TYPES.has(prev.type)) { return false }
+    if (prev.type === 'tsumo') { break }
   }
-  if (event.type === 'nuki') {
-    round.players[event.actor].nuki.push('N')
-    if (event.actor === round.meSeat) {
-      removeMatchingFromTehai(round.players[event.actor].tehai, 'N', 1)
-    } else {
-      round.players[event.actor].tehai.splice(0, 1)
-    }
+  return true
+}
+
+function applyTsumo (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'tsumo' }>,
+): void {
+  round.players[event.actor].tehai.push(event.pai)
+  if (isDrawFromTilesLeft(round.events)) {
+    round.tilesLeft--
   }
-  if (event.type === 'tsumo') {
-    round.players[event.actor].tehai.push(event.pai)
-    let isDrawFromLeftTiles = true
-    for (let i = round.events.length - 2; i >= 0; i--) {
-      if (round.events[i].type === 'daiminkan' || round.events[i].type === 'ankan' || round.events[i].type === 'kakan') {
-        isDrawFromLeftTiles = false
-        break
-      }
-      if (round.events[i].type === 'tsumo') { break }
-    }
-    if (isDrawFromLeftTiles) { round.tilesLeft-- }
-  }
-  if (event.type === 'dahai') {
-    round.players[event.actor].sutehai.push(event.pai)
-    if (event.actor === round.meSeat) {
-      removeMatchingFromTehai(round.players[event.actor].tehai, event.pai, 1)
-    } else {
-      round.players[event.actor].tehai.splice(0, 1)
-    }
-  }
-  if (event.type === 'reach') {
-    round.players[event.actor].reached = true
-    round.scores[event.actor] -= REACH_COST
-    round.kyotaku += 1
-  }
-  if (event.type === 'dora') {
-    round.doraMarkers.push(event.dora_marker)
-  }
-  if (event.type === 'end_kyoku' && event.scores !== undefined) {
+}
+
+function applyDahai (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'dahai' }>,
+): void {
+  round.players[event.actor].sutehai.push(event.pai)
+  removeFromTehai(round, event.actor, event.pai, 1)
+}
+
+function applyReach (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'reach' }>,
+): void {
+  round.players[event.actor].reached = true
+  round.scores[event.actor] -= REACH_COST
+  round.kyotaku += 1
+}
+
+function applyDora (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'dora' }>,
+): void {
+  round.doraMarkers.push(event.dora_marker)
+}
+
+function applyEndKyoku (
+  round: Round,
+  event: Extract<MjaiEvent, { type: 'end_kyoku' }>,
+): void {
+  if (event.scores !== undefined) {
     round.scores = [...event.scores]
   }
+}
+
+function applyRoundEvent (round: Round, event: MjaiEvent): void {
+  switch (event.type) {
+    case 'ankan':
+      applyAnkan(round, event)
+      break
+    case 'kakan':
+      applyKakan(round, event)
+      break
+    case 'pon':
+    case 'chi':
+    case 'daiminkan':
+      applyChiPonDaiminkan(round, event)
+      break
+    case 'nuki':
+      applyNuki(round, event)
+      break
+    case 'tsumo':
+      applyTsumo(round, event)
+      break
+    case 'dahai':
+      applyDahai(round, event)
+      break
+    case 'reach':
+      applyReach(round, event)
+      break
+    case 'dora':
+      applyDora(round, event)
+      break
+    case 'end_kyoku':
+      applyEndKyoku(round, event)
+      break
+  }
+}
+
+export function applyEvent (game: Game, event: MjaiEvent): number {
+  if (event.type === 'start_kyoku') {
+    applyStartKyoku(game, event)
+  }
+
+  const round = game.rounds[game.roundPointer]
+  if (round === undefined) { return NaN }
+
+  round.events.push(event)
+  applyRoundEvent(round, event)
 
   return round.events.length - 1
 }

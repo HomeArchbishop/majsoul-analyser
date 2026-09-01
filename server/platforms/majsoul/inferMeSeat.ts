@@ -1,31 +1,35 @@
-import { ResAuthGame } from '../../types/ParsedMajsoulJSON'
+import type { ResAuthGame } from '../../types/ParsedMajsoulJSON'
 import {
-  ActionDealTile, ActionNewRound, ActionPrototype, OptionalOperationList,
+  ActionDealTile,
+  ActionNewRound,
+  ActionPrototype,
+  OptionalOperationList,
 } from '../../types/ParsedMajsoulJSON'
 
-/** Resolve 己方座位 from ResAuthGame heuristics; -1 if unknown (ranked). */
+/** 从 ResAuthGame 推断己方座位；-1 表示未知（如段位场）。 */
 export function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {
-  const seatList = data.seat_list
+  const { seat_list: seatList, players } = data
 
-  if (data.players.length === 1) {
-    const accountId = String(data.players[0].account_id)
+  if (players.length === 1) {
+    const accountId = String(players[0].account_id)
     const seat = seatList.findIndex(id => String(id) === accountId)
     if (seat !== -1) { return seat }
   }
 
   const humanSeats = seatList
-    .map((id, idx) => ({ id, idx }))
+    .map((id, seat) => ({ id, seat }))
     .filter(({ id }) => id !== 0)
+
   if (humanSeats.length === 1) {
-    return humanSeats[0].idx
+    return humanSeats[0].seat
   }
 
   return -1
 }
 
-/** Infer 己方座位 from a private action visible only to this client. */
-export function inferMeSeatFromAction (action: ActionPrototype): number | undefined {
-  const { name, data } = action.data
+/** 从仅本客户端可见的 action 推断己方座位。 */
+export function inferMeSeatFromAction (wire: ActionPrototype): number | undefined {
+  const { name, data } = wire.data
 
   if (name === 'ActionNewRound') {
     const newRound = data as ActionNewRound
@@ -42,9 +46,9 @@ export function inferMeSeatFromAction (action: ActionPrototype): number | undefi
     if (deal.tile !== '') { return deal.seat }
   }
 
-  const withOp = data as { operation?: OptionalOperationList | null }
-  if (withOp.operation !== null && withOp.operation !== undefined) {
-    return withOp.operation.seat
+  const withOperation = data as { operation?: OptionalOperationList | null }
+  if (withOperation.operation !== null && withOperation.operation !== undefined) {
+    return withOperation.operation.seat
   }
 
   return undefined

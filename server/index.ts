@@ -5,14 +5,11 @@ import Koa from 'koa'
 import Router from 'koa-router'
 
 import { loadAnalyser } from './analyser/registry'
-import env from './env'
 import logger from './logger'
 import { Pipeline } from './pipeline/Pipeline'
 import type { PlatformId } from './platforms/registry'
 import UI from './UI'
 import { createSerialExecutor } from './utils/createSerialExecutor'
-
-env.init()
 
 const app = new Koa()
 const router = new Router()
@@ -73,7 +70,10 @@ process.on('uncaughtException', function (err) {
 
 UI.clear()
 try {
-  const analyserName = env.get<string>('runtimeConf.analyser')
+  const analyserName = process.env.RUNTIME_CONF_ANALYSER
+  if (analyserName === undefined || analyserName === '') {
+    throw new Error('Missing RUNTIME_CONF_ANALYSER in .env')
+  }
   UI.print(`Analyser module (${analyserName}) loading...`)
   pipeline.setAnalyser(await loadAnalyser(analyserName))
   app.listen(56556, () => {
