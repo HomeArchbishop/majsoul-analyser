@@ -3,33 +3,27 @@ import {
   ActionDealTile, ActionNewRound, ActionPrototype, OptionalOperationList,
 } from '../../types/ParsedMajsoulJSON'
 
-function resolveMeSeatFromAuth (
-  data: ResAuthGame['data'],
-  meID?: string,
-): { meSeat: number, meID: string } {
+/** Resolve 己方座位 from ResAuthGame heuristics; -1 if unknown (ranked). */
+function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {
   const seatList = data.seat_list
-
-  if (meID !== undefined && meID.length > 0) {
-    const meSeat = seatList.findIndex(id => String(id) === meID)
-    if (meSeat !== -1) { return { meSeat, meID } }
-  }
 
   if (data.players.length === 1) {
     const accountId = String(data.players[0].account_id)
-    const meSeat = seatList.findIndex(id => String(id) === accountId)
-    if (meSeat !== -1) { return { meSeat, meID: accountId } }
+    const seat = seatList.findIndex(id => String(id) === accountId)
+    if (seat !== -1) { return seat }
   }
 
   const humanSeats = seatList
     .map((id, idx) => ({ id, idx }))
     .filter(({ id }) => id !== 0)
   if (humanSeats.length === 1) {
-    return { meSeat: humanSeats[0].idx, meID: String(humanSeats[0].id) }
+    return humanSeats[0].idx
   }
 
-  return { meSeat: -1, meID: meID ?? '' }
+  return -1
 }
 
+/** Infer 己方座位 from a private action visible only to this client. */
 function inferMeSeatFromAction (action: ActionPrototype): number | undefined {
   const { name, data } = action.data
 

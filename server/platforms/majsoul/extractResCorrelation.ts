@@ -2,7 +2,8 @@ import { AnyNestedObject, Root } from 'protobufjs'
 
 import liqi from './liqi'
 
-function parseReq (binaryReq: Buffer): Array<{ index: number, resName: string }> {
+/** Decode outbound Majsoul wire and return res-name correlations by request index. */
+function extractResCorrelation (binaryReq: Buffer): Array<{ index: number, resName: string }> {
   const binaryReqArr = new Uint8Array(binaryReq)
 
   const root = Root.fromJSON(liqi as AnyNestedObject)
@@ -30,4 +31,4 @@ function parseReq (binaryReq: Buffer): Array<{ index: number, resName: string }>
   }
 }
 
-export { parseReq }
+export { extractResCorrelation }

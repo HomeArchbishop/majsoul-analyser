@@ -3,9 +3,10 @@ import structuredClone from '@ungap/structured-clone'
 import logger from '../../logger'
 import type { ActionCandidateList, MjaiEventList } from '../../types/Mjai'
 import { ParsedTenhouJSON } from '../../types/ParsedTenhouJSON'
-import { tenhouNumToMjai, tenhouSeedToKaze } from '../../utils/pai'
+import type { Platform, PlatformProcessResult, PlatformSession, WireParseResult } from '../types'
+import { numToMjai, seedToKaze } from './pai'
 
-function parseTenhouJSON (binaryMsg: Buffer): ParsedTenhouJSON | null {
+function decodeWire (binaryMsg: Buffer): ParsedTenhouJSON | null {
   const text = binaryMsg.toString()
   if (text.startsWith('<')) {
     return null
@@ -60,37 +61,26 @@ function parseTenhouJSON (binaryMsg: Buffer): ParsedTenhouJSON | null {
   return null
 }
 
-function parseRes (
-  binaryMsg: Buffer,
-): [MjaiEventList, ActionCandidateList] {
-  const parsedTenhouJSON = parseTenhouJSON(binaryMsg)
-  logger.info(
-    `<parser> parsed ResMsg Buffer to JSON(tenhou): ${JSON.stringify(structuredClone(parsedTenhouJSON))}`,
-  )
+function wireToMjai (wire: ParsedTenhouJSON): WireParseResult {
+  const events: MjaiEventList = []
+  const candidates: ActionCandidateList = []
 
-  if (parsedTenhouJSON === null) {
-    return [[], []]
+  if (wire.tag === 'GO') {
+    events.push({ type: 'start_game', id: 0 })
   }
 
-  const parsedMsgList: MjaiEventList = []
-  const actionCandidateList: ActionCandidateList = []
-
-  if (parsedTenhouJSON.tag === 'GO') {
-    parsedMsgList.push({ type: 'start_game', id: 0 })
-  }
-
-  if (parsedTenhouJSON.tag === 'INIT') {
-    parsedMsgList.push({
+  if (wire.tag === 'INIT') {
+    events.push({
       type: 'start_kyoku',
-      bakaze: tenhouSeedToKaze(parsedTenhouJSON.seed[0]),
-      dora_marker: tenhouNumToMjai(parsedTenhouJSON.seed[5]),
-      kyoku: parsedTenhouJSON.seed[0] + 1,
-      honba: parsedTenhouJSON.seed[1],
-      kyotaku: parsedTenhouJSON.seed[2],
-      scores: parsedTenhouJSON.ten,
-      oya: parsedTenhouJSON.oya,
+      bakaze: seedToKaze(wire.seed[0]),
+      dora_marker: numToMjai(wire.seed[5]),
+      kyoku: wire.seed[0] + 1,
+      honba: wire.seed[1],
+      kyotaku: wire.seed[2],
+      scores: wire.ten,
+      oya: wire.oya,
       tehais: [
-        parsedTenhouJSON.hai.map(num => tenhouNumToMjai(num)),
+        wire.hai.map(num => numToMjai(num)),
         Array.from({ length: 13 }).map(() => '?' as const),
         Array.from({ length: 13 }).map(() => '?' as const),
         Array.from({ length: 13 }).map(() => '?' as const),
@@ -98,59 +88,83 @@ function parseRes (
     })
   }
 
-  if (parsedTenhouJSON.tag === 'DORA') {
-    parsedMsgList.push({
+  if (wire.tag === 'DORA') {
+    events.push({
       type: 'dora',
-      dora_marker: tenhouNumToMjai(parsedTenhouJSON.hai),
+      dora_marker: numToMjai(wire.hai),
     })
   }
 
-  if (parsedTenhouJSON.tag === 'REACH' && parsedTenhouJSON.step === 2) {
-    parsedMsgList.push({ type: 'reach', actor: parsedTenhouJSON.who })
+  if (wire.tag === 'REACH' && wire.step === 2) {
+    events.push({ type: 'reach', actor: wire.who })
   }
 
-  if (parsedTenhouJSON.tag === 'AGARI') {
-    parsedMsgList.push({
+  if (wire.tag === 'AGARI') {
+    events.push({
       type: 'hora',
-      actor: parsedTenhouJSON.who,
-      target: parsedTenhouJSON.fromWho,
+      actor: wire.who,
+      target: wire.fromWho,
     })
-    parsedMsgList.push({ type: 'end_kyoku' })
+    events.push({ type: 'end_kyoku' })
   }
 
-  if (parsedTenhouJSON.tag === 'RYUUKYOKU') {
-    parsedMsgList.push({ type: 'ryukyoku' })
-    parsedMsgList.push({ type: 'end_kyoku' })
+  if (wire.tag === 'RYUUKYOKU') {
+    events.push({ type: 'ryukyoku' })
+    events.push({ type: 'end_kyoku' })
   }
 
   if (
-    parsedTenhouJSON.tag === 'T' ||
-    parsedTenhouJSON.tag === 'U' ||
-    parsedTenhouJSON.tag === 'V' ||
-    parsedTenhouJSON.tag === 'W'
+    wire.tag === 'T' ||
+    wire.tag === 'U' ||
+    wire.tag === 'V' ||
+    wire.tag === 'W'
   ) {
-    parsedMsgList.push({
+    events.push({
       type: 'tsumo',
-      actor: ['T', 'U', 'V', 'W'].indexOf(parsedTenhouJSON.tag),
-      pai: parsedTenhouJSON.hai !== undefined ? tenhouNumToMjai(parsedTenhouJSON.hai) : '?',
+      actor: ['T', 'U', 'V', 'W'].indexOf(wire.tag),
+      pai: wire.hai !== undefined ? numToMjai(wire.hai) : '?',
     })
   }
 
   if (
-    parsedTenhouJSON.tag === 'D' ||
-    parsedTenhouJSON.tag === 'E' ||
-    parsedTenhouJSON.tag === 'F' ||
-    parsedTenhouJSON.tag === 'G'
+    wire.tag === 'D' ||
+    wire.tag === 'E' ||
+    wire.tag === 'F' ||
+    wire.tag === 'G'
   ) {
-    parsedMsgList.push({
+    events.push({
       type: 'dahai',
-      actor: ['D', 'E', 'F', 'G'].indexOf(parsedTenhouJSON.tag),
-      pai: tenhouNumToMjai(parsedTenhouJSON.hai),
+      actor: ['D', 'E', 'F', 'G'].indexOf(wire.tag),
+      pai: numToMjai(wire.hai),
       tsumogiri: false,
     })
   }
 
-  return [parsedMsgList, actionCandidateList]
+  return { events, candidates }
 }
 
-export { parseRes }
+function createSession (): PlatformSession {
+  return {}
+}
+
+function onOutbound (_buffer: Buffer, session: PlatformSession): PlatformProcessResult {
+  return { result: { events: [], candidates: [] }, session }
+}
+
+function onInbound (buffer: Buffer, session: PlatformSession): PlatformProcessResult {
+  const wire = decodeWire(buffer)
+  logger.info(`<parser> parsed wire buffer: ${JSON.stringify(structuredClone(wire))}`)
+  if (wire === null) {
+    return { result: { events: [], candidates: [] }, session }
+  }
+  const result = wireToMjai(wire)
+  return { result, session }
+}
+
+const tenhouPlatform: Platform = {
+  createSession,
+  onOutbound,
+  onInbound,
+}
+
+export { tenhouPlatform }

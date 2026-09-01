@@ -1,63 +1,4 @@
-import type { Kaze, Pai } from '../types/Mjai'
-
-/** 雀魂 protobuf 牌面编码（解析器内部 wire 格式） */
-export type MajsoulPai = string
-
-const KAZE_FROM_MAJSOUL: Record<string, Kaze> = {
-  '1z': 'E', '2z': 'S', '3z': 'W', '4z': 'N',
-}
-
-const KAZE_TO_MAJSOUL: Record<Kaze, string> = {
-  E: '1z', S: '2z', W: '3z', N: '4z',
-}
-
-const HONOR_FROM_MAJSOUL: Record<string, Pai> = {
-  '5z': 'P', '6z': 'F', '7z': 'C',
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HONOR_TO_MAJSOUL: Record<string, string> = {
-  P: '5z', F: '6z', C: '7z',
-}
-
-function majsoulPaiToMjai (tile: MajsoulPai): Pai {
-  if (tile === '?') { return '?' }
-  if (tile === '0m') { return '5mr' }
-  if (tile === '0p') { return '5pr' }
-  if (tile === '0s') { return '5sr' }
-  if (tile in KAZE_FROM_MAJSOUL) { return KAZE_FROM_MAJSOUL[tile] }
-  if (tile in HONOR_FROM_MAJSOUL) { return HONOR_FROM_MAJSOUL[tile] }
-  if (/^[1-9][mps]$/.test(tile)) { return tile as Pai }
-  return tile as Pai
-}
-
-function majsoulPaiListToMjai (tiles: MajsoulPai[]): Pai[] {
-  return tiles.map(majsoulPaiToMjai)
-}
-
-function majsoulChangToKaze (chang: number): Kaze {
-  return KAZE_FROM_MAJSOUL[`${chang + 1}z`] ?? 'E'
-}
-
-function tenhouNumToMjai (num: number): Pai {
-  const suit = ['m', 'p', 's', 'z'][~~(num / 36)]
-  if (num === 16 || num === 52 || num === 88) {
-    if (suit === 'm') { return '5mr' }
-    if (suit === 'p') { return '5pr' }
-    if (suit === 's') { return '5sr' }
-  }
-  const rank = ~~(num % 36 / 4) + 1
-  if (suit === 'z') {
-    const map: Record<number, Pai> = { 1: 'E', 2: 'S', 3: 'W', 4: 'N', 5: 'P', 6: 'F', 7: 'C' }
-    return map[rank] ?? 'P'
-  }
-  return `${rank}${suit}` as Pai
-}
-
-function tenhouSeedToKaze (seed0: number): Kaze {
-  const idx = ((~~(seed0 / 4) - 1) % 4) + 1
-  return KAZE_FROM_MAJSOUL[`${idx}z`] ?? 'E'
-}
+import type { Pai } from '../types/Mjai'
 
 function paiSortKey (pai: Pai): string {
   if (pai === '?') { return 'z99' }
@@ -148,13 +89,7 @@ function helperLabelToPai (label: string): Pai {
 export {
   formatPai,
   helperLabelToPai,
-  KAZE_TO_MAJSOUL,
-  majsoulChangToKaze,
-  majsoulPaiListToMjai,
-  majsoulPaiToMjai,
   nextPai,
   paiToHelperLabel,
   sortPai,
-  tenhouNumToMjai,
-  tenhouSeedToKaze,
 }

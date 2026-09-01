@@ -4,7 +4,8 @@ import {
   ActionChiPengGang, ActionDealTile, ActionDiscardTile, ActionHule, ActionNewRound, ActionNoTile,
   ActionPrototype, OptionalOperationList,
 } from '../../types/ParsedMajsoulJSON'
-import { majsoulChangToKaze, majsoulPaiListToMjai, majsoulPaiToMjai, sortPai } from '../../utils/pai'
+import { sortPai } from '../../utils/pai'
+import { changToKaze, wirePaiListToMjai, wirePaiToMjai } from './pai'
 
 export interface ActionToMjaiCtx {
   lastDahai?: { actor: number, pai: Pai }
@@ -17,7 +18,7 @@ export interface ActionToMjaiResult {
 }
 
 function toConsumedList (combination: string[]): Pai[][] {
-  return combination.map(s => majsoulPaiListToMjai(s.split('|')))
+  return combination.map(s => wirePaiListToMjai(s.split('|')))
 }
 
 function actionToMjai (
@@ -31,14 +32,14 @@ function actionToMjai (
 
   if (parsedMajsoulJSON.data.name === 'ActionNewRound') {
     const actionData = parsedMajsoulJSON.data.data as ActionNewRound
-    const sortedTiles = sortPai(majsoulPaiListToMjai(actionData.tiles))
+    const sortedTiles = sortPai(wirePaiListToMjai(actionData.tiles))
     const oya = actionData.ju % actionData.scores.length
 
     parsedMsgList.push(
       {
         type: 'start_kyoku',
-        bakaze: majsoulChangToKaze(actionData.chang),
-        dora_marker: majsoulPaiToMjai(actionData.doras[0]),
+        bakaze: changToKaze(actionData.chang),
+        dora_marker: wirePaiToMjai(actionData.doras[0]),
         kyoku: actionData.ju + 1,
         honba: actionData.ben,
         kyotaku: actionData.liqibang,
@@ -54,27 +55,28 @@ function actionToMjai (
         actor: oya,
       },
     )
+    lastDahai = undefined
   }
 
   if (parsedMajsoulJSON.data.name === 'ActionAnGangAddGang') {
     const actionData = parsedMajsoulJSON.data.data as ActionAnGangAddGang
-    const tile = majsoulPaiToMjai(actionData.tiles)
+    const tile = wirePaiToMjai(actionData.tiles)
     if (actionData.type === 3) {
       parsedMsgList.push({ type: 'ankan', actor: actionData.seat, consumed: [tile, tile, tile, tile] })
       if (actionData.doras?.length) {
-        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
+        parsedMsgList.push({ type: 'dora', dora_marker: wirePaiToMjai(actionData.doras.slice(-1)[0]) })
       }
     } else if (actionData.type === 4) {
       parsedMsgList.push({ type: 'kakan', actor: actionData.seat, pai: tile, consumed: [tile, tile, tile] })
       if (actionData.doras?.length) {
-        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
+        parsedMsgList.push({ type: 'dora', dora_marker: wirePaiToMjai(actionData.doras.slice(-1)[0]) })
       }
     }
   }
 
   if (parsedMajsoulJSON.data.name === 'ActionChiPengGang') {
     const actionData = parsedMajsoulJSON.data.data as ActionChiPengGang
-    const tiles = majsoulPaiListToMjai(actionData.tiles)
+    const tiles = wirePaiListToMjai(actionData.tiles)
     if (actionData.type === 2) {
       parsedMsgList.push({
         type: 'daiminkan',
@@ -84,7 +86,7 @@ function actionToMjai (
         consumed: tiles.slice(0, 3),
       })
       if (actionData.doras?.length) {
-        parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
+        parsedMsgList.push({ type: 'dora', dora_marker: wirePaiToMjai(actionData.doras.slice(-1)[0]) })
       }
     } else if (actionData.type === 0) {
       const targetIndex = actionData.froms.findIndex(n => n !== actionData.seat)
@@ -116,10 +118,10 @@ function actionToMjai (
     parsedMsgList.push({
       type: 'tsumo',
       actor: actionData.seat,
-      pai: actionData.tile !== '' ? majsoulPaiToMjai(actionData.tile) : '?',
+      pai: actionData.tile !== '' ? wirePaiToMjai(actionData.tile) : '?',
     })
     if (actionData.doras?.length) {
-      parsedMsgList.push({ type: 'dora', dora_marker: majsoulPaiToMjai(actionData.doras.slice(-1)[0]) })
+      parsedMsgList.push({ type: 'dora', dora_marker: wirePaiToMjai(actionData.doras.slice(-1)[0]) })
     }
   }
 
@@ -128,7 +130,7 @@ function actionToMjai (
     if (actionData.is_liqi || actionData.is_wliqi) {
       parsedMsgList.push({ type: 'reach', actor: actionData.seat })
     }
-    const pai = majsoulPaiToMjai(actionData.tile)
+    const pai = wirePaiToMjai(actionData.tile)
     parsedMsgList.push({
       type: 'dahai',
       actor: actionData.seat,
@@ -145,7 +147,7 @@ function actionToMjai (
         type: 'hora',
         actor: hule.seat,
         target: hule.zimo ? undefined : lastDahai?.actor,
-        pai: majsoulPaiToMjai(hule.hu_tile),
+        pai: wirePaiToMjai(hule.hu_tile),
       })
     }
     parsedMsgList.push({ type: 'end_kyoku', scores: actionData.scores })
@@ -193,7 +195,7 @@ function actionToMjai (
       } else if (optionalOperation.type === 7) {
         actionCandidateList.push({
           type: 'reach',
-          pais: majsoulPaiListToMjai(Array.from(new Set(optionalOperation.combination))),
+          pais: wirePaiListToMjai(Array.from(new Set(optionalOperation.combination))),
         })
       } else if (optionalOperation.type === 8) {
         actionCandidateList.push({ type: 'hora', tsumo: true })

@@ -5,7 +5,7 @@ import liqi from './liqi'
 
 function decodeMajsoulWire (
   binaryMsg: Buffer,
-  reqQueueMajsoul: Readonly<Record<number, { resName: string }>>,
+  resByIndex: Readonly<Record<number, { resName: string }>>,
 ): ParsedMajsoulJSON | null {
   const binaryMsgArr = new Uint8Array(binaryMsg)
 
@@ -34,7 +34,7 @@ function decodeMajsoulWire (
   if (binaryMsgArr[0] === msgType.res) {
     try {
       const index = (binaryMsgArr[2] << 8) + binaryMsgArr[1]
-      const resName = reqQueueMajsoul[index]?.resName
+      const resName = resByIndex[index]?.resName
       if (resName === undefined) { return null }
       const { data } = wrapper.decode(binaryMsgArr.slice(3)) as unknown as DecodeMsg
       const parsedMsg: any = { data: {}, name: resName as ParsedMajsoulJSON['name'] }

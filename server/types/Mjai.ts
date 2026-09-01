@@ -20,6 +20,7 @@ export type Kaze = 'E' | 'S' | 'W' | 'N'
 
 export interface EventStartGame {
   type: 'start_game'
+  /** 己方座位（meSeat）；与 board `Game.meSeat` 同义。 */
   id: number
 }
 

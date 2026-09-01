@@ -1,3 +1,5 @@
+import type { IncomingMessage } from 'node:http'
+
 import cors from '@koa/cors'
 import Koa from 'koa'
 import Router from 'koa-router'
@@ -6,8 +8,9 @@ import { loadAnalyser } from './analyser/registry'
 import env from './env'
 import logger from './logger'
 import { Pipeline } from './pipeline/Pipeline'
-import type { GameNameString } from './types/General'
+import type { PlatformId } from './platforms/registry'
 import UI from './UI'
+import { createSerialExecutor } from './utils/createSerialExecutor'
 
 env.init()
 
@@ -15,49 +18,52 @@ const app = new Koa()
 const router = new Router()
 
 const pipeline = new Pipeline()
+const runSerial = createSerialExecutor()
 
-const msgQueue = {
-  cur: Promise.resolve(),
-  async add (promise: Promise<void>) {
-    msgQueue.cur = msgQueue.cur.then(async () => await promise)
-    await msgQueue.cur
-  },
+async function readRequestBody (req: IncomingMessage): Promise<Buffer> {
+  const chunks: Buffer[] = []
+  for await (const chunk of req) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+  }
+  return Buffer.concat(chunks)
 }
 
-router.post('/', async function (ctx, next) {
-  const params: Buffer[] = []
-  await msgQueue.add(new Promise<void>((resolve, reject) => {
-    ctx.req.on('data', (chunk: Buffer) => {
-      params.push(chunk)
-    })
-    ctx.req.on('end', () => {
-      const buffer = Buffer.concat(params)
-      const msgType = ctx.query.msg as 'req' | 'res'
-      const gameName = String(ctx.query.game) as GameNameString
-      let handleFuncPromise: Promise<void> = Promise.resolve()
-      if (msgType === 'res') {
-        logger.info('<server-base> Server received res buffer: ' + JSON.stringify(buffer.toJSON().data))
-        handleFuncPromise = pipeline.handleRes(buffer, ctx.query.meID as string | undefined, gameName).then(() => {
-          if (pipeline.meID !== undefined) {
-            ctx.set('X-Majsoul-Account-Id', pipeline.meID)
-          }
-        })
-      } else if (msgType === 'req') {
-        logger.info('<server-base> Server received req buffer')
-        handleFuncPromise = pipeline.handleReq(buffer, gameName)
-      }
-      handleFuncPromise.then(() => {
-        ctx.status = 200
-        resolve()
-      }).catch(() => null)
-    })
-  }))
-  await next()
+/**
+ * HTTP query `msg=req|res` is transport direction from the userscript:
+ * - req  → client → server (outbound)
+ * - res  → server → client (inbound)
+ * Also accepts `direction=out|in` as an alias.
+ */
+function resolveWireDirection (query: Record<string, string | string[] | undefined>): 'outbound' | 'inbound' | undefined {
+  const msg = String(query.msg ?? '')
+  const direction = String(query.direction ?? '')
+  if (msg === 'req' || direction === 'out' || direction === 'outbound') { return 'outbound' }
+  if (msg === 'res' || direction === 'in' || direction === 'inbound') { return 'inbound' }
+  return undefined
+}
+
+router.post('/', async function (ctx) {
+  const buffer = await readRequestBody(ctx.req)
+  const platformId = String(ctx.query.game) as PlatformId
+  const wireDirection = resolveWireDirection(ctx.query as Record<string, string | string[] | undefined>)
+
+  await runSerial(async () => {
+    if (wireDirection === 'inbound') {
+      logger.info('<server-base> Server received inbound buffer: ' + JSON.stringify(buffer.toJSON().data))
+      await pipeline.handleInbound(buffer, platformId)
+    } else if (wireDirection === 'outbound') {
+      logger.info('<server-base> Server received outbound buffer')
+      await pipeline.handleOutbound(buffer, platformId)
+    }
+  })
+
+  ctx.status = 200
 })
 
 app
-  .use(cors({ exposeHeaders: ['X-Majsoul-Account-Id'] }))
-  .use(router.routes()).use(router.allowedMethods())
+  .use(cors())
+  .use(router.routes())
+  .use(router.allowedMethods())
 
 process.on('uncaughtException', function (err) {
   console.error(err)
@@ -66,17 +72,16 @@ process.on('uncaughtException', function (err) {
 })
 
 UI.clear()
-;(async () => {
-  try {
-    const analyserName = env.get<string>('runtimeConf.analyser')
-    UI.print(`Analyser module (${analyserName}) loading...`)
-    pipeline.setAnalyser(await loadAnalyser(analyserName))
-    app.listen(56556, () => {
-      UI.clear()
-      UI.print('All modules loaded. Service started at port: 56556')
-      logger.info('<server-base> Server started at port 56556')
-    })
-  } catch (err) {
-    console.error(err)
-  }
-})().catch(() => null)
+try {
+  const analyserName = env.get<string>('runtimeConf.analyser')
+  UI.print(`Analyser module (${analyserName}) loading...`)
+  pipeline.setAnalyser(await loadAnalyser(analyserName))
+  app.listen(56556, () => {
+    UI.clear()
+    UI.print('All modules loaded. Service started at port: 56556')
+    logger.info('<server-base> Server started at port 56556')
+  })
+} catch (err) {
+  console.error(err)
+  process.exit(1)
+}
