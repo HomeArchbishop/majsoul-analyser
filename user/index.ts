@@ -4,16 +4,34 @@ const serverURL = 'http://localhost:56556/'
 
 let cachedAccountId = ''
 
+function digAccountId (value: unknown, depth = 0): string {
+  if (value === null || value === undefined || depth > 5) { return '' }
+  if (typeof value === 'number' || typeof value === 'string') {
+    const s = String(value)
+    return /^\d{5,}$/.test(s) ? s : ''
+  }
+  if (typeof value !== 'object') { return '' }
+  const obj = value as Record<string, unknown>
+  for (const key of ['account_id', 'accountId', 'uid', 'user_id', 'userId']) {
+    if (key in obj) {
+      const found = digAccountId(obj[key], depth + 1)
+      if (found.length > 0) { return found }
+    }
+  }
+  if ('account' in obj) {
+    const found = digAccountId(obj.account, depth + 1)
+    if (found.length > 0) { return found }
+  }
+  return ''
+}
+
 function readAccountIdFromStorage (): string {
   for (const key of Object.keys(localStorage)) {
     const value = localStorage.getItem(key)
     if (value === null) { continue }
     try {
-      const parsed = JSON.parse(value) as { account_id?: number | string, account?: { account_id?: number | string } }
-      const accountId = parsed.account_id ?? parsed.account?.account_id
-      if (accountId !== undefined && String(accountId).length > 0) {
-        return String(accountId)
-      }
+      const found = digAccountId(JSON.parse(value))
+      if (found.length > 0) { return found }
     } catch {
       continue
     }
@@ -24,10 +42,17 @@ function readAccountIdFromStorage (): string {
 function resolveAccountId (): string {
   if (cachedAccountId.length > 0) { return cachedAccountId }
 
-  const legacyAccountId = window?.GameMgr?.Inst?.account_data?.account_id
-  if (legacyAccountId !== undefined && String(legacyAccountId).length > 0) {
-    cachedAccountId = String(legacyAccountId)
-    return cachedAccountId
+  const candidates: unknown[] = [
+    (window as any)?.GameMgr?.Inst?.account_data?.account_id,
+    (window as any)?.GameMgr?.Inst?.account_id,
+    (window as any)?.uiscript?.UI_Lobby?.Inst?.account_data?.account_id,
+  ]
+  for (const c of candidates) {
+    const found = digAccountId(c)
+    if (found.length > 0) {
+      cachedAccountId = found
+      return cachedAccountId
+    }
   }
 
   const storageAccountId = readAccountIdFromStorage()

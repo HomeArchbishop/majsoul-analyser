@@ -31,3 +31,21 @@ export abstract class BaseAnalyser {
 ```
 
 新增分析器：在 `server/analyser/` 下创建 `analyser-<name>/` 目录并导出 `default`，在 `.env` 中设置 `RUNTIME_CONF_ANALYSER=analyser-<name>`。
+
+### 本地 Mortal
+
+`analyser-local-mortal` 使用同目录权重 `model_v4_20240308_best_min.pth`（v4）与 `riichi`（CPython 3.10）。
+
+```bash
+# 安装依赖（Python 3.10）
+pyenv install 3.10.11   # 若尚未安装
+python -m pip install -r server/analyser/analyser-local-mortal/requirements.txt
+```
+
+`.env`：
+
+```
+RUNTIME_CONF_ANALYSER=analyser-local-mortal
+# 可选：指定 3.10 解释器
+# MORTAL_PYTHON=C:\Users\YOU\.pyenv\pyenv-win\versions\3.10.11\python.exe
+```

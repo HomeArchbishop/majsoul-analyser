@@ -10,6 +10,7 @@ import { parseResBufferMsg as TenhouParseResBufferMsg } from './tenhou/parseResB
 import type { BaseAnalyser } from './types/Analyser'
 import type { GameNameString } from './types/General'
 import type { Pai } from './types/Mjai'
+import { ActionPrototype } from './types/ParsedMajsoulJSON'
 import UI from './UI'
 
 function printIDerror (): void {
@@ -60,8 +61,10 @@ class MsgHandler {
 
     const parseOptions = {
       meID: (meID !== undefined && meID.length > 0) ? meID : this.meID,
-      meSeat: this.game?.meSeat,
+      meSeat: this.game?.meSeat ?? this.pendingMeSeat,
       lastDahai: this.lastDahai,
+      awaitingMeSeat: this.awaitingMeSeat,
+      pendingActionNewRound: this.pendingActionNewRound,
     }
 
     /* ----------------------- */
@@ -71,7 +74,12 @@ class MsgHandler {
     logger.info(`<res-handler> Begin to handle ResMsg(${gameName}${_rand}): ${JSON.stringify(bufferMsg.toJSON().data)}`)
     const [mjaiEventList, actionCandidateList] = this.gameMsgParser[gameName].parseRes(bufferMsg, this.reqQueue[gameName], parseOptions)
     if (parseOptions.meID !== undefined && parseOptions.meID.length > 0) { this.meID = parseOptions.meID }
-    logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) meID=${parseOptions.meID ?? ''} meSeat=${parseOptions.meSeat ?? ''} ${JSON.stringify(structuredClone(mjaiEventList))}`)
+    if (parseOptions.meSeat !== undefined && parseOptions.meSeat !== -1) {
+      this.pendingMeSeat = parseOptions.meSeat
+    }
+    this.awaitingMeSeat = parseOptions.awaitingMeSeat === true
+    this.pendingActionNewRound = parseOptions.pendingActionNewRound
+    logger.info(`<res-handler> Parsed ResMsg(${gameName}${_rand}) meID=${parseOptions.meID ?? ''} meSeat=${parseOptions.meSeat ?? ''} awaiting=${String(this.awaitingMeSeat)} ${JSON.stringify(structuredClone(mjaiEventList))}`)
     /* --------------------- */
     /*      Majsoul END      */
     /* ------------ -------- */
@@ -94,12 +102,25 @@ class MsgHandler {
       /* ======================== */
       if (mjaiEvent.type === 'start_game') { /* 整场游戏开始, 创建新游戏记录实例 */
         const meSeat = mjaiEvent.id
-        if (meSeat === -1) { return printIDerror() }
+        if (meSeat === -1) {
+          // 段位场可能稍后才能推断座位；此处不再直接失败
+          if (this.awaitingMeSeat) {
+            UI.print('等待从牌局消息推断座位...')
+            continue
+          }
+          return printIDerror()
+        }
         this.game = new Game({ meSeat })
+        this.pendingMeSeat = meSeat
+        this.awaitingMeSeat = false
+        this.pendingActionNewRound = undefined
         continue
       }
       if (mjaiEvent.type === 'end_game') { /* 整场游戏结束, 销毁游戏记录实例 */
         delete this.game
+        this.pendingMeSeat = undefined
+        this.awaitingMeSeat = false
+        this.pendingActionNewRound = undefined
         continue
       }
       if (this.game === undefined) { break } /* 如果没有创建Game实例, 说明ID等有问题, 不进行下面的分析 */
@@ -141,6 +162,13 @@ class MsgHandler {
   game?: Game
 
   meID?: string
+
+  /** ResAuthGame 暂未能确定时缓存的座位（段位场延迟推断） */
+  pendingMeSeat?: number
+
+  awaitingMeSeat = false
+
+  pendingActionNewRound?: ActionPrototype
 
   lastDahai?: { actor: number, pai: Pai }
 
