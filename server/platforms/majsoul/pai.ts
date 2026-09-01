@@ -1,5 +1,5 @@
-import type { Kaze, Pai } from '../../types/Mjai'
-import { toBakaze } from '../../utils/pai'
+import type { Kaze, Pai } from '@/types/Mjai'
+import { toBakaze } from '@/utils/pai'
 
 export type WirePai = string
 

@@ -1,4 +1,4 @@
-import { Round } from './Round'
+import { Round } from '@/board/Round'
 
 interface GameConstructorOptions {
   meSeat: number

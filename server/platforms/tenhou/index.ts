@@ -1,10 +1,10 @@
 import structuredClone from '@ungap/structured-clone'
 
-import logger from '../../logger'
-import type { ActionCandidateList, MjaiEventList } from '../../types/Mjai'
-import { ParsedTenhouJSON } from '../../types/ParsedTenhouJSON'
-import type { Platform, PlatformProcessResult, PlatformSession, WireParseResult } from '../types'
-import { numToMjai, toBakazeFromTenhouSeed } from './pai'
+import logger from '@/logger'
+import { numToMjai, toBakazeFromTenhouSeed } from '@/platforms/tenhou/pai'
+import type { Platform, PlatformProcessResult, PlatformSession, WireParseResult } from '@/platforms/types'
+import type { ActionCandidateList, MjaiEventList } from '@/types/Mjai'
+import { ParsedTenhouJSON } from '@/types/ParsedTenhouJSON'
 
 function decodeWire (binaryMsg: Buffer): ParsedTenhouJSON | null {
   const text = binaryMsg.toString()

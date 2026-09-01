@@ -1,10 +1,10 @@
-import type { ResAuthGame } from '../../types/ParsedMajsoulJSON'
+import type { ResAuthGame } from '@/types/ParsedMajsoulJSON'
 import {
   ActionDealTile,
   ActionNewRound,
   ActionPrototype,
   OptionalOperationList,
-} from '../../types/ParsedMajsoulJSON'
+} from '@/types/ParsedMajsoulJSON'
 
 /** 从 ResAuthGame 推断己方座位；-1 表示未知（如段位场）。 */
 export function resolveMeSeatFromAuth (data: ResAuthGame['data']): number {

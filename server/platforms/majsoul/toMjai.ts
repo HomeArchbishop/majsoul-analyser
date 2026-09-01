@@ -1,4 +1,5 @@
-import type { ActionCandidateList, MjaiEventList, Pai } from '../../types/Mjai'
+import { toBakaze, wirePaiListToMjai, wirePaiToMjai } from '@/platforms/majsoul/pai'
+import type { ActionCandidateList, MjaiEventList, Pai } from '@/types/Mjai'
 import type {
   ActionAnGangAddGang,
   ActionBaBei,
@@ -10,9 +11,8 @@ import type {
   ActionNoTile,
   ActionPrototype,
   OptionalOperationList,
-} from '../../types/ParsedMajsoulJSON'
-import { sortPai } from '../../utils/pai'
-import { toBakaze, wirePaiListToMjai, wirePaiToMjai } from './pai'
+} from '@/types/ParsedMajsoulJSON'
+import { sortPai } from '@/utils/pai'
 
 export interface ActionToMjaiCtx {
   lastDahai?: { actor: number, pai: Pai }

@@ -1,13 +1,13 @@
 import structuredClone from '@ungap/structured-clone'
 
-import logger from '../../logger'
-import type { ActionCandidateList, MjaiEventList, Pai } from '../../types/Mjai'
-import type { ActionPrototype, ParsedMajsoulJSON, ResAuthGame } from '../../types/ParsedMajsoulJSON'
-import type { Platform, PlatformProcessResult, PlatformSession } from '../types'
-import { decodeMajsoulWire } from './decode'
-import { extractResCorrelation } from './extractResCorrelation'
-import { inferMeSeatFromAction, resolveMeSeatFromAuth } from './inferMeSeat'
-import { actionToMjai } from './toMjai'
+import logger from '@/logger'
+import { decodeMajsoulWire } from '@/platforms/majsoul/decode'
+import { extractResCorrelation } from '@/platforms/majsoul/extractResCorrelation'
+import { inferMeSeatFromAction, resolveMeSeatFromAuth } from '@/platforms/majsoul/inferMeSeat'
+import { actionToMjai } from '@/platforms/majsoul/toMjai'
+import type { Platform, PlatformProcessResult, PlatformSession } from '@/platforms/types'
+import type { ActionCandidateList, MjaiEventList, Pai } from '@/types/Mjai'
+import type { ActionPrototype, ParsedMajsoulJSON, ResAuthGame } from '@/types/ParsedMajsoulJSON'
 
 interface MajsoulSession extends PlatformSession {
   /** 己方座位；未确定前为空。与 board `Game.meSeat` 同名同义。 */

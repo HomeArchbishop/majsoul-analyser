@@ -1,4 +1,4 @@
-import { getLiqiRoot, getWrapperType } from './liqiRoot'
+import { getLiqiRoot, getWrapperType } from '@/platforms/majsoul/liqiRoot'
 
 const TRACKED_REQUEST = /(authGame)|(syncGame)|(oauth2Login)|(login)|(emailLogin)/i
 

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { BaseAnalyser } from '../types/Analyser'
+import { BaseAnalyser } from '@/types/Analyser'
 
 const analyserCollectionDir = __dirname
 const reference = fs.readdirSync(analyserCollectionDir)

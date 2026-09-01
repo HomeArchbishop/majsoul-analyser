@@ -1,4 +1,4 @@
-import type { Pai } from '../types/Mjai'
+import type { Pai } from '@/types/Mjai'
 
 /** 5 与赤 5 视为同牌（碰/杠/删手牌时）。 */
 export function paiMatches (a: Pai, b: Pai): boolean {

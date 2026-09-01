@@ -1,5 +1,5 @@
-import type { MjaiEventList } from '../types/Mjai'
-import { Kaze, Pai } from '../types/Mjai'
+import type { MjaiEventList } from '@/types/Mjai'
+import { Kaze, Pai } from '@/types/Mjai'
 
 export interface RoundConstructorOptions {
   bakaze: Kaze

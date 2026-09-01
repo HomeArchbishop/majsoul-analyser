@@ -1,5 +1,5 @@
-import type { Pai } from '../../types/Mjai'
-import { toBakaze } from '../../utils/pai'
+import type { Pai } from '@/types/Mjai'
+import { toBakaze } from '@/utils/pai'
 
 export function numToMjai (num: number): Pai {
   const suit = ['m', 'p', 's', 'z'][~~(num / 36)]

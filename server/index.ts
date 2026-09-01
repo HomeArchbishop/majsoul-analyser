@@ -4,12 +4,12 @@ import cors from '@koa/cors'
 import Koa from 'koa'
 import Router from 'koa-router'
 
-import { loadAnalyser } from './analyser/registry'
-import logger from './logger'
-import { Pipeline } from './pipeline/Pipeline'
-import type { PlatformId } from './platforms/registry'
-import UI from './UI'
-import { createSerialExecutor } from './utils/createSerialExecutor'
+import { loadAnalyser } from '@/analyser/registry'
+import logger from '@/logger'
+import { Pipeline } from '@/pipeline/Pipeline'
+import type { PlatformId } from '@/platforms/registry'
+import UI from '@/UI'
+import { createSerialExecutor } from '@/utils/createSerialExecutor'
 
 const app = new Koa()
 const router = new Router()

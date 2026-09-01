@@ -1,14 +1,14 @@
 import structuredClone from '@ungap/structured-clone'
 
-import { applyEvent } from '../board/applyEvent'
-import { Game } from '../board/Game'
-import logger from '../logger'
-import { materializeMjaiActions } from '../mjai/materializeMjaiActions'
-import { getPlatform, type Platform, type PlatformId, type PlatformSession } from '../platforms/registry'
-import type { BaseAnalyser } from '../types/Analyser'
-import type { EventStartGame, MjaiEventList } from '../types/Mjai'
-import UI from '../UI'
-import { nextTraceId } from '../utils/misc'
+import { applyEvent } from '@/board/applyEvent'
+import { Game } from '@/board/Game'
+import logger from '@/logger'
+import { materializeMjaiActions } from '@/mjai/materializeMjaiActions'
+import { getPlatform, type Platform, type PlatformId, type PlatformSession } from '@/platforms/registry'
+import type { BaseAnalyser } from '@/types/Analyser'
+import type { EventStartGame, MjaiEventList } from '@/types/Mjai'
+import UI from '@/UI'
+import { nextTraceId } from '@/utils/misc'
 
 function printSeatError (): void {
   UI.print('未能确定己方座位, 请重启游戏')

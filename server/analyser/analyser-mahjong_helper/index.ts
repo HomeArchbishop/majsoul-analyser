@@ -3,12 +3,12 @@ import os from 'node:os'
 
 import path from 'path'
 
-import { type Round } from '../../board/Round'
-import logger from '../../logger'
-import { BaseAnalyser } from '../../types/Analyser'
-import type { MjaiAction, MjaiActionList } from '../../types/Mjai'
-import { Pai } from '../../types/Mjai'
-import { formatPai, helperLabelToPai, nextPai } from '../../utils/pai'
+import { type Round } from '@/board/Round'
+import logger from '@/logger'
+import { BaseAnalyser } from '@/types/Analyser'
+import type { MjaiAction, MjaiActionList } from '@/types/Mjai'
+import { Pai } from '@/types/Mjai'
+import { formatPai, helperLabelToPai, nextPai } from '@/utils/pai'
 
 let binPath: string
 

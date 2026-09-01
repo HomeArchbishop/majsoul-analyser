@@ -1,5 +1,5 @@
-import { ParsedMajsoulJSON } from '../../types/ParsedMajsoulJSON'
-import { getLiqiRoot, getWrapperType } from './liqiRoot'
+import { getLiqiRoot, getWrapperType } from '@/platforms/majsoul/liqiRoot'
+import { ParsedMajsoulJSON } from '@/types/ParsedMajsoulJSON'
 
 const WIRE_KIND = { notify: 1, req: 2, res: 3 } as const
 

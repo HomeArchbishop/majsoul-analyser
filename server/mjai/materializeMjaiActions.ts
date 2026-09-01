@@ -1,13 +1,13 @@
 import findLastIndex from 'lodash.findlastindex'
 
-import { Round } from '../board/Round'
+import { Round } from '@/board/Round'
 import type {
   ActionCandidateList,
   EventDahai,
   MjaiAction,
   MjaiActionList,
   Pai,
-} from '../types/Mjai'
+} from '@/types/Mjai'
 
 type Candidate = ActionCandidateList[number]
 

@@ -1,6 +1,6 @@
 import { AnyNestedObject, Root, Type } from 'protobufjs'
 
-import liqi from './liqi'
+import liqi from '@/platforms/majsoul/liqi'
 
 let root: Root | undefined
 

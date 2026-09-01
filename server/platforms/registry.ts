@@ -1,8 +1,8 @@
-export type { Platform, PlatformId, PlatformSession } from './types'
+export type { Platform, PlatformId, PlatformSession } from '@/platforms/types'
 
-import { majsoulPlatform } from './majsoul'
-import { tenhouPlatform } from './tenhou'
-import type { Platform, PlatformId } from './types'
+import { majsoulPlatform } from '@/platforms/majsoul'
+import { tenhouPlatform } from '@/platforms/tenhou'
+import type { Platform, PlatformId } from '@/platforms/types'
 
 const platforms: Record<PlatformId, Platform> = {
   majsoul: majsoulPlatform,

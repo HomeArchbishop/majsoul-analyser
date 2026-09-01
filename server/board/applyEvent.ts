@@ -1,7 +1,7 @@
-import type { MjaiEvent, Pai } from '../types/Mjai'
-import { paiMatches, removeMatchingFromTehai, sortPai } from '../utils/pai'
-import { Game } from './Game'
-import { Round } from './Round'
+import { Game } from '@/board/Game'
+import { Round } from '@/board/Round'
+import type { MjaiEvent, Pai } from '@/types/Mjai'
+import { paiMatches, removeMatchingFromTehai, sortPai } from '@/utils/pai'
 
 const REACH_COST = 1000
 

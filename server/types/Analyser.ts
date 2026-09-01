@@ -1,5 +1,5 @@
-import { Round } from '../board/Round'
-import type { MjaiAction, MjaiActionList } from './Mjai'
+import { Round } from '@/board/Round'
+import type { MjaiAction, MjaiActionList } from '@/types/Mjai'
 
 export abstract class BaseAnalyser {
   init?: (...args: any) => Promise<boolean>

@@ -1,4 +1,4 @@
-import type { ActionCandidateList, MjaiEventList } from '../types/Mjai'
+import type { ActionCandidateList, MjaiEventList } from '@/types/Mjai'
 
 export type PlatformId = 'majsoul' | 'tenhou'
 
