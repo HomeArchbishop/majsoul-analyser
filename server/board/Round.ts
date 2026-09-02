@@ -1,6 +1,9 @@
 import type { MjaiEventList } from '@/types/Mjai'
 import { Kaze, Pai } from '@/types/Mjai'
 
+import type { Meld } from './Meld'
+import { emptyReachLay, type ReachLayState } from './reachLay'
+
 export interface RoundConstructorOptions {
   bakaze: Kaze
   kyoku: number
@@ -34,7 +37,9 @@ export class Round {
         furo: [],
         ankan: [],
         reached: false,
+        tsumoPai: null,
         nuki: [],
+        ...emptyReachLay(),
       })
     }
   }
@@ -55,11 +60,13 @@ export class Round {
   players: Array<{
     tehai: Pai[]
     sutehai: Pai[]
-    furo: Pai[][]
-    ankan: Pai[][]
+    furo: Meld[]
+    ankan: Meld[]
     reached: boolean
+    /** 刚摸尚未打出的牌；无则 null */
+    tsumoPai: Pai | null
     nuki: Pai[]
-  }> = []
+  } & ReachLayState> = []
 
   events: MjaiEventList = []
 }

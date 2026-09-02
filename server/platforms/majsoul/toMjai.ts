@@ -7,6 +7,7 @@ import type {
   ActionDealTile,
   ActionDiscardTile,
   ActionHule,
+  ActionLiuJu,
   ActionNewRound,
   ActionNoTile,
   ActionPrototype,
@@ -16,12 +17,15 @@ import { sortPai } from '@/utils/pai'
 
 export interface ActionToMjaiCtx {
   lastDahai?: { actor: number, pai: Pai }
+  /** 已从雀魂 doras[] 同步到 MJAI 的指示牌数量 */
+  doraMarkerCount: number
 }
 
 export interface ActionToMjaiResult {
   events: MjaiEventList
   candidates: ActionCandidateList
   lastDahai?: { actor: number, pai: Pai }
+  doraMarkerCount: number
 }
 
 type ActionData = ActionPrototype['data']
@@ -39,17 +43,27 @@ function toConsumedList (combination: string[]): Pai[][] {
   return combination.map(entry => wirePaiListToMjai(entry.split('|')))
 }
 
-function appendDora (events: MjaiEventList, doras: string[] | undefined): void {
+/** 雀魂 doras 为累计指示牌列表；只追加尚未同步的项（避免 DealTile 重复、漏掉 DiscardTile 新翻） */
+function syncDoraFromWire (
+  events: MjaiEventList,
+  doras: string[] | undefined,
+  ctx: ActionToMjaiCtx,
+): void {
   if (doras === undefined || doras.length === 0) { return }
-  events.push({ type: 'dora', dora_marker: wirePaiToMjai(doras.at(-1)!) })
+  for (let i = ctx.doraMarkerCount; i < doras.length; i++) {
+    events.push({ type: 'dora', dora_marker: wirePaiToMjai(doras[i]) })
+  }
+  ctx.doraMarkerCount = doras.length
 }
 
 function convertNewRound (
   actionData: ActionNewRound,
   meSeat: number,
+  ctx: ActionToMjaiCtx,
 ): { events: MjaiEventList, lastDahai: undefined } {
   const sortedTiles = sortPai(wirePaiListToMjai(actionData.tiles))
   const oya = actionData.ju % actionData.scores.length
+  ctx.doraMarkerCount = actionData.doras.length
 
   return {
     events: [
@@ -77,63 +91,76 @@ function convertNewRound (
   }
 }
 
-function convertAnGangAddGang (actionData: ActionAnGangAddGang): MjaiEventList {
+function convertAnGangAddGang (actionData: ActionAnGangAddGang, ctx: ActionToMjaiCtx): MjaiEventList {
   const events: MjaiEventList = []
   const tile = wirePaiToMjai(actionData.tiles)
 
-  if (actionData.type === 3) {
-    events.push({
-      type: 'ankan',
-      actor: actionData.seat,
-      consumed: [tile, tile, tile, tile],
-    })
-  } else if (actionData.type === 4) {
+  // ActionAnGangAddGang.type: 2=加杠, 3=暗杠（与 OptionalOperation 的 type 编号不同）
+  if (actionData.type === 2) {
     events.push({
       type: 'kakan',
       actor: actionData.seat,
       pai: tile,
       consumed: [tile, tile, tile],
     })
+  } else if (actionData.type === 3) {
+    events.push({
+      type: 'ankan',
+      actor: actionData.seat,
+      consumed: [tile, tile, tile, tile],
+    })
   }
 
-  appendDora(events, actionData.doras)
+  syncDoraFromWire(events, actionData.doras, ctx)
   return events
 }
 
-function convertChiPengGang (actionData: ActionChiPengGang): MjaiEventList {
+function convertChiPengGang (actionData: ActionChiPengGang, ctx: ActionToMjaiCtx): MjaiEventList {
   const events: MjaiEventList = []
   const tiles = wirePaiListToMjai(actionData.tiles)
 
   if (actionData.type === 2) {
+    const target = actionData.froms.find(seat => seat !== actionData.seat) as number
+    const calledPai = ctx.lastDahai?.actor === target
+      ? ctx.lastDahai.pai
+      : tiles[0]
     events.push({
       type: 'daiminkan',
       actor: actionData.seat,
-      target: actionData.froms.find(seat => seat !== actionData.seat) as number,
-      pai: tiles[0],
+      target,
+      pai: calledPai,
       consumed: tiles.slice(0, 3),
     })
-    appendDora(events, actionData.doras)
+    syncDoraFromWire(events, actionData.doras, ctx)
     return events
   }
 
   if (actionData.type === 0) {
-    const targetIndex = actionData.froms.findIndex(seat => seat !== actionData.seat)
+    const target = actionData.froms.find(seat => seat !== actionData.seat) as number
+    const targetIndex = actionData.froms.findIndex(seat => seat === target)
+    const calledPai = ctx.lastDahai?.actor === target
+      ? ctx.lastDahai.pai
+      : tiles[targetIndex]
     events.push({
       type: 'chi',
       actor: actionData.seat,
-      target: actionData.froms[targetIndex],
-      pai: tiles[targetIndex],
+      target,
+      pai: calledPai,
       consumed: tiles.filter((_, index) => actionData.froms[index] === actionData.seat),
     })
     return events
   }
 
   if (actionData.type === 1) {
+    const target = actionData.froms.find(seat => seat !== actionData.seat) as number
+    const calledPai = ctx.lastDahai?.actor === target
+      ? ctx.lastDahai.pai
+      : tiles[0]
     events.push({
       type: 'pon',
       actor: actionData.seat,
-      target: actionData.froms.find(seat => seat !== actionData.seat) as number,
-      pai: tiles[0],
+      target,
+      pai: calledPai,
       consumed: tiles.slice(0, 2),
     })
   }
@@ -141,17 +168,17 @@ function convertChiPengGang (actionData: ActionChiPengGang): MjaiEventList {
   return events
 }
 
-function convertDealTile (actionData: ActionDealTile): MjaiEventList {
+function convertDealTile (actionData: ActionDealTile, ctx: ActionToMjaiCtx): MjaiEventList {
   const events: MjaiEventList = [{
     type: 'tsumo',
     actor: actionData.seat,
     pai: actionData.tile !== '' ? wirePaiToMjai(actionData.tile) : '?',
   }]
-  appendDora(events, actionData.doras)
+  syncDoraFromWire(events, actionData.doras, ctx)
   return events
 }
 
-function convertDiscardTile (actionData: ActionDiscardTile): {
+function convertDiscardTile (actionData: ActionDiscardTile, ctx: ActionToMjaiCtx): {
   events: MjaiEventList
   lastDahai: { actor: number, pai: Pai }
 } {
@@ -159,6 +186,8 @@ function convertDiscardTile (actionData: ActionDiscardTile): {
   if (actionData.is_liqi || actionData.is_wliqi) {
     events.push({ type: 'reach', actor: actionData.seat })
   }
+
+  syncDoraFromWire(events, actionData.doras, ctx)
 
   const pai = wirePaiToMjai(actionData.tile)
   events.push({
@@ -185,16 +214,40 @@ function convertHule (
   return events
 }
 
+function scoresFromNoTile (actionData: ActionNoTile): number[] | undefined {
+  if (!actionData.scores?.length) { return undefined }
+
+  const first = actionData.scores[0]
+  if (first.old_scores?.length && first.delta_scores?.length) {
+    const n = Math.max(first.old_scores.length, first.delta_scores.length)
+    return Array.from({ length: n }, (_, i) =>
+      (first.old_scores[i] ?? 0) + (first.delta_scores[i] ?? 0),
+    )
+  }
+
+  const bySeat: number[] = []
+  for (const entry of actionData.scores) {
+    if (entry.old_scores?.length && entry.delta_scores?.length) {
+      bySeat[entry.seat] =
+        (entry.old_scores[entry.seat] ?? 0) + (entry.delta_scores[entry.seat] ?? 0)
+    } else if (entry.score !== undefined) {
+      bySeat[entry.seat] = entry.score
+    }
+  }
+  return bySeat.length > 0 ? bySeat.map(score => score ?? 0) : undefined
+}
+
 function convertNoTile (actionData: ActionNoTile): MjaiEventList {
   const events: MjaiEventList = [{ type: 'ryukyoku', reason: 'haitei' }]
-  if (actionData.scores?.length) {
-    events.push({
-      type: 'end_kyoku',
-      scores: actionData.scores.map(entry => entry.score),
-    })
-  } else {
-    events.push({ type: 'end_kyoku' })
-  }
+  const scores = scoresFromNoTile(actionData)
+  events.push(scores !== undefined ? { type: 'end_kyoku', scores } : { type: 'end_kyoku' })
+  return events
+}
+
+function convertLiuJu (actionData: ActionLiuJu): MjaiEventList {
+  const events: MjaiEventList = [{ type: 'ryukyoku' }]
+  const scores = actionData.gameend?.scores
+  events.push(scores?.length ? { type: 'end_kyoku', scores } : { type: 'end_kyoku' })
   return events
 }
 
@@ -203,36 +256,40 @@ type OptionalOperation = OptionalOperationList['operation_list'][number]
 function convertActionEvents (
   action: ActionData,
   meSeat: number,
-  lastDahai: ActionToMjaiCtx['lastDahai'],
+  ctx: ActionToMjaiCtx,
 ): { events: MjaiEventList, lastDahai: ActionToMjaiCtx['lastDahai'] } {
   switch (action.name) {
     case 'ActionNewRound': {
-      const result = convertNewRound(action.data as ActionNewRound, meSeat)
+      const result = convertNewRound(action.data as ActionNewRound, meSeat, ctx)
       return { events: result.events, lastDahai: result.lastDahai }
     }
     case 'ActionAnGangAddGang':
-      return { events: convertAnGangAddGang(action.data as ActionAnGangAddGang), lastDahai }
+      return { events: convertAnGangAddGang(action.data as ActionAnGangAddGang, ctx), lastDahai: ctx.lastDahai }
     case 'ActionChiPengGang':
-      return { events: convertChiPengGang(action.data as ActionChiPengGang), lastDahai }
-    case 'ActionBaBei':
-      return { events: [{ type: 'nuki', actor: (action.data as ActionBaBei).seat }], lastDahai }
+      return { events: convertChiPengGang(action.data as ActionChiPengGang, ctx), lastDahai: ctx.lastDahai }
+    case 'ActionBaBei': {
+      const data = action.data as ActionBaBei
+      const events: MjaiEventList = [{ type: 'nuki', actor: data.seat }]
+      syncDoraFromWire(events, data.doras, ctx)
+      return { events, lastDahai: ctx.lastDahai }
+    }
     case 'ActionDealTile':
-      return { events: convertDealTile(action.data as ActionDealTile), lastDahai }
+      return { events: convertDealTile(action.data as ActionDealTile, ctx), lastDahai: ctx.lastDahai }
     case 'ActionDiscardTile': {
-      const result = convertDiscardTile(action.data as ActionDiscardTile)
+      const result = convertDiscardTile(action.data as ActionDiscardTile, ctx)
       return { events: result.events, lastDahai: result.lastDahai }
     }
     case 'ActionHule':
-      return { events: convertHule(action.data as ActionHule, lastDahai), lastDahai }
+      return { events: convertHule(action.data as ActionHule, ctx.lastDahai), lastDahai: ctx.lastDahai }
     case 'ActionLiuJu':
       return {
-        events: [{ type: 'ryukyoku' }, { type: 'end_kyoku' }],
-        lastDahai,
+        events: convertLiuJu(action.data as ActionLiuJu),
+        lastDahai: ctx.lastDahai,
       }
     case 'ActionNoTile':
-      return { events: convertNoTile(action.data as ActionNoTile), lastDahai }
+      return { events: convertNoTile(action.data as ActionNoTile), lastDahai: ctx.lastDahai }
     default:
-      return { events: [], lastDahai }
+      return { events: [], lastDahai: ctx.lastDahai }
   }
 }
 
@@ -240,8 +297,8 @@ function hasMyOperation (action: ActionData, meSeat: number): action is ActionDa
   data: { operation: OptionalOperationList }
 } {
   if (!ACTIONS_WITH_OPERATION.has(action.name)) { return false }
-  const operation = (action.data as { operation: OptionalOperationList | null }).operation
-  return operation !== null &&
+  const operation = (action.data as { operation?: OptionalOperationList | null }).operation
+  return operation !== null && operation !== undefined &&
     operation.seat === meSeat &&
     operation.operation_list.length > 0
 }
@@ -288,7 +345,7 @@ export function actionToMjai (
   meSeat: number,
   ctx: ActionToMjaiCtx,
 ): ActionToMjaiResult {
-  const { events, lastDahai } = convertActionEvents(wire.data, meSeat, ctx.lastDahai)
+  const { events, lastDahai } = convertActionEvents(wire.data, meSeat, ctx)
   const candidates = convertOperationCandidates(wire.data, meSeat)
-  return { events, candidates, lastDahai }
+  return { events, candidates, lastDahai, doraMarkerCount: ctx.doraMarkerCount }
 }

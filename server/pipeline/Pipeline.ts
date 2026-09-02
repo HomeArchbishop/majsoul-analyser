@@ -57,6 +57,7 @@ export class Pipeline {
     if (mjaiEventList.length === 0) { return }
 
     this.applyEvents(mjaiEventList, platform)
+    UI.publishBoard(this.game, this.platformId)
 
     if (this.game?.rounds[this.game.roundPointer] === undefined) { return }
     if (actionCandidateList.length === 0) { return }
@@ -67,6 +68,7 @@ export class Pipeline {
     const mjaiActionList = materializeMjaiActions(actionCandidateList, round)
     UI.print('analysing actions', mjaiActionList)
     const { choice: actionChoice, info } = await this.analyser.analyseActions(mjaiActionList, round)
+    UI.publishAnalysis(mjaiActionList, actionChoice, info ?? '')
     UI.print('choice: ', JSON.stringify(structuredClone(actionChoice)), ' | ', info)
     logger.info('<inbound> Analyser end')
     logger.info(`<inbound> Done (${platformId}#${traceId})`)
@@ -104,10 +106,12 @@ export class Pipeline {
       return printSeatError()
     }
     this.game = new Game({ meSeat: event.id })
+    UI.publishBoard(this.game, this.platformId)
   }
 
   private endGame (platform: Platform): void {
     delete this.game
     this.session = platform.createSession()
+    UI.publishBoard(undefined, this.platformId)
   }
 }

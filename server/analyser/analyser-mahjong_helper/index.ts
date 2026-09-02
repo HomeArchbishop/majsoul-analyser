@@ -31,7 +31,7 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
     const furo = round.players[round.meSeat].furo
     const ankan = round.players[round.meSeat].ankan
     const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
-    const args = formatPai(meTehai) + '#' + furo.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase()
+    const args = formatPai(meTehai) + '#' + furo.map(m => formatPai(m.tiles)).join(' ') + ' ' + ankan.map(m => formatPai(m.tiles)).join(' ').toUpperCase()
     const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const choiceName = out.split('\n').find(l => l.match(/无役/) === null && l.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/) !== null)?.match(/(?<=(切|ド)\s*?)\S*?(?=\s*?=>)/)
     if (choiceName !== null && choiceName !== undefined) {
@@ -52,7 +52,7 @@ const operationJudge: Record<string, (round: Round, targetPai?: Pai) => { choice
     const furo = round.players[round.meSeat].furo
     const ankan = round.players[round.meSeat].ankan
     const doraArgs = `-d=${formatPai(round.doraMarkers.map(nextPai)).replace(/\s/g, '')}`
-    const args = formatPai(meTehai) + '#' + furo.map(formatPai).join(' ') + ' ' + ankan.map(formatPai).join(' ').toUpperCase() + ' + ' + (targetPai ?? '')
+    const args = formatPai(meTehai) + '#' + furo.map(m => formatPai(m.tiles)).join(' ') + ' ' + ankan.map(m => formatPai(m.tiles)).join(' ').toUpperCase() + ' + ' + (targetPai ?? '')
     const out = callMahjongHelperShell(`${binPath} ${doraArgs} ${args}`)
     const currentLine = {
       line: out.split('\n').find((l, i, a) => l.match(/(无役)|(振听)/) === null && i > 0 && a[i - 1].match(/当前/) !== null),

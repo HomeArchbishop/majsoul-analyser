@@ -9,6 +9,7 @@ import logger from '@/logger'
 import { Pipeline } from '@/pipeline/Pipeline'
 import type { PlatformId } from '@/platforms/registry'
 import UI from '@/UI'
+import { attachWebUi } from '@/UI/webServer'
 import { createSerialExecutor } from '@/utils/createSerialExecutor'
 
 const app = new Koa()
@@ -62,6 +63,8 @@ app
   .use(router.routes())
   .use(router.allowedMethods())
 
+attachWebUi(app)
+
 process.on('uncaughtException', function (err) {
   console.error(err)
   logger.error(`<server-base> Server service shutdown: ${err.message}`)
@@ -79,6 +82,7 @@ try {
   app.listen(56556, () => {
     UI.clear()
     UI.print('All modules loaded. Service started at port: 56556')
+    UI.print('Web UI: http://localhost:56556/ (build with `bun run build:web` first)')
     logger.info('<server-base> Server started at port 56556')
   })
 } catch (err) {

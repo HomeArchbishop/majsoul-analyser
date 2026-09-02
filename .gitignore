@@ -2,6 +2,7 @@ node_modules
 logs
 dist
 docs/.vitepress/dist
+web/dist
 
 .env
 

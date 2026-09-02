@@ -14,6 +14,7 @@ interface MajsoulSession extends PlatformSession {
   meSeat?: number
   awaitingMeSeat: boolean
   lastDahai?: { actor: number, pai: Pai }
+  doraMarkerCount: number
   /** Outbound request index → expected inbound res type name. */
   resByIndex: Record<number, { resName: string }>
   pendingActionNewRound?: ActionPrototype
@@ -23,6 +24,7 @@ function createSession (): MajsoulSession {
   return {
     awaitingMeSeat: false,
     resByIndex: {},
+    doraMarkerCount: 0,
   }
 }
 
@@ -44,11 +46,15 @@ function applyActionToState (
   events: MjaiEventList,
   candidates: ActionCandidateList,
 ): void {
-  const result = actionToMjai(wire, state.meSeat!, { lastDahai: state.lastDahai })
+  const result = actionToMjai(wire, state.meSeat!, {
+    lastDahai: state.lastDahai,
+    doraMarkerCount: state.doraMarkerCount,
+  })
   events.push(...result.events)
   candidates.length = 0
   candidates.push(...result.candidates)
   state.lastDahai = result.lastDahai
+  state.doraMarkerCount = result.doraMarkerCount
 }
 
 function tryInferMeSeat (

@@ -6,22 +6,32 @@
   "scripts": {
     "install:dependence": "sh scripts/install.sh",
     "build:user": "sh scripts/build-user.sh",
+    "build:web": "vite build --config web/vite.config.ts",
+    "convert:tiles": "node scripts/convert-tiles.mjs",
     "start": "bun run server/index.ts",
     "dev:wip": "bun run server/index.ts",
+    "dev:web": "vite --config web/vite.config.ts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "@koa/cors": "^4.0.0",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/koa-router": "^7.4.4",
+    "@types/koa-static": "^4.0.4",
     "@types/koa__cors": "^4.0.0",
     "@types/lodash.findlastindex": "^4.6.9",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@types/ungap__structured-clone": "^0.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
     "eslint": "9",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "knip": "^6.34.0",
     "neostandard": "^0.13.0",
+    "pdf-img-convert": "^2.0.0",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.1.6",
     "vite": "^6.0.0",
     "vitepress": "^1.6.0",
@@ -31,8 +41,11 @@
     "@ungap/structured-clone": "^1.2.0",
     "koa": "^2.14.2",
     "koa-router": "^12.0.0",
+    "koa-static": "^5.0.0",
     "lodash.findlastindex": "^4.6.0",
     "protobufjs": "^7.2.4",
-    "python-shell": "^5.0.0"
+    "python-shell": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

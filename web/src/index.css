@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-table: #1a2332;
+  --color-hub: #0d1117;
+  --color-muted: #8b949e;
+}

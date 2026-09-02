@@ -1,5 +1,18 @@
 import type { Pai } from '@/types/Mjai'
 
+/** 从 tehai 按请求顺序解析实际牌（赤 5 优先精确匹配，否则等价匹配）。 */
+export function resolveFromTehai (tehai: Pai[], requested: Pai[]): Pai[] {
+  const pool = [...tehai]
+  return requested.map((req) => {
+    let i = pool.findIndex(t => t === req)
+    if (i < 0) { i = pool.findIndex(t => paiMatches(t, req)) }
+    if (i < 0) { return req }
+    const actual = pool[i]
+    pool.splice(i, 1)
+    return actual
+  })
+}
+
 /** 5 与赤 5 视为同牌（碰/杠/删手牌时）。 */
 export function paiMatches (a: Pai, b: Pai): boolean {
   if (a === b) { return true }

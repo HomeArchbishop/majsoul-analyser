@@ -83,6 +83,7 @@ export interface ActionNewRound {
 
 export interface ActionAnGangAddGang {
   seat: number
+  /** 2=加杠, 3=暗杠（与 operation_list 的 type 编号不同） */
   type: number
   tiles: MajsoulWirePai
   doras: MajsoulWirePai[]
@@ -150,7 +151,7 @@ export interface ActionHule {
   doras: MajsoulWirePai[]
 }
 
-interface ActionLiuJu {
+export interface ActionLiuJu {
   type: number
   gameend: { scores: number[] }
   seat: number

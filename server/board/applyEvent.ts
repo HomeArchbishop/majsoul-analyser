@@ -1,7 +1,21 @@
 import { Game } from '@/board/Game'
+import {
+  applyKakanToMeld,
+  findPonMeldIndex,
+  meldFromAnkan,
+  meldFromChi,
+  meldFromDaiminkan,
+  meldFromPon,
+} from '@/board/Meld'
+import {
+  clearReachRiverIfTaken,
+  declareReachLay,
+  shiftReachHandLayByCount,
+  shiftReachHandLayExact,
+} from '@/board/reachLay'
 import { Round } from '@/board/Round'
 import type { MjaiEvent, Pai } from '@/types/Mjai'
-import { paiMatches, removeMatchingFromTehai, sortPai } from '@/utils/pai'
+import { removeMatchingFromTehai, resolveFromTehai } from '@/utils/pai'
 
 const REACH_COST = 1000
 
@@ -55,12 +69,34 @@ function removeConsumedFromTehai (
   }
 }
 
+function noteHandRemove (
+  round: Round,
+  actor: number,
+  tehaiBefore: Pai[],
+  consumed: Pai[],
+): void {
+  const lay = round.players[actor]
+  if (actor === round.meSeat) {
+    shiftReachHandLayExact(lay, tehaiBefore, consumed)
+  } else {
+    shiftReachHandLayByCount(lay, consumed.length)
+  }
+}
+
+function clearTsumo (round: Round, actor: number): void {
+  round.players[actor].tsumoPai = null
+}
+
 function applyAnkan (
   round: Round,
   event: Extract<MjaiEvent, { type: 'ankan' }>,
 ): void {
   const tile = event.consumed[0]
-  round.players[event.actor].ankan.push([tile, tile, tile, tile])
+  const consumed = [tile, tile, tile, tile]
+  const tehaiBefore = [...round.players[event.actor].tehai]
+  noteHandRemove(round, event.actor, tehaiBefore, consumed)
+  clearTsumo(round, event.actor)
+  round.players[event.actor].ankan.push(meldFromAnkan(tile))
   removeFromTehai(round, event.actor, tile, 4)
 }
 
@@ -69,11 +105,12 @@ function applyKakan (
   event: Extract<MjaiEvent, { type: 'kakan' }>,
 ): void {
   const player = round.players[event.actor]
-  const ponIndex = player.furo.findIndex(group => {
-    return group.length === 3 && group.every(tile => paiMatches(tile, event.pai))
-  })
+  const tehaiBefore = [...player.tehai]
+  noteHandRemove(round, event.actor, tehaiBefore, [event.pai])
+  clearTsumo(round, event.actor)
+  const ponIndex = findPonMeldIndex(player.furo, event.pai)
   if (ponIndex >= 0) {
-    player.furo[ponIndex] = sortPai([...player.furo[ponIndex], event.pai])
+    applyKakanToMeld(player.furo[ponIndex], event.pai)
   }
   removeFromTehai(round, event.actor, event.pai, 1)
 }
@@ -82,9 +119,28 @@ function applyChiPonDaiminkan (
   round: Round,
   event: Extract<MjaiEvent, { type: 'chi' | 'pon' | 'daiminkan' }>,
 ): void {
-  const { actor, target, consumed, pai } = event
-  round.players[actor].furo.push(sortPai([...consumed, pai]))
-  round.players[target].sutehai.pop()
+  const { actor, target, pai } = event
+  const playerCnt = round.playerCnt
+  const consumed = actor === round.meSeat
+    ? resolveFromTehai(round.players[actor].tehai, event.consumed)
+    : event.consumed
+  const tehaiBefore = [...round.players[actor].tehai]
+  noteHandRemove(round, actor, tehaiBefore, consumed)
+  clearTsumo(round, actor)
+
+  let meld
+  if (event.type === 'chi') {
+    meld = meldFromChi(consumed, pai)
+  } else if (event.type === 'pon') {
+    meld = meldFromPon(consumed, pai, actor, target, playerCnt)
+  } else {
+    meld = meldFromDaiminkan(consumed, pai, actor, target, playerCnt)
+  }
+  round.players[actor].furo.push(meld)
+
+  const targetPlayer = round.players[target]
+  clearReachRiverIfTaken(targetPlayer, targetPlayer.sutehai.length)
+  targetPlayer.sutehai.pop()
   removeConsumedFromTehai(round, actor, consumed)
 }
 
@@ -92,6 +148,9 @@ function applyNuki (
   round: Round,
   event: Extract<MjaiEvent, { type: 'nuki' }>,
 ): void {
+  const tehaiBefore = [...round.players[event.actor].tehai]
+  noteHandRemove(round, event.actor, tehaiBefore, ['N'])
+  clearTsumo(round, event.actor)
   round.players[event.actor].nuki.push('N')
   removeFromTehai(round, event.actor, 'N', 1)
 }
@@ -109,7 +168,9 @@ function applyTsumo (
   round: Round,
   event: Extract<MjaiEvent, { type: 'tsumo' }>,
 ): void {
-  round.players[event.actor].tehai.push(event.pai)
+  const player = round.players[event.actor]
+  player.tehai.push(event.pai)
+  player.tsumoPai = event.pai
   if (isDrawFromTilesLeft(round.events)) {
     round.tilesLeft--
   }
@@ -119,7 +180,12 @@ function applyDahai (
   round: Round,
   event: Extract<MjaiEvent, { type: 'dahai' }>,
 ): void {
-  round.players[event.actor].sutehai.push(event.pai)
+  const player = round.players[event.actor]
+  if (player.reached) {
+    declareReachLay(player, player.tehai, event.pai, player.sutehai.length)
+  }
+  player.sutehai.push(event.pai)
+  clearTsumo(round, event.actor)
   removeFromTehai(round, event.actor, event.pai, 1)
 }
 
