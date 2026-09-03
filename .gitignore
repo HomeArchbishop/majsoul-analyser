@@ -1,11 +1,11 @@
-node_modules
-logs
-dist
-docs/.vitepress/dist
-web/dist
+
 
 .env
-
-TODOs.txt
-
+dist
+docs/.vitepress/cache
+docs/.vitepress/dist
+logs
+node_modules
 server/analyser/analyser-local-*/
+TODOs.txt
+web/dist

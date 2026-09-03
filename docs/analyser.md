@@ -1,51 +1,59 @@
-# 分析器模块
+# analyser
 
 源码：`server/analyser/`
 
-依据 `gameRecords` 模块记录的牌桌状态（`Round` 实例），从 MJAI action 列表中选出推荐操作。
+analyser 是可替换的。pipeline 会把候选动作（如有）和当前局面一起交给它，它返回一个推荐选择，以及可选的各候选分数。
 
-默认实现：`analyser-mahjong_helper`（包装 [mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)）。
+默认实现是 `analyser-mahjong_helper`，包装了 [mahjong-helper](https://github.com/EndlessCheng/mahjong-helper)。
 
-## 数据流
+## 自己实现一个
 
-1. 雀魂解析器输出 `ActionCandidateList`（粗粒度备选，如「可打任意手牌」）
-2. `detailizeActionCandidateList()` 结合当前 `Round` 细化为 `MjaiActionList`
-3. 具体分析器从 `MjaiActionList` 中返回 `{ choice, info? }`
+**第一步**：在 `server/analyser/` 下新建一个目录，命名为 `analyser-<name>`，例如 `analyser-myrule`。
 
-牌面编码使用标准 MJAI romaji（如 `1m`、`E`、`5mr`），类型定义见 `server/types/Mjai.ts`。
-
-## API
-
-分析器须继承 `BaseAnalyser`（`server/types/Analyser.ts`）：
+**第二步**：目录下导出一个继承 `BaseAnalyser` 的实例作为 `default`：
 
 ```ts
-export abstract class BaseAnalyser {
-  init?: (...args: any) => Promise<boolean>
-  end?: (...args: any) => Promise<void>
+// server/analyser/analyser-myrule/index.ts
+import { BaseAnalyser, type AnalyseResult } from '@/types/Analyser'
+import type { MjaiActionList } from '@/types/Mjai'
+import type { Round } from '@/board/Round'
 
-  abstract analyseActions (
+class MyRuleAnalyser extends BaseAnalyser {
+  async analyseActions (mjaiActionList: MjaiActionList, round: Round): Promise<AnalyseResult> {
+    // mjaiActionList: 本次可选的所有 MJAI action
+    // round: 当前局面（手牌、河、副露、点数等）
+    const choice = mjaiActionList[0]  // 随便选第一个
+    return { choice }
+  }
+}
+
+export default new MyRuleAnalyser()
+```
+
+**第三步**：在 `.env` 里指定它：
+
+```
+RUNTIME_CONF_ANALYSER=analyser-myrule
+```
+
+## 接口说明
+
+```ts
+interface AnalyseResult {
+  choice: MjaiAction           // 推荐动作（必填）
+  scores?: Array<number | null> // 与 mjaiActionList 等长的分数，没有就省略
+  info?: string                // 展示用的说明文字
+}
+
+abstract class BaseAnalyser {
+  init?(): Promise<boolean>    // 可选，启动时初始化；返回 false 则终止
+  end?(): Promise<void>        // 可选，结束时清理
+
+  abstract analyseActions(
     mjaiActionList: MjaiActionList,
     round: Round
-  ): Promise<{ choice: MjaiAction, info?: string }>
+  ): Promise<AnalyseResult>
 }
 ```
 
-新增分析器：在 `server/analyser/` 下创建 `analyser-<name>/` 目录并导出 `default`，在 `.env` 中设置 `RUNTIME_CONF_ANALYSER=analyser-<name>`。
-
-### 本地 Mortal
-
-`analyser-local-mortal` 使用同目录权重 `model_v4_20240308_best_min.pth`（v4）与 `riichi`（CPython 3.10）。
-
-```bash
-# 安装依赖（Python 3.10）
-pyenv install 3.10.11   # 若尚未安装
-python -m pip install -r server/analyser/analyser-local-mortal/requirements.txt
-```
-
-`.env`：
-
-```
-RUNTIME_CONF_ANALYSER=analyser-local-mortal
-# 可选：指定 3.10 解释器
-# MORTAL_PYTHON=C:\Users\YOU\.pyenv\pyenv-win\versions\3.10.11\python.exe
-```
+`scores` 填了的话，webui 会在候选动作旁边画出分数条。
