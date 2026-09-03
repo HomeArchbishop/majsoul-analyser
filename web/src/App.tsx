@@ -1,9 +1,11 @@
 import { AnalysisPanel } from './components/AnalysisPanel'
 import { BoardView } from './components/BoardView'
+import { useKyokuStats } from './hooks/useKyokuStats'
 import { useUiStream } from './hooks/useUiStream'
 
 export default function App () {
   const { board, analysis, connected, debug } = useUiStream()
+  const kyokuStats = useKyokuStats(board, analysis)
 
   return (
     <div className="flex min-h-screen flex-col bg-table text-gray-300">
@@ -20,10 +22,13 @@ export default function App () {
       </header>
 
       <main className="flex min-h-0 flex-1 flex-col">
-        <BoardView snapshot={board ?? { meSeat: -1, round: null }} />
+        <BoardView
+          snapshot={board ?? { meSeat: -1, round: null }}
+          analysis={analysis}
+        />
       </main>
 
-      <AnalysisPanel analysis={analysis} />
+      <AnalysisPanel analysis={analysis} kyokuStats={kyokuStats} />
     </div>
   )
 }

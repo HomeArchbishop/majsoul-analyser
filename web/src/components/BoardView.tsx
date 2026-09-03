@@ -1,4 +1,4 @@
-import type { BoardSnapshot, PlayerSnapshot } from '../types'
+import type { AnalysisSnapshot, BoardSnapshot, PlayerSnapshot } from '../types'
 import {
   CENTER_GRID,
   riverPlaceholderClass,
@@ -67,7 +67,13 @@ function Center ({
   )
 }
 
-export function BoardView ({ snapshot }: { snapshot: BoardSnapshot }) {
+export function BoardView ({
+  snapshot,
+  analysis = null,
+}: {
+  snapshot: BoardSnapshot
+  analysis?: AnalysisSnapshot | null
+}) {
   const round = snapshot.round
   if (round === null) {
     return (
@@ -97,7 +103,14 @@ export function BoardView ({ snapshot }: { snapshot: BoardSnapshot }) {
     if (s === undefined) {
       return null
     }
-    return <Seat player={s.player} side={side} isMe={s.isMe} />
+    return (
+      <Seat
+        player={s.player}
+        side={side}
+        isMe={s.isMe}
+        analysis={s.isMe ? analysis : null}
+      />
+    )
   }
 
   return (

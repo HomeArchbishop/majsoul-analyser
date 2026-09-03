@@ -76,8 +76,23 @@ const UI = {
     publish({ type: 'board', snapshot: toBoardSnapshot(game, platformId) })
   },
 
-  publishAnalysis (candidates: unknown[], choice: unknown, info: string): void {
-    publish({ type: 'analysis', snapshot: { candidates, choice, info } })
+  publishAnalysis (
+    actions: unknown[],
+    choice: unknown,
+    info: string,
+    scores?: Array<number | null>,
+  ): void {
+    publish({
+      type: 'analysis',
+      snapshot: {
+        candidates: actions.map((action, i) => ({
+          action,
+          score: scores?.[i] ?? null,
+        })),
+        choice,
+        info,
+      },
+    })
   },
 }
 

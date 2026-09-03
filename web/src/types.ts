@@ -14,7 +14,10 @@ type Kaze = 'E' | 'S' | 'W' | 'N'
 export type TableSide = 'bottom' | 'right' | 'top' | 'left'
 
 export interface AnalysisSnapshot {
-  candidates: unknown[]
+  candidates: Array<{
+    action: unknown
+    score?: number | null
+  }>
   choice: unknown
   info: string
 }

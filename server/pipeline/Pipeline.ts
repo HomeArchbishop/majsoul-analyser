@@ -67,8 +67,8 @@ export class Pipeline {
     const round = this.game.rounds[this.game.roundPointer]
     const mjaiActionList = materializeMjaiActions(actionCandidateList, round)
     UI.print('analysing actions', mjaiActionList)
-    const { choice: actionChoice, info } = await this.analyser.analyseActions(mjaiActionList, round)
-    UI.publishAnalysis(mjaiActionList, actionChoice, info ?? '')
+    const { choice: actionChoice, info, scores } = await this.analyser.analyseActions(mjaiActionList, round)
+    UI.publishAnalysis(mjaiActionList, actionChoice, info ?? '', scores)
     UI.print('choice: ', JSON.stringify(structuredClone(actionChoice)), ' | ', info)
     logger.info('<inbound> Analyser end')
     logger.info(`<inbound> Done (${platformId}#${traceId})`)

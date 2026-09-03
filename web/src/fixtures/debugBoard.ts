@@ -49,7 +49,16 @@ export const DEBUG_BOARD: BoardSnapshot = {
 }
 
 export const DEBUG_ANALYSIS: AnalysisSnapshot = {
-  candidates: [{ type: 'none' }],
-  choice: { type: 'none' },
+  candidates: [
+    { action: { type: 'dahai', pai: '5p', tsumogiri: true }, score: 1.24 },
+    { action: { type: 'dahai', pai: '1m', tsumogiri: false }, score: 0.81 },
+    { action: { type: 'dahai', pai: '2m', tsumogiri: false }, score: -0.12 },
+    { action: { type: 'chi', pai: '3s', consumed: ['1s', '2s'] }, score: 0.4 },
+    { action: { type: 'pon', pai: '5pr', consumed: ['5p', '5p'] }, score: -0.2 },
+    { action: { type: 'reach', pai: '1m' }, score: 0.9 },
+    { action: { type: 'hora', pai: '3s', target: 2 }, score: 2.1 },
+    { action: { type: 'none' }, score: -0.55 },
+  ],
+  choice: { type: 'hora', pai: '3s', target: 2 },
   info: 'layout debug',
 }

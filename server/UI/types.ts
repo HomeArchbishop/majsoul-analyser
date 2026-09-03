@@ -39,7 +39,10 @@ export interface BoardSnapshot {
 }
 
 export interface AnalysisSnapshot {
-  candidates: unknown[]
+  candidates: Array<{
+    action: unknown
+    score?: number | null
+  }>
   choice: unknown
   info: string
 }
@@ -51,9 +54,4 @@ export type UiMessage =
 
 export interface UISink {
   onMessage (message: UiMessage): void
-}
-
-interface UiState {
-  board: BoardSnapshot | null
-  analysis: AnalysisSnapshot | null
 }
