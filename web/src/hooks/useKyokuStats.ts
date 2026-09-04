@@ -1,17 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 
 import type { AnalysisSnapshot, BoardSnapshot } from '../types'
-import { actionsMatch } from '../utils/actionMatch'
-import { inferMyAction, kyokuKey } from '../utils/inferMyAction'
+import { actionsMatch, type InferredAction } from '../utils/actionMatch'
+import { inferMyAction, kyokuKey, othersCalledMeld } from '../utils/inferMyAction'
 
 export interface KyokuStats {
-  /** 本局需要操作的次数（收到分析） */
+  /** 本局已结算的选择次数 */
   decisions: number
   top1Hits: number
   top2Hits: number
   top1Rate: number | null
   top2Rate: number | null
   kyokuLabel: string | null
+}
+
+interface PendingDecision {
+  ranked: unknown[]
+  kyoku: string
+  /** 候选里是否有 none（可 skip） */
+  allowsSkip: boolean
 }
 
 function emptyStats (label: string | null): KyokuStats {
@@ -54,10 +61,62 @@ function rankedRecommendations (analysis: AnalysisSnapshot): unknown[] {
   return [analysis.choice, ...rest]
 }
 
+function isNoneAction (action: unknown): boolean {
+  return action !== null &&
+    typeof action === 'object' &&
+    (action as { type?: string }).type === 'none'
+}
+
+function isPositiveMyAction (action: InferredAction): boolean {
+  return action.type !== 'none'
+}
+
+/** skip 后轮到自己摸牌：上一帧无摸牌，这一帧有 */
+function iJustTsumoed (prev: BoardSnapshot, next: BoardSnapshot): boolean {
+  if (prev.round === null || next.round === null) { return false }
+  if (prev.meSeat < 0) { return false }
+  const a = prev.round.players.find(p => p.seat === prev.meSeat)
+  const b = next.round.players.find(p => p.seat === next.meSeat)
+  if (a === undefined || b === undefined) { return false }
+  return a.tsumoPai === null && b.tsumoPai !== null &&
+    a.furo.length === b.furo.length &&
+    a.ankan.length === b.ankan.length &&
+    a.sutehai.length === b.sutehai.length
+}
+
+function applySettle (
+  s: KyokuStats,
+  ranked: unknown[],
+  actual: InferredAction,
+  label: string | null,
+): KyokuStats {
+  const decisions = s.decisions + 1
+  const hit1 = ranked[0] !== undefined && actionsMatch(ranked[0], actual)
+  const hit2 = ranked.slice(0, 2).some(r => actionsMatch(r, actual))
+  const top1Hits = s.top1Hits + (hit1 ? 1 : 0)
+  const top2Hits = s.top2Hits + (hit2 ? 1 : 0)
+  return {
+    ...s,
+    decisions,
+    top1Hits,
+    top2Hits,
+    top1Rate: rate(top1Hits, decisions),
+    top2Rate: rate(top2Hits, decisions),
+    kyokuLabel: label ?? s.kyokuLabel,
+  }
+}
+
 /**
- * 一局内命中率。
- * 分母 = 收到分析的次数（需要你操作），不是牌局事件数。
- * 每条分析只对照一次实际行动。
+ * 一局内一选/二选率。
+ *
+ * 规则：分子、分母只在「选择已作出」时一起更新。
+ * - 收到 analysis → 只挂起 pending，不动统计
+ * - 打牌/鸣牌/立直等落地 → 结算
+ * - skip（候选含 none，且自己未鸣）：
+ *   · 局面推进自己没动，或
+ *   · 随后自己摸牌，或
+ *   · 下一次 analysis 到来而本次尚未结算
+ * - 抢碰（他家先鸣）→ 丢弃 pending，不计入
  */
 export function useKyokuStats (
   board: BoardSnapshot | null,
@@ -66,10 +125,22 @@ export function useKyokuStats (
   const [stats, setStats] = useState<KyokuStats>(() => emptyStats(null))
   const prevBoard = useRef<BoardSnapshot | null>(null)
   const boardRef = useRef<BoardSnapshot | null>(null)
-  const pendingRanked = useRef<unknown[] | null>(null)
-  const pendingKyoku = useRef<string | null>(null)
+  const pending = useRef<PendingDecision | null>(null)
   const armedAnalysis = useRef<AnalysisSnapshot | null>(null)
   const statsKyoku = useRef<string | null>(null)
+
+  const settle = (
+    ranked: unknown[],
+    actual: InferredAction,
+    label: string | null,
+  ) => {
+    pending.current = null
+    setStats(s => applySettle(s, ranked, actual, label))
+  }
+
+  const dropPending = () => {
+    pending.current = null
+  }
 
   useEffect(() => {
     boardRef.current = board
@@ -83,52 +154,36 @@ export function useKyokuStats (
 
     if (key !== null && key !== statsKyoku.current) {
       statsKyoku.current = key
-      pendingRanked.current = null
-      pendingKyoku.current = null
+      pending.current = null
       armedAnalysis.current = null
       setStats(emptyStats(label))
     }
 
     const prev = prevBoard.current
-    if (
-      prev !== null &&
-      pendingRanked.current !== null &&
-      pendingKyoku.current === key
-    ) {
-      const actual = inferMyAction(prev, board)
-      const ranked = pendingRanked.current
-      const canPass = ranked.some(r =>
-        r !== null &&
-        typeof r === 'object' &&
-        (r as { type?: string }).type === 'none',
-      )
-      // 未出现パス选项时，不要把「他家推进」误判成跳过
-      const usable = actual !== null &&
-        (actual.type !== 'none' || canPass)
-      if (usable && actual !== null) {
-        const hit1 = ranked[0] !== undefined && actionsMatch(ranked[0], actual)
-        const hit2 = ranked.slice(0, 2).some(r => actionsMatch(r, actual))
-        pendingRanked.current = null
-        pendingKyoku.current = null
-        setStats(s => {
-          const top1Hits = s.top1Hits + (hit1 ? 1 : 0)
-          const top2Hits = s.top2Hits + (hit2 ? 1 : 0)
-          return {
-            ...s,
-            top1Hits,
-            top2Hits,
-            top1Rate: rate(top1Hits, s.decisions),
-            top2Rate: rate(top2Hits, s.decisions),
-            kyokuLabel: label,
-          }
-        })
+    const p = pending.current
+    if (prev !== null && p !== null && p.kyoku === key) {
+      if (othersCalledMeld(prev, board)) {
+        // 抢碰：机会被别人拿走，不算自己的选择
+        dropPending()
+      } else {
+        const actual = inferMyAction(prev, board)
+        if (actual !== null && isPositiveMyAction(actual)) {
+          settle(p.ranked, actual, label)
+        } else if (
+          p.allowsSkip &&
+          (
+            (actual !== null && actual.type === 'none') ||
+            iJustTsumoed(prev, board)
+          )
+        ) {
+          settle(p.ranked, { type: 'none' }, label)
+        }
       }
     }
 
     prevBoard.current = board
   }, [board])
 
-  // 仅在「新的分析」到来时计入一次需要操作；不要绑 board，避免重挂 pending
   useEffect(() => {
     if (analysis === null) { return }
     if (armedAnalysis.current === analysis) { return }
@@ -137,21 +192,27 @@ export function useKyokuStats (
     const key = boardNow !== null ? kyokuKey(boardNow) : null
     if (key === null) { return }
 
-    armedAnalysis.current = analysis
-    pendingRanked.current = rankedRecommendations(analysis)
-    pendingKyoku.current = key
-
     const label = boardNow !== null ? formatKyokuLabel(boardNow) : null
-    setStats(s => {
-      const decisions = s.decisions + 1
-      return {
-        ...s,
-        decisions,
-        top1Rate: rate(s.top1Hits, decisions),
-        top2Rate: rate(s.top2Hits, decisions),
-        kyokuLabel: label ?? s.kyokuLabel,
-      }
-    })
+    const prevPending = pending.current
+
+    // 新决策点到来：若上一决策还可 skip 且尚未结算 → 视为已 skip
+    if (
+      prevPending !== null &&
+      prevPending.kyoku === key &&
+      prevPending.allowsSkip
+    ) {
+      settle(prevPending.ranked, { type: 'none' }, label)
+    } else if (prevPending !== null) {
+      dropPending()
+    }
+
+    armedAnalysis.current = analysis
+    const ranked = rankedRecommendations(analysis)
+    pending.current = {
+      ranked,
+      kyoku: key,
+      allowsSkip: ranked.some(isNoneAction),
+    }
   }, [analysis])
 
   return stats

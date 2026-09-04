@@ -145,3 +145,27 @@ function boardProgressed (prev: BoardSnapshot, next: BoardSnapshot): boolean {
   }
   return false
 }
+
+/** 他家刚鸣牌（抢碰/抢杠）：自己没动，但这不是 skip */
+export function othersCalledMeld (prev: BoardSnapshot, next: BoardSnapshot): boolean {
+  if (prev.round === null || next.round === null) { return false }
+  for (let i = 0; i < next.round.players.length; i++) {
+    const p = prev.round.players[i]
+    const n = next.round.players[i]
+    if (p === undefined || n === undefined) { continue }
+    if (n.seat === next.meSeat) { continue }
+    if (n.furo.length > p.furo.length || n.ankan.length > p.ankan.length) {
+      return true
+    }
+    if (n.furo.length === p.furo.length) {
+      for (let j = 0; j < n.furo.length; j++) {
+        const before = p.furo[j]
+        const after = n.furo[j]
+        if (before !== undefined && after !== undefined && after.tiles.length > before.tiles.length) {
+          return true
+        }
+      }
+    }
+  }
+  return false
+}

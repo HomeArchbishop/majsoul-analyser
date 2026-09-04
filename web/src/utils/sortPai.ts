@@ -3,7 +3,8 @@ import type { Pai } from '../types'
 function paiSortKey (pai: Pai): string {
   if (pai === '?') { return 'z99' }
   if (pai === '5mr' || pai === '5pr' || pai === '5sr') {
-    return pai[2] + '50'
+    // 赤 5 与同花色 5 同序，赤排在普通 5 前面（m50 vs m51）
+    return pai[1] + '50'
   }
   if (pai.length === 1) {
     const order = 'ESWNPFC'
