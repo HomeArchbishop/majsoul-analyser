@@ -6,7 +6,6 @@
   "scripts": {
     "build:user": "sh scripts/build-user.sh",
     "build:web": "vite build --config web/vite.config.ts",
-    "convert:tiles": "node scripts/convert-tiles.mjs",
     "start": "bun run server/index.ts",
     "dev:wip": "bun run server/index.ts",
     "dev:web": "vite --config web/vite.config.ts",
@@ -30,7 +29,6 @@
     "knip": "^6.34.0",
     "mermaid": "11.16.1",
     "neostandard": "^0.13.0",
-    "pdf-img-convert": "^2.0.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.1.6",
     "vite": "^6.0.0",
