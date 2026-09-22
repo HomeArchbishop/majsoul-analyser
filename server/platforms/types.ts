@@ -1,6 +1,6 @@
 import type { ActionCandidateList, MjaiEventList } from '@/types/Mjai'
 
-export type PlatformId = 'majsoul' | 'tenhou'
+export type PlatformId = 'majsoul' | 'tenhou' | 'mjai'
 
 export interface WireParseResult {
   events: MjaiEventList
